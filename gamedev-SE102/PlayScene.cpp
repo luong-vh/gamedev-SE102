@@ -9,7 +9,7 @@
 #include "Portal.h"
 #include "Coin.h"
 #include "Platform.h"
-
+#include "Block.h"
 #include "SampleKeyEventHandler.h"
 
 using namespace std;
@@ -149,6 +149,27 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		float b = (float)atof(tokens[4].c_str());
 		int scene_id = atoi(tokens[5].c_str());
 		obj = new CPortal(x, y, r, b, scene_id);
+		break;
+	}
+	case OBJECT_TYPE_BLOCK:
+	{
+		if (tokens.size() < 9) return;
+		float cell_width = (float)atof(tokens[3].c_str());
+		float cell_height = (float)atof(tokens[4].c_str());
+		int width = atoi(tokens[5].c_str());
+		int height = atoi(tokens[6].c_str());
+		int cell_id_1 = atoi(tokens[7].c_str());
+		
+		int shadow_cell_id = atoi(tokens[8].c_str());
+		int has = atoi(tokens[8].c_str());
+		
+		
+		obj = new CBlock(
+			x, y,
+			cell_width, cell_height, width, height,
+			cell_id_1,
+			shadow_cell_id, has==1
+		);
 	}
 	break;
 
