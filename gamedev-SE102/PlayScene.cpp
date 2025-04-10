@@ -122,18 +122,22 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	case OBJECT_TYPE_PLATFORM:
 	{
-
+		if (tokens.size() < 13) return;
 		float cell_width = (float)atof(tokens[3].c_str());
 		float cell_height = (float)atof(tokens[4].c_str());
 		int length = atoi(tokens[5].c_str());
-		int sprite_begin = atoi(tokens[6].c_str());
-		int sprite_middle = atoi(tokens[7].c_str());
-		int sprite_end = atoi(tokens[8].c_str());
-
+		int thick = atoi(tokens[6].c_str());
+		int sprite_begin = atoi(tokens[7].c_str());
+		int sprite_middle = atoi(tokens[8].c_str());
+		int sprite_end = atoi(tokens[9].c_str());
+		int sprite_begin2 = atoi(tokens[10].c_str());
+		int sprite_middle2 = atoi(tokens[11].c_str());
+		int sprite_end2 = atoi(tokens[12].c_str());
 		obj = new CPlatform(
 			x, y,
-			cell_width, cell_height, length,
-			sprite_begin, sprite_middle, sprite_end
+			cell_width, cell_height, length, thick,
+			sprite_begin, sprite_middle, sprite_end,
+			sprite_begin2, sprite_middle2, sprite_end2
 		);
 
 		break;
@@ -260,7 +264,7 @@ void CPlayScene::Update(DWORD dt)
 
 	if (cx < 0) cx = 0;
 
-	CGame::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
+	CGame::GetInstance()->SetCamPos(cx, 250.0f /*cy*/);
 
 	PurgeDeletedObjects();
 }
