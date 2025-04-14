@@ -8,6 +8,8 @@
 #include "Coin.h"
 #include "Portal.h"
 #include "VenusFireTrap.h"
+
+#include "PiranhaPlant.h"
 #include "Collision.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
@@ -54,9 +56,12 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	else if (dynamic_cast<CPortal*>(e->obj))
 		OnCollisionWithPortal(e);
 	else if (dynamic_cast<LPVENUSFIRETRAP>(e->obj))
-	{
-		if (untouchable == 0) OnGetDamage();
-	}
+		OnCollisionWithVenus(e);
+	else if (dynamic_cast<LPPIRANHAPLANT>(e->obj))
+		OnCollisionWithPiranha(e);
+	
+	
+
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -94,6 +99,24 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 {
 	CPortal* p = (CPortal*)e->obj;
 	CGame::GetInstance()->InitiateSwitchScene(p->GetSceneId());
+}
+
+void CMario::OnCollisionWithVenus(LPCOLLISIONEVENT e)
+{
+	CVenusFireTrap* venus = dynamic_cast<CVenusFireTrap*>(e->obj);
+	if (venus->GetState() != VENUS_DIE_STATE)
+	{
+		OnGetDamage();
+	}
+}
+
+void CMario::OnCollisionWithPiranha(LPCOLLISIONEVENT e)
+{
+	LPPIRANHAPLANT piranha = dynamic_cast<LPPIRANHAPLANT>(e->obj);
+	if (piranha->GetState() != PIRANHA_DIE_STATE)
+	{
+		OnGetDamage();
+	}
 }
 
 void CMario::OnGetDamage()

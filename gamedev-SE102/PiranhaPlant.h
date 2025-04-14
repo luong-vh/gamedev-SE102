@@ -16,7 +16,7 @@
 #define PIRANHA_HIDE_TIMEOUT 1000
 #define PIRANHA_ATTACK_TIMEOUT 1000
 class CPiranha_Pipe;
-typedef CPiranha_Pipe* LPPiranhaPipe;
+typedef CPiranha_Pipe* LPPIRANHAPIPE;
 
 class CPiranhaPlant :
     public CGameObject
@@ -28,10 +28,10 @@ private:
 	
 public:
 	bool isRisable;
-	LPPiranhaPipe pipe;
+	LPPIRANHAPIPE pipe;
 	CPiranhaPlant(float x, float y,
 		int height,
-		LPPiranhaPipe _pipe) : CGameObject(x, y)
+		LPPIRANHAPIPE _pipe) : CGameObject(x, y)
 	{
 		
 		isRisable = true;
@@ -47,7 +47,8 @@ public:
 	void SetState(int state);
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	int IsCollidable() { return 1; };
+	int IsBlocking() { return 0; }
 };
-typedef CPiranhaPlant* LPPiranhaPlant;
+typedef CPiranhaPlant* LPPIRANHAPLANT;
 
 

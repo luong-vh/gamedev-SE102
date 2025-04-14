@@ -226,12 +226,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int pipeHeight = atoi(tokens[4].c_str());
 		int pipeHeadId = atoi(tokens[5].c_str());
 		int pipeBodyId = atoi(tokens[6].c_str());
-		LPPiranhaPipe pipe = new CPiranha_Pipe(
+		LPPIRANHAPIPE pipe = new CPiranha_Pipe(
 			x, y + height * PIRANHA_CELL_HEIGHT / 2 + PIPE_CELL_HEIGHT / 2, pipeHeight,
 			pipeHeadId, pipeBodyId, NULL
 		);
 		obj = new CPiranhaPlant(x, y, height, pipe);
-		pipe->piranhaPlant = (LPPiranhaPlant)obj;
+		pipe->piranhaPlant = (LPPIRANHAPLANT)obj;
 		y += height * PIRANHA_CELL_HEIGHT;
 		break;
 	}
@@ -252,7 +252,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	if (object_type == OBJECT_TYPE_PIRANHA)
 	{
-		objects.push_back(((LPPiranhaPlant)obj)->pipe);
+		objects.push_back(((LPPIRANHAPLANT)obj)->pipe);
 	}
 	
 }
