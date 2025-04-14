@@ -10,6 +10,7 @@
 #include "Coin.h"
 #include "Platform.h"
 #include "Block.h"
+#include "Pipe.h"
 #include "SampleKeyEventHandler.h"
 
 using namespace std;
@@ -106,18 +107,18 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	switch (object_type)
 	{
 	case OBJECT_TYPE_MARIO:
-		if (player!=NULL) 
+		if (player != NULL)
 		{
 			DebugOut(L"[ERROR] MARIO object was created before!\n");
 			return;
 		}
-		obj = new CMario(x,y); 
-		player = (CMario*)obj;  
+		obj = new CMario(x, y);
+		player = (CMario*)obj;
 
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
-	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
-	case OBJECT_TYPE_BRICK: obj = new CBrick(x,y); break;
+	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x, y); break;
+	case OBJECT_TYPE_BRICK: obj = new CBrick(x, y); break;
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
 
 	case OBJECT_TYPE_PLATFORM:
@@ -159,20 +160,65 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int width = atoi(tokens[5].c_str());
 		int height = atoi(tokens[6].c_str());
 		int cell_id_1 = atoi(tokens[7].c_str());
-		
+
 		int shadow_cell_id = atoi(tokens[8].c_str());
 		int has = atoi(tokens[8].c_str());
-		
-		
+
+
 		obj = new CBlock(
 			x, y,
 			cell_width, cell_height, width, height,
 			cell_id_1,
-			shadow_cell_id, has==1
+			shadow_cell_id, has == 1
 		);
+		break;
 	}
-	break;
+	case OBJECT_TYPE_PIPE:
+	{
+		if (tokens.size() < 6) return;
+		int height = atoi(tokens[3].c_str());
+		int cell_id_head = atoi(tokens[4].c_str());
+		int cell_id_body = atoi(tokens[5].c_str());
 
+
+		obj = new CPipe(
+			x, y, height,
+			cell_id_head, cell_id_body, NULL
+		);
+		break;
+	}
+	case OBJECT_TYPE_RED_VENUS:
+	{
+		if (tokens.size() < 4) return;
+		int height = atoi(tokens[3].c_str());
+		int pipeHeight = atoi(tokens[4].c_str());
+		int pipeHeadId = atoi(tokens[5].c_str());
+		int pipeBodyId = atoi(tokens[6].c_str());
+		LPPipe pipe = new CPipe(
+			x, y + height * VENUS_CELL_HEIGHT / 2 + PIPE_CELL_HEIGHT / 2, pipeHeight,
+			pipeHeadId, pipeBodyId, NULL
+		);
+		obj = new CVenusFireTrap(x, y, height, pipe, RED_VENUSFIRETRAP_ID);
+		pipe->venusFireTrap = (LPVENUSFIRETRAP)obj;
+		y += height * VENUS_CELL_HEIGHT;
+		break;
+	}
+	case OBJECT_TYPE_GREEN_VENUS:
+	{
+		if (tokens.size() < 4) return;
+		int height = atoi(tokens[3].c_str());
+		int pipeHeight = atoi(tokens[4].c_str());
+		int pipeHeadId = atoi(tokens[5].c_str());
+		int pipeBodyId = atoi(tokens[6].c_str());
+		LPPipe pipe = new CPipe(
+			x, y + height * VENUS_CELL_HEIGHT / 2 + PIPE_CELL_HEIGHT / 2, pipeHeight,
+			pipeHeadId, pipeBodyId, NULL
+		);
+		obj = new CVenusFireTrap(x, y, height, pipe, GREEN_VENUSFIRETRAP_ID);
+		pipe->venusFireTrap = (LPVENUSFIRETRAP)obj;
+		y += height * VENUS_CELL_HEIGHT;
+		break;
+	}
 
 	default:
 		DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);
@@ -184,6 +230,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 
 	objects.push_back(obj);
+	if (object_type == OBJECT_TYPE_RED_VENUS || object_type == OBJECT_TYPE_GREEN_VENUS)
+	{
+		objects.push_back(((LPVENUSFIRETRAP)obj)->pipe);
+	}
+	
 }
 
 void CPlayScene::LoadAssets(LPCWSTR assetFile)
@@ -292,8 +343,9 @@ void CPlayScene::Update(DWORD dt)
 
 void CPlayScene::Render()
 {
-	for (int i = 0; i < objects.size(); i++)
+	for (int i = 1; i < objects.size(); i++)
 		objects[i]->Render();
+	objects[0]->Render();
 }
 
 /*

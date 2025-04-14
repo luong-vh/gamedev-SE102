@@ -7,6 +7,9 @@ goomba.txt
 cloud.txt
 platform.txt
 block.txt
+pipe.txt
+venus.txt
+fire-bullet.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -19,15 +22,19 @@ block.txt
 # 5 = Cloud
 # 6 = Platform:	cell_width	cell_height	length	thick	spritesID (6)
 # 7 = Block:	cell_width	cell_height	width	height	9 cellIDs	4 shadowCellIds
+# 8 = Pipe
+# 9 = Red Venus Fire Trap
+# 10 = Green Venus Fire Trap
+# 11 = Fire Bullet
 # 50 = Portal: r	b	sceneID
 # See OBJECT_TYPE constants in AssetIDs.h
 
-
+# MARIO
+0	20	350
 #Portal 
 50	300	110	316	140	2
 
-#Goomba
-2	239	407
+
 #Platform
 6	15	423	16	16	39	1	60000	60001	60002	60003	60004	60005
 6	632	407	16	16	29	2	60000	60001	60002	60003	60004	60005
@@ -55,7 +62,12 @@ block.txt
 7	404	371	8	8	10	6	72000	74000	0
 ##pink
 7	2148	371	8	8	6	6	70000	74000	0
-# MARIO
-0	20	350
 
- 
+
+
+#Goomba
+2	239	407
+#Red Venus Fire Trap
+9	375	351	4	3	80000	80001
+#Green Venus Fire Trap
+10	1879	355	3	3	80000	80001
