@@ -16,7 +16,6 @@
 #define VENUS_HEAD_LEFT 0
 #define VENUS_HEAD_RIGHT 10
 
-#define VENUS_ATTACK_RANGE 90.0f
 #define VENUS_SPEED 0.03f
 
 #define VENUS_CELL_WIDTH 16
@@ -34,7 +33,6 @@ class CVenusFireTrap :public CGameObject
 private:
 	LPFIREBULLET fireBullet;
 	ULONGLONG state_start;
-	int state;
 	int objectId;
 	int height;
 	float minY, maxY;
@@ -55,7 +53,7 @@ public:
 		this->minY = y;
 		this->maxY = y + height * VENUS_CELL_HEIGHT;
 		this->objectId = object_id;
-		SetState(VENUS_RISE_STATE);
+		SetState(VENUS_HIDE_STATE);
 		vy = -VENUS_SPEED;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);

@@ -145,6 +145,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mario.cpp" />
     <ClCompile Include="Pipe.cpp" />
+    <ClCompile Include="PiranhaPlant.cpp" />
     <ClCompile Include="Piranha_Pipe.cpp" />
     <ClCompile Include="Platform.cpp" />
     <ClCompile Include="PlayScene.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="KeyEventHandler.h" />
     <ClInclude Include="Mario.h" />
     <ClInclude Include="Pipe.h" />
+    <ClInclude Include="PiranhaPlant.h" />
     <ClInclude Include="Piranha_Pipe.h" />
     <ClInclude Include="Platform.h" />
     <ClInclude Include="PlayScene.h" />

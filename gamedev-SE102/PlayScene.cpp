@@ -12,7 +12,7 @@
 #include "Block.h"
 #include "Venus_Pipe.h"
 #include "SampleKeyEventHandler.h"
-
+#include "Piranha_Pipe.h"
 using namespace std;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath):
@@ -219,6 +219,22 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		y += height * VENUS_CELL_HEIGHT;
 		break;
 	}
+	case OBJECT_TYPE_PIRANHA:
+	{
+		if (tokens.size() < 4) return;
+		int height = atoi(tokens[3].c_str());
+		int pipeHeight = atoi(tokens[4].c_str());
+		int pipeHeadId = atoi(tokens[5].c_str());
+		int pipeBodyId = atoi(tokens[6].c_str());
+		LPPiranhaPipe pipe = new CPiranha_Pipe(
+			x, y + height * PIRANHA_CELL_HEIGHT / 2 + PIPE_CELL_HEIGHT / 2, pipeHeight,
+			pipeHeadId, pipeBodyId, NULL
+		);
+		obj = new CPiranhaPlant(x, y, height, pipe);
+		pipe->piranhaPlant = (LPPiranhaPlant)obj;
+		y += height * PIRANHA_CELL_HEIGHT;
+		break;
+	}
 
 	default:
 		DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);
@@ -233,6 +249,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	if (object_type == OBJECT_TYPE_RED_VENUS || object_type == OBJECT_TYPE_GREEN_VENUS)
 	{
 		objects.push_back(((LPVENUSFIRETRAP)obj)->pipe);
+	}
+	if (object_type == OBJECT_TYPE_PIRANHA)
+	{
+		objects.push_back(((LPPiranhaPlant)obj)->pipe);
 	}
 	
 }
