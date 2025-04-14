@@ -1,5 +1,5 @@
 #include "VenusFireTrap.h"
-#include "Pipe.h"
+#include "Venus_Pipe.h"
 #include "Mario.h"
 #include "PlayScene.h"
 void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)

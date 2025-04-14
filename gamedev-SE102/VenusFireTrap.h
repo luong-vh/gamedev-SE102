@@ -27,8 +27,8 @@
 #define VENUS_SHOOT_TIMEOUT 1000
 #define VENUS_HIDE_TIMEOUT 1000
 
-class CPipe;
-typedef CPipe* LPPipe;
+class CVenus_Pipe;
+typedef CVenus_Pipe* LPVenusPipe;
 class CVenusFireTrap :public CGameObject
 {
 private:
@@ -41,11 +41,11 @@ private:
 	bool isShooted;
 public:
 
-	LPPipe pipe;
+	LPVenusPipe pipe;
 	bool isRisable;
 	CVenusFireTrap(float x, float y, 
 	int height,
-		LPPipe _pipe,int object_id) : CGameObject(x, y)
+		LPVenusPipe _pipe,int object_id) : CGameObject(x, y)
 	{
 		this->fireBullet = new CFireBullet(x, y - (VENUS_CELL_HEIGHT * height) / 2.0f + VENUS_CELL_HEIGHT);
 		isRisable = true;

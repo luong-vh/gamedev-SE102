@@ -10,7 +10,7 @@
 #include "Coin.h"
 #include "Platform.h"
 #include "Block.h"
-#include "Pipe.h"
+#include "Venus_Pipe.h"
 #include "SampleKeyEventHandler.h"
 
 using namespace std;
@@ -183,7 +183,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		obj = new CPipe(
 			x, y, height,
-			cell_id_head, cell_id_body, NULL
+			cell_id_head, cell_id_body
 		);
 		break;
 	}
@@ -194,7 +194,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int pipeHeight = atoi(tokens[4].c_str());
 		int pipeHeadId = atoi(tokens[5].c_str());
 		int pipeBodyId = atoi(tokens[6].c_str());
-		LPPipe pipe = new CPipe(
+		LPVenusPipe pipe = new CVenus_Pipe(
 			x, y + height * VENUS_CELL_HEIGHT / 2 + PIPE_CELL_HEIGHT / 2, pipeHeight,
 			pipeHeadId, pipeBodyId, NULL
 		);
@@ -210,7 +210,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int pipeHeight = atoi(tokens[4].c_str());
 		int pipeHeadId = atoi(tokens[5].c_str());
 		int pipeBodyId = atoi(tokens[6].c_str());
-		LPPipe pipe = new CPipe(
+		LPVenusPipe pipe = new CVenus_Pipe(
 			x, y + height * VENUS_CELL_HEIGHT / 2 + PIPE_CELL_HEIGHT / 2, pipeHeight,
 			pipeHeadId, pipeBodyId, NULL
 		);

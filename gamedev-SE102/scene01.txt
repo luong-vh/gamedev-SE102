@@ -26,6 +26,7 @@ fire-bullet.txt
 # 9 = Red Venus Fire Trap
 # 10 = Green Venus Fire Trap
 # 11 = Fire Bullet
+# 12 = Piranha Plant
 # 50 = Portal: r	b	sceneID
 # See OBJECT_TYPE constants in AssetIDs.h
 
