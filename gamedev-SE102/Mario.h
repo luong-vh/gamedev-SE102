@@ -139,7 +139,6 @@ public:
 		isOnPlatform = false;
 		coin = 0;
 	}
-	void OnCollisionWithSuperMushroom(LPCOLLISIONEVENT e);
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
 	void SetState(int state);

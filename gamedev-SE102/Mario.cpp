@@ -11,7 +11,8 @@
 #include "QuestionBrick.h"
 #include "PiranhaPlant.h"
 #include "Collision.h"
-
+#include "SuperMushroom.h"
+#include "SuperLeaf.h"
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	vy += ay * dt;
@@ -67,8 +68,16 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 			questionBrick->OnMarioHitted(e);
 		}
 	}
-	
-	
+	else if (dynamic_cast<CSuperMushroom*>(e->obj))
+	{
+		SetLevel(this->level + 1);
+		(dynamic_cast<CSuperMushroom*>(e->obj))->Delete();
+	}
+	else if (dynamic_cast<CSuperLeaf*>(e->obj))
+	{
+		SetLevel(this->level + 1);
+		(dynamic_cast<CSuperLeaf*>(e->obj))->Delete();
+	}
 
 }
 
@@ -128,10 +137,7 @@ void CMario::OnCollisionWithPiranha(LPCOLLISIONEVENT e)
 	}
 }
 
-void CMario::OnCollisionWithSuperMushroom(LPCOLLISIONEVENT e)
-{
-	SetLevel(this->level + 1);
-}
+
 
 void CMario::OnGetDamage()
 {

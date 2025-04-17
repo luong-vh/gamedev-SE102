@@ -1,7 +1,9 @@
 #pragma once
 #include "Item.h"
 
-#define ID_ANI_SUPER_MUSHROOM 140000
+#define ID_ANI_SUPER_MUSHROOM_NORMAL 140000
+#define ID_ANI_SUPER_MUSHROOM_RISE 140001
+
 
 #define SUPER_MUSHROOM_BBOX_WIDTH 16
 #define SUPER_MUSHROOM_BBOX_HEIGHT 16
@@ -15,12 +17,14 @@
 #define SUPER_MUSHROOM_STATE_RISE 1
 #define SUPER_MUSHROOM_STATE_MOVING 2
 
+#define SUPER_MUSHROOM_TIMEOUT_RISE 1400
 class CSuperMushroom :
     public CItem
 {
 private:
 	int direction;
 	bool isOnPlatform;
+	int timeState;
 public:
 	CSuperMushroom(float x, float y, int _direction, int _state = 0) : CItem(x, y)
 	{

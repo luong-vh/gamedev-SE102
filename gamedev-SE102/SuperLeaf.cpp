@@ -19,12 +19,7 @@ void CSuperLeaf::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (state == SUPER_LEAF_STATE_WAITING)
 		return;
-	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
-	LPCOLLISIONEVENT e = CCollision::GetInstance()->SweptAABB(this, dt, mario);
-	if (e->WasCollided()) {
-		Delete();
-		mario->OnCollisionWithSuperMushroom(e);
-	}
+	
 	float dy = 0;
 	switch (state)
 	{

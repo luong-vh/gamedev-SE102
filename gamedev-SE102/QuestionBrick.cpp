@@ -7,7 +7,7 @@
 #include "SuperLeaf.h"
 void CQuestionBrick::Render()
 {
-	if (item) item->Render();	
+	/*if (item) item->Render();	*/
 
 	CAnimations* animations = CAnimations::GetInstance();
 	int aniId = -1;
@@ -20,11 +20,11 @@ void CQuestionBrick::Render()
 }
 void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	if (item)
+	/*if (item)
 	{
 		item->Update(dt, coObjects);
 		if (item->IsDeleted()) item = NULL;
-	}
+	}*/
 	
 	
 	if (state == QUESTION_BRICK_STATE_NORMAL || state == QUESTION_BRICK_STATE_HITTED)
@@ -86,18 +86,17 @@ void CQuestionBrick::SpawnItem()
 	case QUESTION_BRICK_ITEM_TYPE_MUSHROOM:
 		CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 		if (mario->GetLevel() >= MARIO_LEVEL_BIG)
-			item = new CSuperLeaf(x, y, 0);
+			item = new CSuperLeaf(x, y - BRICK_BBOX_HEIGHT, 0);
 		else 
 		{
 			mario->GetPosition(mx, my);
 			if (x >= mx)
-				item = new CSuperMushroom(x, y, 1);
+				item = new CSuperMushroom(x, y - BRICK_BBOX_HEIGHT, 1);
 			else
-				item = new CSuperMushroom(x, y, -1);
+				item = new CSuperMushroom(x, y - BRICK_BBOX_HEIGHT, -1);
 		}
-			
-			
 		break;
 	}
+	((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(item);
 	if (item) item->WakeUp();
 }

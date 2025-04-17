@@ -7,30 +7,24 @@ void CSuperMushroom::Render()
 	if (state == SUPER_MUSHROOM_STATE_WAITING)
 		return;
 	CAnimations* animations = CAnimations::GetInstance();
-	animations->Get(ID_ANI_SUPER_MUSHROOM)->Render(x, y);
+	if (state == SUPER_MUSHROOM_STATE_RISE)
+		animations->Get(ID_ANI_SUPER_MUSHROOM_RISE)->Render(x, y);
+	else
+		animations->Get(ID_ANI_SUPER_MUSHROOM_NORMAL)->Render(x, y);
 }
 
 void CSuperMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (state == SUPER_MUSHROOM_STATE_WAITING)
 		return;
-	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
-	LPCOLLISIONEVENT e = CCollision::GetInstance()->SweptAABB(this, dt, mario);
-	if (e->WasCollided()) {
-		Delete();
-		mario->OnCollisionWithSuperMushroom(e);
-	}
+	
 	
 	
 	if (state == SUPER_MUSHROOM_STATE_RISE)
 	{
-		y += vy * dt;
-		if (y <= minY)
-		{
-
-			y = minY;
-			SetState(SUPER_MUSHROOM_STATE_MOVING);
-		}
+		
+		if (GetTickCount64() - timeState >= SUPER_MUSHROOM_TIMEOUT_RISE) SetState(SUPER_MUSHROOM_STATE_MOVING);
+		
 	}
 	else if (state == SUPER_MUSHROOM_STATE_MOVING)
 	{
@@ -51,6 +45,7 @@ void CSuperMushroom::GetBoundingBox(float& l, float& t, float& r, float& b)
 void CSuperMushroom::SetState(int _state)
 {
 	state = _state;
+	timeState = GetTickCount64();
 	switch (_state)
 	{
 	case SUPER_MUSHROOM_STATE_WAITING:
