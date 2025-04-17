@@ -57,7 +57,7 @@ void CPlatform::Render()
 			s->Get(this->spriteIdEnd2)->Draw(xx, yy);
 	}
 	
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CPlatform::GetBoundingBox(float& l, float& t, float& r, float& b)

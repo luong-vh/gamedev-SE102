@@ -87,6 +87,7 @@
 
 #define	MARIO_LEVEL_SMALL	1
 #define	MARIO_LEVEL_BIG		2
+#define MARIO_LEVEL_TAIL	3
 
 #define MARIO_BIG_BBOX_WIDTH  14
 #define MARIO_BIG_BBOX_HEIGHT 24
@@ -119,8 +120,10 @@ class CMario : public CGameObject
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
 	void OnCollisionWithVenus(LPCOLLISIONEVENT e);
 	void OnCollisionWithPiranha(LPCOLLISIONEVENT e);
+
 	int GetAniIdBig();
 	int GetAniIdSmall();
+	int GetAniIdTail();
 
 public:
 	CMario(float x, float y) : CGameObject(x, y)
@@ -136,6 +139,7 @@ public:
 		isOnPlatform = false;
 		coin = 0;
 	}
+	void OnCollisionWithSuperMushroom(LPCOLLISIONEVENT e);
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
 	void SetState(int state);
@@ -151,6 +155,7 @@ public:
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 
 	void SetLevel(int l);
+	int GetLevel() { return level; }
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);

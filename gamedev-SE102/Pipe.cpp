@@ -19,13 +19,7 @@ void CPipe::Render()
 		s->Get(this->spriteIdBody)->Draw(x, yy);
 	}
 
-	RenderBoundingBox();
-}
-void CPipe::Update(DWORD dt,vector<LPGAMEOBJECT>* coObjects)
-{
-	
-	
-	
+	//RenderBoundingBox();
 }
 
 void CPipe::GetBoundingBox(float& l, float& t, float& r, float& b)

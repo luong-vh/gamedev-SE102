@@ -13,6 +13,7 @@
 #include "Venus_Pipe.h"
 #include "SampleKeyEventHandler.h"
 #include "Piranha_Pipe.h"
+#include "QuestionBrick.h"
 using namespace std;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath):
@@ -118,7 +119,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x, y); break;
-	case OBJECT_TYPE_BRICK: obj = new CBrick(x, y); break;
+	//case OBJECT_TYPE_BRICK: obj = new CBrick(x, y); break;
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
 
 	case OBJECT_TYPE_PLATFORM:
@@ -233,6 +234,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CPiranhaPlant(x, y, height, pipe);
 		pipe->piranhaPlant = (LPPIRANHAPLANT)obj;
 		y += height * PIRANHA_CELL_HEIGHT;
+		break;
+	}
+	case OBJECT_TYPE_QUESTION_BRICK:
+	{
+		if (tokens.size() < 4) return;
+		int item_type = atoi(tokens[3].c_str());
+		obj = new CQuestionBrick(x, y, item_type);
 		break;
 	}
 

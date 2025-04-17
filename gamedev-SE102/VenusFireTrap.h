@@ -51,7 +51,7 @@ public:
 		this->height = height;
 		this->pipe = _pipe;
 		this->minY = y;
-		this->maxY = y + height * VENUS_CELL_HEIGHT;
+		this->maxY = y + height * VENUS_CELL_HEIGHT ;
 		this->objectId = object_id;
 		SetState(VENUS_HIDE_STATE);
 		vy = -VENUS_SPEED;

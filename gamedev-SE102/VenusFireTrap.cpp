@@ -64,6 +64,7 @@ void CVenusFireTrap::Render()
 {
 	if (state == VENUS_HIDE_STATE) return;
 	
+	
 	int aniId = state + objectId;
 
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
@@ -84,6 +85,7 @@ void CVenusFireTrap::Render()
 	}
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 	this->fireBullet->Render();
+	//RenderBoundingBox();
 }
 
 void CVenusFireTrap::SetState(int state)

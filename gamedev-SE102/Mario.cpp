@@ -8,7 +8,7 @@
 #include "Coin.h"
 #include "Portal.h"
 #include "VenusFireTrap.h"
-
+#include "QuestionBrick.h"
 #include "PiranhaPlant.h"
 #include "Collision.h"
 
@@ -59,6 +59,14 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithVenus(e);
 	else if (dynamic_cast<LPPIRANHAPLANT>(e->obj))
 		OnCollisionWithPiranha(e);
+	else if (dynamic_cast<CQuestionBrick*>(e->obj))
+	{
+		CQuestionBrick* questionBrick = dynamic_cast<CQuestionBrick*>(e->obj);
+		if (e->ny > 0)
+		{
+			questionBrick->OnMarioHitted(e);
+		}
+	}
 	
 	
 
@@ -91,6 +99,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
+	if (e->obj->IsCollidable() == 0) return;
 	e->obj->Delete();
 	coin++;
 }
@@ -104,7 +113,7 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithVenus(LPCOLLISIONEVENT e)
 {
 	CVenusFireTrap* venus = dynamic_cast<CVenusFireTrap*>(e->obj);
-	if (venus->GetState() != VENUS_DIE_STATE)
+	if (venus->GetState() != VENUS_DIE_STATE && venus->GetState() != VENUS_HIDE_STATE)
 	{
 		OnGetDamage();
 	}
@@ -119,13 +128,17 @@ void CMario::OnCollisionWithPiranha(LPCOLLISIONEVENT e)
 	}
 }
 
+void CMario::OnCollisionWithSuperMushroom(LPCOLLISIONEVENT e)
+{
+	SetLevel(this->level + 1);
+}
+
 void CMario::OnGetDamage()
 {
 	if (untouchable) return;
-	DebugOut(L"[INFO] Mario get hit\n");
 	if (level > MARIO_LEVEL_SMALL)
 	{
-		level = MARIO_LEVEL_SMALL;
+		level -= 1;
 		StartUntouchable();
 	}
 	else
@@ -139,6 +152,64 @@ void CMario::OnGetDamage()
 // Get animation ID for small Mario
 //
 int CMario::GetAniIdSmall()
+{
+	int aniId = -1;
+	if (!isOnPlatform)
+	{
+		if (abs(ax) == MARIO_ACCEL_RUN_X)
+		{
+			if (nx >= 0)
+				aniId = ID_ANI_MARIO_SMALL_JUMP_RUN_RIGHT;
+			else
+				aniId = ID_ANI_MARIO_SMALL_JUMP_RUN_LEFT;
+		}
+		else
+		{
+			if (nx >= 0)
+				aniId = ID_ANI_MARIO_SMALL_JUMP_WALK_RIGHT;
+			else
+				aniId = ID_ANI_MARIO_SMALL_JUMP_WALK_LEFT;
+		}
+	}
+	else
+		if (isSitting)
+		{
+			if (nx > 0)
+				aniId = ID_ANI_MARIO_SIT_RIGHT;
+			else
+				aniId = ID_ANI_MARIO_SIT_LEFT;
+		}
+		else
+			if (vx == 0)
+			{
+				if (nx > 0) aniId = ID_ANI_MARIO_SMALL_IDLE_RIGHT;
+				else aniId = ID_ANI_MARIO_SMALL_IDLE_LEFT;
+			}
+			else if (vx > 0)
+			{
+				if (ax < 0)
+					aniId = ID_ANI_MARIO_SMALL_BRACE_RIGHT;
+				else if (ax == MARIO_ACCEL_RUN_X)
+					aniId = ID_ANI_MARIO_SMALL_RUNNING_RIGHT;
+				else if (ax == MARIO_ACCEL_WALK_X)
+					aniId = ID_ANI_MARIO_SMALL_WALKING_RIGHT;
+			}
+			else // vx < 0
+			{
+				if (ax > 0)
+					aniId = ID_ANI_MARIO_SMALL_BRACE_LEFT;
+				else if (ax == -MARIO_ACCEL_RUN_X)
+					aniId = ID_ANI_MARIO_SMALL_RUNNING_LEFT;
+				else if (ax == -MARIO_ACCEL_WALK_X)
+					aniId = ID_ANI_MARIO_SMALL_WALKING_LEFT;
+			}
+
+	if (aniId == -1) aniId = ID_ANI_MARIO_SMALL_IDLE_RIGHT;
+
+	return aniId;
+}
+
+int CMario::GetAniIdTail()
 {
 	int aniId = -1;
 	if (!isOnPlatform)
@@ -269,7 +340,8 @@ void CMario::Render()
 		aniId = GetAniIdBig();
 	else if (level == MARIO_LEVEL_SMALL)
 		aniId = GetAniIdSmall();
-
+	else if (level == MARIO_LEVEL_TAIL)
+		aniId = GetAniIdTail();
 	animations->Get(aniId)->Render(x, y);
 
 	//RenderBoundingBox();
@@ -387,6 +459,7 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 
 void CMario::SetLevel(int l)
 {
+	if (level > MARIO_LEVEL_TAIL) return;
 	// Adjust position to avoid falling off platform
 	if (this->level == MARIO_LEVEL_SMALL)
 	{
