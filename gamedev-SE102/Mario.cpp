@@ -165,16 +165,16 @@ int CMario::GetAniIdSmall()
 		if (abs(ax) == MARIO_ACCEL_RUN_X)
 		{
 			if (nx >= 0)
-				aniId = ID_ANI_MARIO_SMALL_JUMP_RUN_RIGHT;
+				aniId = ID_ANI_MARIO_SMALL_JUMP_FULL_RIGHT;
 			else
-				aniId = ID_ANI_MARIO_SMALL_JUMP_RUN_LEFT;
+				aniId = ID_ANI_MARIO_SMALL_JUMP_FULL_LEFT;
 		}
 		else
 		{
 			if (nx >= 0)
-				aniId = ID_ANI_MARIO_SMALL_JUMP_WALK_RIGHT;
+				aniId = ID_ANI_MARIO_SMALL_JUMP_RIGHT;
 			else
-				aniId = ID_ANI_MARIO_SMALL_JUMP_WALK_LEFT;
+				aniId = ID_ANI_MARIO_SMALL_JUMP_LEFT;
 		}
 	}
 	else
@@ -215,7 +215,7 @@ int CMario::GetAniIdSmall()
 	return aniId;
 }
 
-int CMario::GetAniIdTail()
+int CMario::GetAniIdRacoon()
 {
 	int aniId = -1;
 	if (!isOnPlatform)
@@ -223,52 +223,52 @@ int CMario::GetAniIdTail()
 		if (abs(ax) == MARIO_ACCEL_RUN_X)
 		{
 			if (nx >= 0)
-				aniId = ID_ANI_MARIO_SMALL_JUMP_RUN_RIGHT;
+				aniId = ID_ANI_MARIO_RACOON_JUMP_RIGHT;
 			else
-				aniId = ID_ANI_MARIO_SMALL_JUMP_RUN_LEFT;
+				aniId = ID_ANI_MARIO_RACOON_JUMP_LEFT;
 		}
 		else
 		{
 			if (nx >= 0)
-				aniId = ID_ANI_MARIO_SMALL_JUMP_WALK_RIGHT;
+				aniId = ID_ANI_MARIO_RACOON_JUMP_RIGHT;
 			else
-				aniId = ID_ANI_MARIO_SMALL_JUMP_WALK_LEFT;
+				aniId = ID_ANI_MARIO_RACOON_JUMP_LEFT;
 		}
 	}
 	else
 		if (isSitting)
 		{
 			if (nx > 0)
-				aniId = ID_ANI_MARIO_SIT_RIGHT;
+				aniId = ID_ANI_MARIO_RACOON_SIT_RIGHT;
 			else
-				aniId = ID_ANI_MARIO_SIT_LEFT;
+				aniId = ID_ANI_MARIO_RACOON_SIT_LEFT;
 		}
 		else
 			if (vx == 0)
 			{
-				if (nx > 0) aniId = ID_ANI_MARIO_SMALL_IDLE_RIGHT;
-				else aniId = ID_ANI_MARIO_SMALL_IDLE_LEFT;
+				if (nx > 0) aniId = ID_ANI_MARIO_RACOON_IDLE_RIGHT;
+				else aniId = 2010;
 			}
 			else if (vx > 0)
 			{
 				if (ax < 0)
-					aniId = ID_ANI_MARIO_SMALL_BRACE_RIGHT;
+					aniId = ID_ANI_MARIO_RACOON_BRACE_RIGHT;
 				else if (ax == MARIO_ACCEL_RUN_X)
-					aniId = ID_ANI_MARIO_SMALL_RUNNING_RIGHT;
+					aniId = ID_ANI_MARIO_RACOON_RUNNING_RIGHT;
 				else if (ax == MARIO_ACCEL_WALK_X)
-					aniId = ID_ANI_MARIO_SMALL_WALKING_RIGHT;
+					aniId = ID_ANI_MARIO_RACOON_WALKING_RIGHT;
 			}
 			else // vx < 0
 			{
 				if (ax > 0)
-					aniId = ID_ANI_MARIO_SMALL_BRACE_LEFT;
+					aniId = ID_ANI_MARIO_RACOON_BRACE_LEFT;
 				else if (ax == -MARIO_ACCEL_RUN_X)
-					aniId = ID_ANI_MARIO_SMALL_RUNNING_LEFT;
+					aniId = ID_ANI_MARIO_RACOON_RUNNING_LEFT;
 				else if (ax == -MARIO_ACCEL_WALK_X)
-					aniId = ID_ANI_MARIO_SMALL_WALKING_LEFT;
+					aniId = ID_ANI_MARIO_RACOON_WALKING_LEFT;
 			}
 
-	if (aniId == -1) aniId = ID_ANI_MARIO_SMALL_IDLE_RIGHT;
+	if (aniId == -1) aniId = ID_ANI_MARIO_RACOON_IDLE_RIGHT;
 
 	return aniId;
 }
@@ -285,16 +285,16 @@ int CMario::GetAniIdBig()
 		if (abs(ax) == MARIO_ACCEL_RUN_X)
 		{
 			if (nx >= 0)
-				aniId = ID_ANI_MARIO_JUMP_RUN_RIGHT;
+				aniId = ID_ANI_MARIO_JUMP_FULL_RIGHT;
 			else
-				aniId = ID_ANI_MARIO_JUMP_RUN_LEFT;
+				aniId = ID_ANI_MARIO_JUMP_FULL_LEFT;
 		}
 		else
 		{
 			if (nx >= 0)
-				aniId = ID_ANI_MARIO_JUMP_WALK_RIGHT;
+				aniId = ID_ANI_MARIO_JUMP_RIGHT;
 			else
-				aniId = ID_ANI_MARIO_JUMP_WALK_LEFT;
+				aniId = ID_ANI_MARIO_JUMP_LEFT;
 		}
 	}
 	else
@@ -346,12 +346,10 @@ void CMario::Render()
 		aniId = GetAniIdBig();
 	else if (level == MARIO_LEVEL_SMALL)
 		aniId = GetAniIdSmall();
-	else if (level == MARIO_LEVEL_TAIL)
-		aniId = GetAniIdTail();
+	else if (level == MARIO_LEVEL_RACOON)
+		aniId = GetAniIdRacoon();
 	animations->Get(aniId)->Render(x, y);
-
-	//RenderBoundingBox();
-	
+	RenderBoundingBox();
 	DebugOutTitle(L"Coins: %d", coin);
 }
 
@@ -437,7 +435,7 @@ void CMario::SetState(int state)
 
 void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 {
-	if (level==MARIO_LEVEL_BIG)
+	if (level>=MARIO_LEVEL_BIG)
 	{
 		if (isSitting)
 		{
@@ -465,8 +463,8 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 
 void CMario::SetLevel(int l)
 {
-	if (level > MARIO_LEVEL_TAIL) return;
-	// Adjust position to avoid falling off platform
+	if (level > MARIO_LEVEL_RACOON) return;
+
 	if (this->level == MARIO_LEVEL_SMALL)
 	{
 		y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;

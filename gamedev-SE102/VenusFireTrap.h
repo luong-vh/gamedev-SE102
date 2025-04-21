@@ -24,7 +24,7 @@
 #define VENUS_DIE_TIMEOUT 500
 #define VENUS_PRE_SHOOT_TIMEOUT 500
 #define VENUS_SHOOT_TIMEOUT 1000
-#define VENUS_HIDE_TIMEOUT 1000
+#define VENUS_HIDE_TIMEOUT 2000
 
 class CVenus_Pipe;
 typedef CVenus_Pipe* LPVenusPipe;

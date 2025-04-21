@@ -78,9 +78,10 @@ piranha.txt
 
 #Goomba
 2	239	407
+
 #Red Venus Fire Trap
 9	375	351	4	3	80000	80001
-#Green Venus Fire Trap
-10	1879	355	3	3	80000	80001
 #Piranha Plant
 12	1815	371	3	2	80000	80001
+#Green Venus Fire Trap
+10	1879	355	3	3	80000	80001
