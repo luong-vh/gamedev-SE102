@@ -2,7 +2,7 @@
 
 #include "GameObject.h"
 
-#define PIPE_BORDER 5
+#define PIPE_BORDER 2
 #define PIPE_CELL_WIDTH 32
 #define PIPE_CELL_HEIGHT 16
 class CPipe : public CGameObject

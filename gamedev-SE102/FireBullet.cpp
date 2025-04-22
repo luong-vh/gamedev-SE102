@@ -1,5 +1,6 @@
 #include "FireBullet.h"
 #include "Game.h"
+#include <cmath>
 void CFireBullet::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	l = x - FIRE_BULLET_WIDTH / 2;
@@ -55,14 +56,31 @@ void CFireBullet::SetState(int _state)
 
 void CFireBullet::Shoot()
 {
+	float angles[] = { 20, 42.5, 137.5, 160, 200, 230, 280, 340 };
+
 	this->SetPosition(start_x, start_y);
 	float mx, my;
 	mario->GetPosition(mx, my);
-	float dx = mx - x;
-	float dy = my - y;
+	float dx = mx - start_x;
+	float dy = my - start_y - MARIO_BIG_BBOX_HEIGHT;
 	float d = sqrt(dx * dx + dy * dy);
 	if (d == 0) return;
-	vx = FIRE_BULLET_SPEED_X * dx / d;
-	vy = FIRE_BULLET_SPEED_Y * dy / d;
+	
+
+	float marioAngle = atan2(dy, dx) * 180 / acos(-1); // acos(-1) = PI
+
+	if (marioAngle < 0) marioAngle += 360;
+	DebugOut(L"Mario Angle: %f\n", marioAngle);
+	float shootAngle = angles[0];
+	for (float angle : angles) {
+		if (abs(marioAngle - angle) < abs(marioAngle - shootAngle))
+		{
+			shootAngle = angle;
+		}
+	}
+	DebugOut(L"Shoot Angle: %f\n", shootAngle);
+	shootAngle = shootAngle * acos(-1) / 180;
+	vx = FIRE_BULLET_SPEED_X * cos(shootAngle);
+	vy = FIRE_BULLET_SPEED_Y * sin(shootAngle);
 	SetState(vx > 0 ? FIRE_BULLET_STATE_RIGHT_SHOOTING : FIRE_BULLET_STATE_LEFT_SHOOTING);
 }
