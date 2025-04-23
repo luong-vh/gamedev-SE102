@@ -14,6 +14,7 @@
 #include "SampleKeyEventHandler.h"
 #include "Piranha_Pipe.h"
 #include "QuestionBrick.h"
+#include "ParaGoomba.h"
 using namespace std;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath):
@@ -118,7 +119,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
-	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x, y); break;
+	case OBJECT_TYPE_GOOMBA: 
+		if (tokens.size() < 4) return;
+		if (atoi(tokens[3].c_str()) == 0)
+			obj = new CGoomba(x, y);
+		else obj = new CParaGoomba(x, y); 
+		break;
 	//case OBJECT_TYPE_BRICK: obj = new CBrick(x, y); break;
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
 

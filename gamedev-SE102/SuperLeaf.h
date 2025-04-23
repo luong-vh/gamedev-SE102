@@ -30,7 +30,6 @@ public:
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
-	int IsBlocking() { return 0; }
 	void SetState(int state);
 	void WakeUp() {
 		if (state == SUPER_LEAF_STATE_WAITING) {

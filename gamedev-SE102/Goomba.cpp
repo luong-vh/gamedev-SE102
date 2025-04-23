@@ -1,4 +1,4 @@
-#include "Goomba.h"
+#include "ParaGoomba.h"
 #include "debug.h"
 #include "Game.h"
 CGoomba::CGoomba(float x, float y):CGameObject(x, y)
@@ -32,10 +32,20 @@ void CGoomba::OnNoCollision(DWORD dt)
 {
 	x += vx * dt;
 	y += vy * dt;
-};
+}
+void CGoomba::WakeUp()
+{
+	SetState(GOOMBA_STATE_WALKING);
+}
+
 
 void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 {
+	if (dynamic_cast<CParaGoomba*>(e->obj)) {
+		if (e->obj->GetState() == GOOMBA_STATE_PARA) return;
+		OnCollisionWithGoomba(e);
+		return;
+	}
 	if (dynamic_cast<CGoomba*>(e->obj)) 
 	{
 		OnCollisionWithGoomba(e);
@@ -48,16 +58,20 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 	}
 	else if (e->nx != 0)
 	{
-		reverseDirection();
+		ReverseDirection();
 	}
 }
 void CGoomba::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 {
 	if (e->nx != 0)
 	{
-		reverseDirection();
-		((CGoomba*)e->obj)->reverseDirection();
+		ReverseDirection();
+		((CGoomba*)e->obj)->ReverseDirection();
 	}
+}
+void CGoomba::GetDamage()
+{
+	SetState(GOOMBA_STATE_DIE);
 }
 void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
@@ -67,7 +81,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 		if (x - cx <= CGame::GetInstance()->GetBackBufferWidth() + GOOMBA_BBOX_WIDTH)
 		{
-			SetState(GOOMBA_STATE_WALKING);
+			WakeUp();
 		}
 		return;
 	}
@@ -79,8 +93,6 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		isDeleted = true;
 		return;
 	}
-
-	//CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
@@ -98,10 +110,10 @@ void CGoomba::Render()
 	RenderBoundingBox();
 }
 
-void CGoomba::SetState(int state)
+void CGoomba::SetState(int _state)
 {
-	CGameObject::SetState(state);
-	switch (state)
+	CGameObject::SetState(_state);
+	switch (_state)
 	{
 		case GOOMBA_STATE_DIE:
 			die_start = GetTickCount64();

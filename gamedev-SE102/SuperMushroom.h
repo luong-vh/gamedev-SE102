@@ -53,7 +53,7 @@ public:
 		}
 	}
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
-	int IsBlocking() { return 0; }
+
 	void SetState(int state);
 	void WakeUp() {
 		if (state == SUPER_MUSHROOM_STATE_WAITING) {
