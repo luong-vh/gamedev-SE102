@@ -56,7 +56,7 @@ void CFireBullet::SetState(int _state)
 
 void CFireBullet::Shoot()
 {
-	float angles[] = { 20, 42.5, 137.5, 160, 200, 230, 280, 340 };
+	float angles[] = { 20, 42.5, 137.5, 160, 200, 230, 310, 340 };
 
 	this->SetPosition(start_x, start_y);
 	float mx, my;
@@ -70,7 +70,7 @@ void CFireBullet::Shoot()
 	float marioAngle = atan2(dy, dx) * 180 / acos(-1); // acos(-1) = PI
 
 	if (marioAngle < 0) marioAngle += 360;
-	DebugOut(L"Mario Angle: %f\n", marioAngle);
+
 	float shootAngle = angles[0];
 	for (float angle : angles) {
 		if (abs(marioAngle - angle) < abs(marioAngle - shootAngle))
@@ -78,7 +78,6 @@ void CFireBullet::Shoot()
 			shootAngle = angle;
 		}
 	}
-	DebugOut(L"Shoot Angle: %f\n", shootAngle);
 	shootAngle = shootAngle * acos(-1) / 180;
 	vx = FIRE_BULLET_SPEED_X * cos(shootAngle);
 	vy = FIRE_BULLET_SPEED_Y * sin(shootAngle);

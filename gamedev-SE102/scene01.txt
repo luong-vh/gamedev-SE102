@@ -78,7 +78,9 @@ piranha.txt
 
 #Goomba
 2	239	407
-
+2	543	407
+2	847	391
+2	895	391
 #Red Venus Fire Trap
 9	375	351	4	3	80000	80001
 #Piranha Plant

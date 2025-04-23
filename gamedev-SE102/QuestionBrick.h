@@ -19,7 +19,6 @@ class CQuestionBrick :public CBrick
 private:
 	float minY, maxY;
 	int item_type;
-	CItem* item;
 public:
 	
 	CQuestionBrick(float x, float y, int _item) : CBrick(x, y)

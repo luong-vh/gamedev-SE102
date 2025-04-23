@@ -11,6 +11,7 @@
 
 #define GOOMBA_DIE_TIMEOUT 500
 
+#define GOOMBA_STATE_WAITING 0
 #define GOOMBA_STATE_WALKING 100
 #define GOOMBA_STATE_DIE 200
 
@@ -34,7 +35,8 @@ protected:
 	virtual void OnNoCollision(DWORD dt);
 
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
-
+	virtual void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
+	virtual void reverseDirection() { vx = -vx; }
 public: 	
 	CGoomba(float x, float y);
 	virtual void SetState(int state);

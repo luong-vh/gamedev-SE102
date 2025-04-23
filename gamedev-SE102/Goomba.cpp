@@ -1,11 +1,12 @@
 #include "Goomba.h"
-
+#include "debug.h"
+#include "Game.h"
 CGoomba::CGoomba(float x, float y):CGameObject(x, y)
 {
 	this->ax = 0;
 	this->ay = GOOMBA_GRAVITY;
 	die_start = -1;
-	SetState(GOOMBA_STATE_WALKING);
+	SetState(GOOMBA_STATE_WAITING);
 }
 
 void CGoomba::GetBoundingBox(float &left, float &top, float &right, float &bottom)
@@ -24,6 +25,7 @@ void CGoomba::GetBoundingBox(float &left, float &top, float &right, float &botto
 		right = left + GOOMBA_BBOX_WIDTH;
 		bottom = top + GOOMBA_BBOX_HEIGHT;
 	}
+
 }
 
 void CGoomba::OnNoCollision(DWORD dt)
@@ -34,8 +36,11 @@ void CGoomba::OnNoCollision(DWORD dt)
 
 void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (!e->obj->IsBlocking()) return; 
-	if (dynamic_cast<CGoomba*>(e->obj)) return; 
+	if (dynamic_cast<CGoomba*>(e->obj)) 
+	{
+		OnCollisionWithGoomba(e);
+	}
+	if (!e->obj->IsBlocking()) return;
 
 	if (e->ny != 0 )
 	{
@@ -43,12 +48,29 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 	}
 	else if (e->nx != 0)
 	{
-		vx = -vx;
+		reverseDirection();
 	}
 }
-
+void CGoomba::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
+{
+	if (e->nx != 0)
+	{
+		reverseDirection();
+		((CGoomba*)e->obj)->reverseDirection();
+	}
+}
 void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
+	if (state == GOOMBA_STATE_WAITING) {
+		float cx, cy;
+		CGame::GetInstance()->GetCamPos(cx, cy);
+
+		if (x - cx <= CGame::GetInstance()->GetBackBufferWidth() + GOOMBA_BBOX_WIDTH)
+		{
+			SetState(GOOMBA_STATE_WALKING);
+		}
+		return;
+	}
 	vy += ay * dt;
 	vx += ax * dt;
 
@@ -58,13 +80,14 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		return;
 	}
 
-	CGameObject::Update(dt, coObjects);
+	//CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
 
 void CGoomba::Render()
 {
+	if (state == GOOMBA_STATE_WAITING) return;
 	int aniId = ID_ANI_GOOMBA_WALKING;
 	if (state == GOOMBA_STATE_DIE) 
 	{
@@ -89,6 +112,10 @@ void CGoomba::SetState(int state)
 			break;
 		case GOOMBA_STATE_WALKING: 
 			vx = -GOOMBA_WALKING_SPEED;
+			break;
+		case GOOMBA_STATE_WAITING:
+			vx = 0;
+			vy = 0;
 			break;
 	}
 }

@@ -7,8 +7,6 @@
 #include "SuperLeaf.h"
 void CQuestionBrick::Render()
 {
-	/*if (item) item->Render();	*/
-
 	CAnimations* animations = CAnimations::GetInstance();
 	int aniId = -1;
 	if (state == QUESTION_BRICK_STATE_NORMAL)
@@ -16,15 +14,9 @@ void CQuestionBrick::Render()
 	else
 		aniId = ID_ANI_QUESTION_BRICK_HITTED;
 	animations->Get(aniId)->Render(x, y);
-	//RenderBoundingBox();
 }
 void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	/*if (item)
-	{
-		item->Update(dt, coObjects);
-		if (item->IsDeleted()) item = NULL;
-	}*/
 	
 	
 	if (state == QUESTION_BRICK_STATE_NORMAL || state == QUESTION_BRICK_STATE_HITTED)
@@ -77,6 +69,7 @@ void CQuestionBrick::SetState(int _state)
 }
 void CQuestionBrick::SpawnItem()
 {
+	CItem* item = NULL;
 	float mx, my;
 	switch (item_type)
 	{
@@ -98,5 +91,5 @@ void CQuestionBrick::SpawnItem()
 		break;
 	}
 	((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(item);
-	if (item) item->WakeUp();
+	item->WakeUp();
 }
