@@ -42,6 +42,6 @@ public:
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 	void OnNoCollision(DWORD dt);
 	void StartFisrtStep();
-	void GetDamage();
+	void GetStomped();
 };
 

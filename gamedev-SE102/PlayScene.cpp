@@ -15,6 +15,7 @@
 #include "Piranha_Pipe.h"
 #include "QuestionBrick.h"
 #include "ParaGoomba.h"
+#include "Koopa.h"
 using namespace std;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath):
@@ -249,6 +250,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CQuestionBrick(x, y, item_type);
 		break;
 	}
+	case OBJECT_TYPE_KOOPAS:
+		obj = new CKoopa(x, y);
+		break;
 
 	default:
 		DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);

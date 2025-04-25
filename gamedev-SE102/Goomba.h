@@ -38,10 +38,13 @@ protected:
 	virtual void WakeUp();
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 	virtual void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
-	virtual void ReverseDirection() { vx = -vx; }
+	virtual void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
+	
 	
 public: 	
+	virtual void ReverseDirection() { vx = -vx; }
 	CGoomba(float x, float y);
 	virtual void SetState(int state);
-	virtual void GetDamage();
+	virtual void GetStomped();
+	virtual void GetKoopaHit();
 };

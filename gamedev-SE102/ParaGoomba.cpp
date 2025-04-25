@@ -144,10 +144,9 @@ void CParaGoomba::StartFisrtStep()
 	vy = 0;
 	vx = direction * GOOMBA_WALKING_SPEED;
 	ay = GOOMBA_GRAVITY;
-	DebugOut(L"chase: %d, is: %d\n", chaseCount, isChase);
 }
 
-void CParaGoomba::GetDamage()
+void CParaGoomba::GetStomped()
 {
 	if (state == GOOMBA_STATE_PARA) {
 		ay = GOOMBA_GRAVITY;

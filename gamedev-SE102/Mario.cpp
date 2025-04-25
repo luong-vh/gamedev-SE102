@@ -13,6 +13,7 @@
 #include "Collision.h"
 #include "SuperMushroom.h"
 #include "SuperLeaf.h"
+#include "Koopa.h"
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	vy += ay * dt;
@@ -78,6 +79,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		SetLevel(this->level + 1);
 		(dynamic_cast<CSuperLeaf*>(e->obj))->Delete();
 	}
+	else if (dynamic_cast<CKoopa*>(e->obj))
+		OnCollisionWithKoopa(e);
 
 }
 
@@ -90,7 +93,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 	{
 		if (goomba->GetState() != GOOMBA_STATE_DIE)
 		{
-			goomba->GetDamage();
+			goomba->GetStomped();
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
 	}
@@ -134,6 +137,31 @@ void CMario::OnCollisionWithPiranha(LPCOLLISIONEVENT e)
 	if (piranha->GetState() != PIRANHA_DIE_STATE)
 	{
 		OnGetDamage();
+	}
+}
+
+void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
+{
+	CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
+
+	// jump on top >> kill Goomba and deflect a bit 
+	if (e->ny < 0)
+	{
+		if (koopa->GetState() != KOOPA_STATE_DIE)
+		{
+			koopa->GetStomped();
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+	}
+	else // hit by Goomba
+	{
+		if (untouchable == 0)
+		{
+			if (koopa->GetState() != KOOPA_STATE_DIE)
+			{
+				OnGetDamage();
+			}
+		}
 	}
 }
 
@@ -463,7 +491,7 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 
 void CMario::SetLevel(int l)
 {
-	if (level > MARIO_LEVEL_RACOON) return;
+	if (l > MARIO_LEVEL_RACOON) return;
 
 	if (this->level == MARIO_LEVEL_SMALL)
 	{

@@ -3,7 +3,7 @@
 #include "PlayScene.h"
 #include "Mario.h"
 
-#define PI 3.141592653589793
+#define PI acos(-1)
 void CSuperLeaf::Render()
 {
 	if (state == SUPER_LEAF_STATE_WAITING)

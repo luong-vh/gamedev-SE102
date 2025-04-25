@@ -1,6 +1,7 @@
 #include "ParaGoomba.h"
 #include "debug.h"
 #include "Game.h"
+#include "Koopa.h"
 CGoomba::CGoomba(float x, float y):CGameObject(x, y)
 {
 	this->ax = 0;
@@ -41,14 +42,15 @@ void CGoomba::WakeUp()
 
 void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (dynamic_cast<CParaGoomba*>(e->obj)) {
-		if (e->obj->GetState() == GOOMBA_STATE_PARA) return;
+	if (dynamic_cast<CGoomba*>(e->obj)) {
+		if (e->obj->GetState() == GOOMBA_STATE_PARA || e->obj->GetState() == GOOMBA_STATE_DIE) return;
 		OnCollisionWithGoomba(e);
 		return;
 	}
-	if (dynamic_cast<CGoomba*>(e->obj)) 
-	{
-		OnCollisionWithGoomba(e);
+	if (dynamic_cast<CKoopa*>(e->obj)) {
+		if (e->obj->GetState() == KOOPA_STATE_DIE) return;
+		OnCollisionWithKoopa(e);
+		return;
 	}
 	if (!e->obj->IsBlocking()) return;
 
@@ -69,7 +71,23 @@ void CGoomba::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 		((CGoomba*)e->obj)->ReverseDirection();
 	}
 }
-void CGoomba::GetDamage()
+void CGoomba::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
+{
+	if (state == GOOMBA_STATE_PARA) return;
+	if (e->nx != 0)
+	{
+		if (e->obj->GetState() == KOOPA_STATE_SPINNING) GetKoopaHit();
+		else {
+			ReverseDirection();
+			((CKoopa*)e->obj)->ReverseDirection();
+		}
+	}
+}
+void CGoomba::GetStomped()
+{
+	SetState(GOOMBA_STATE_DIE);
+}
+void CGoomba::GetKoopaHit()
 {
 	SetState(GOOMBA_STATE_DIE);
 }

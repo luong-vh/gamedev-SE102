@@ -68,7 +68,6 @@ void CPiranhaPlant::SetState(int _state)
 		vy = 0;
 		break;
 	case PIRANHA_RISE_STATE:
-		DebugOut(L"[INFO] Piranha rise\n");
 		vx = 0;
 		vy = -PIRANHA_SPEED;
 		break;

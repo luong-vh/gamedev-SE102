@@ -11,6 +11,7 @@ pipe.txt
 venus.txt
 fire-bullet.txt
 piranha.txt
+koopas.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -89,3 +90,4 @@ piranha.txt
 12	1815	371	3	2	80000	80001
 #Green Venus Fire Trap
 10	1879	355	3	3	80000	80001
+3	750	391		0
