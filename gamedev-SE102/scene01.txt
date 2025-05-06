@@ -12,6 +12,7 @@ venus.txt
 fire-bullet.txt
 piranha.txt
 koopas.txt
+background.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
