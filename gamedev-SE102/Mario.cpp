@@ -14,6 +14,8 @@
 #include "SuperMushroom.h"
 #include "SuperLeaf.h"
 #include "Koopa.h"
+#include "GameData.h"
+#include "PlayHUD.h"
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	vy += ay * dt;
@@ -73,11 +75,15 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	{
 		SetLevel(this->level + 1);
 		(dynamic_cast<CSuperMushroom*>(e->obj))->Delete();
+		CGameData::AddScore(1000);
+		CPlayHUD::GetInstance()->SetScore(CGameData::score);
 	}
 	else if (dynamic_cast<CSuperLeaf*>(e->obj))
 	{
 		SetLevel(this->level + 1);
 		(dynamic_cast<CSuperLeaf*>(e->obj))->Delete();
+		CGameData::AddScore(1000);
+		CPlayHUD::GetInstance()->SetScore(CGameData::score);
 	}
 	else if (dynamic_cast<CKoopa*>(e->obj))
 		OnCollisionWithKoopa(e);
@@ -94,6 +100,8 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 		if (goomba->GetState() != GOOMBA_STATE_DIE)
 		{
 			goomba->GetStomped();
+			CGameData::AddScore(100);
+			CPlayHUD::GetInstance()->SetScore(CGameData::score);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
 	}
@@ -113,7 +121,10 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
 	if (e->obj->IsCollidable() == 0) return;
 	e->obj->Delete();
-	coin++;
+	CGameData::AddCoin(1);
+	CGameData::AddScore(100);
+	CPlayHUD::GetInstance()->SetCoin(CGameData::coin);
+	CPlayHUD::GetInstance()->SetScore(CGameData::score);
 }
 
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
@@ -143,8 +154,6 @@ void CMario::OnCollisionWithPiranha(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 {
 	CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
-
-	// jump on top >> kill Goomba and deflect a bit 
 	if (e->ny < 0)
 	{
 		if (koopa->GetState() != KOOPA_STATE_DIE)
@@ -153,7 +162,7 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
 	}
-	else // hit by Goomba
+	else
 	{
 		if (untouchable == 0)
 		{
@@ -378,7 +387,6 @@ void CMario::Render()
 		aniId = GetAniIdRacoon();
 	animations->Get(aniId)->Render(x, y);
 	RenderBoundingBox();
-	DebugOutTitle(L"Coins: %d", coin);
 }
 
 void CMario::SetState(int state)

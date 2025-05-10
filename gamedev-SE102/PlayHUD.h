@@ -1,6 +1,7 @@
 #pragma once
 #include "Sprites.h"
 #include "HUDTile.h"
+#include "GameData.h"
 
 #define ID_NUMBER_0		21000000
 #define ID_NUMBER_1		21000001

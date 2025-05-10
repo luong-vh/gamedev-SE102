@@ -17,6 +17,9 @@ CPlayHUD::CPlayHUD()
 	{
 		time.push_back(new CHUDTile(CSprites::GetInstance()->Get(ID_NUMBER_0), 169 + 8 * i, 11));
 	}
+	CGameData::LoadData();
+	SetCoin(CGameData::coin);
+	SetScore(CGameData::score);
 }
 
 CPlayHUD* CPlayHUD::GetInstance()
