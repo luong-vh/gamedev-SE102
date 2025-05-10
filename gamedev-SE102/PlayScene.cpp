@@ -366,7 +366,13 @@ void CPlayScene::Update(DWORD dt)
 {
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
-
+	time -= dt * 1.0f / 1000;
+	if (time <= 0)
+	{
+		//GameOver
+		return;
+	}
+	CPlayHUD::GetInstance()->SetTime(floor(time));
 	vector<LPGAMEOBJECT> coObjects;
 	for (size_t i = 1; i < objects.size(); i++)
 	{
