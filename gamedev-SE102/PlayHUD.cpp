@@ -3,19 +3,19 @@
 CPlayHUD* CPlayHUD::__instance = NULL;
 CPlayHUD::CPlayHUD()
 {
-	background = new CHUDTile(CSprites::GetInstance()->Get(ID_HUD_BACKGROUND), 159, 16);
+	background = new CHUDTile(CSprites::GetInstance()->Get(ID_HUD_BACKGROUND), 128, 16);
 
 	for (int i = 0; i < 7; i++)
 	{
-		score.push_back(new CHUDTile(CSprites::GetInstance()->Get(ID_NUMBER_0), 97 + 8 * i, 11));
+		score.push_back(new CHUDTile(CSprites::GetInstance()->Get(ID_NUMBER_0), 66 + 8 * i, 11));
 	}
 	for (int i = 0; i < 2; i++)
 	{
-		coin.push_back(new CHUDTile(CSprites::GetInstance()->Get(ID_NUMBER_0), 177 + 8 * i, 19));
+		coin.push_back(new CHUDTile(CSprites::GetInstance()->Get(ID_NUMBER_0), 146 + 8 * i, 19));
 	}
 	for (int i = 0; i < 3; i++)
 	{
-		time.push_back(new CHUDTile(CSprites::GetInstance()->Get(ID_NUMBER_0), 169 + 8 * i, 11));
+		time.push_back(new CHUDTile(CSprites::GetInstance()->Get(ID_NUMBER_0), 138 + 8 * i, 11));
 	}
 	CGameData::LoadData();
 	SetCoin(CGameData::coin);
