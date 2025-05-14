@@ -76,7 +76,7 @@ void CGoomba::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 	if (state == GOOMBA_STATE_PARA) return;
 	if (e->nx != 0)
 	{
-		if (e->obj->GetState() == KOOPA_STATE_SPINNING) GetKoopaHit();
+		if (e->obj->GetState() == KOOPA_STATE_SPINNING) GetKoopaHit(-e->nx);
 		else {
 			ReverseDirection();
 			((CKoopa*)e->obj)->ReverseDirection();
@@ -87,9 +87,10 @@ void CGoomba::GetStomped()
 {
 	SetState(GOOMBA_STATE_DIE);
 }
-void CGoomba::GetKoopaHit()
+void CGoomba::GetKoopaHit(int direction)
 {
-	SetState(GOOMBA_STATE_DIE);
+	vx = direction * GOOMBA_WALKING_SPEED;
+	SetState(GOOMBA_STATE_DIE_BY_KOOPA);
 }
 void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
@@ -106,9 +107,10 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	vy += ay * dt;
 	vx += ax * dt;
 
-	if ( (state==GOOMBA_STATE_DIE) && (GetTickCount64() - die_start > GOOMBA_DIE_TIMEOUT) )
+	if ( (state==GOOMBA_STATE_DIE || state == GOOMBA_STATE_DIE_BY_KOOPA) )
 	{
-		isDeleted = true;
+		OnNoCollision(dt);
+		if (GetTickCount64() - die_start > GOOMBA_DIE_TIMEOUT) isDeleted = true;
 		return;
 	}
 	CCollision::GetInstance()->Process(this, dt, coObjects);
@@ -117,15 +119,23 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 void CGoomba::Render()
 {
-	if (state == GOOMBA_STATE_WAITING) return;
 	int aniId = ID_ANI_GOOMBA_WALKING;
-	if (state == GOOMBA_STATE_DIE) 
+	switch (state)
 	{
+	case GOOMBA_STATE_DIE:
 		aniId = ID_ANI_GOOMBA_DIE;
+		break;
+	case GOOMBA_STATE_DIE_BY_KOOPA:
+	case GOOMBA_STATE_DIE_BY_TAIL:
+		aniId = ID_ANI_GOOMBA_DIE_BY_TAIL;
+		break;
+	case GOOMBA_STATE_WALKING:
+		aniId = ID_ANI_GOOMBA_WALKING;
+		break;
+	case GOOMBA_STATE_WAITING:
+		return;
 	}
-
 	CAnimations::GetInstance()->Get(aniId)->Render(x,y);
-	RenderBoundingBox();
 }
 
 void CGoomba::SetState(int _state)
@@ -142,6 +152,12 @@ void CGoomba::SetState(int _state)
 			break;
 		case GOOMBA_STATE_WALKING: 
 			vx = -GOOMBA_WALKING_SPEED;
+			break;
+		case GOOMBA_STATE_DIE_BY_TAIL:
+		case GOOMBA_STATE_DIE_BY_KOOPA:
+			die_start = GetTickCount64();
+			vy = GOOMBA_DIE_SPEED_BY_KOOPA;
+			ay = GOOMBA_GRAVITY;
 			break;
 		case GOOMBA_STATE_WAITING:
 			vx = 0;

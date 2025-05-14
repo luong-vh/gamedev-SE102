@@ -60,6 +60,8 @@ public:
 	void Render();
 	void SetState(int state);
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
+	void HittedByTail();
+	void HittedByKoopa();
 	int IsCollidable() { return 1; };
 	int IsBlocking() { return 0; }
 };

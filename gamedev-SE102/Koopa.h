@@ -3,7 +3,7 @@
 #define KOOPA_GRAVITY 0.002f
 #define KOOPA_WALKING_SPEED 0.04f
 #define KOOPA_SPINNING_SPEED 0.15f
-
+#define KOOPA_DIE_SPEED_BY_KOOPA -0.4f
 #define KOOPA_BBOX_WIDTH 16
 #define KOOPA_BBOX_HEIGHT 16
 
@@ -50,6 +50,8 @@ protected:
    virtual void OnCollisionWith(LPCOLLISIONEVENT e);
    virtual void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
    virtual void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
+   virtual void OnCollisionWithVenus(LPCOLLISIONEVENT e);
+   virtual void OnCollisionWithPiranha(LPCOLLISIONEVENT e);
    
 
 public:
@@ -57,8 +59,9 @@ public:
    virtual void ReverseDirection();
    virtual void SetState(int state);
    virtual void GetStomped();
-   virtual void GetTailHit();
-   virtual void GetKoopaHit();
+   virtual void GetKicked(int);
+   virtual void GetTailHit(int);
+   virtual void GetKoopaHit(int);
 };
 
 

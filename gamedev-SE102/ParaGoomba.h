@@ -1,6 +1,6 @@
 #pragma once
 #include "Goomba.h"
-#define GOOMBA_STATE_PARA 300
+#define GOOMBA_STATE_PARA 500
 
 #define ID_ANI_PARA_GOOMBA_WALKING 21000
 #define ID_ANI_PARA_GOOMBA_DIE 21100

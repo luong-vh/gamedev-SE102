@@ -4,6 +4,8 @@
 #include "Mario.h"
 #include "PlayScene.h"
 #include "QuestionBrick.h"
+#include "VenusFireTrap.h"
+#include "PiranhaPlant.h"
 void CKoopa::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	left = x - KOOPA_BBOX_WIDTH / 2;
@@ -102,7 +104,8 @@ void CKoopa::SetState(int _state)
 		vx = direction * KOOPA_WALKING_SPEED;
 		break;
 	case KOOPA_STATE_DIE:
-
+		ay = KOOPA_GRAVITY;
+		vy = KOOPA_DIE_SPEED_BY_KOOPA;
 		break;
 	case KOOPA_STATE_INSHELL:
 
@@ -121,6 +124,12 @@ void CKoopa::SetState(int _state)
 	}
 
 }
+void CKoopa::GetKicked(int _direction) 
+{
+	if (_direction < 0) direction = -1;
+	else direction = 1;
+	SetState(KOOPA_STATE_SPINNING);
+}
 
 void CKoopa::GetStomped()
 {
@@ -138,12 +147,17 @@ void CKoopa::GetStomped()
 	}
 }
 
-void CKoopa::GetTailHit()
+void CKoopa::GetTailHit(int direction)
 {
+
 }
 
-void CKoopa::GetKoopaHit()
+void CKoopa::GetKoopaHit(int _direction)
 {
+	if (_direction < 0) direction = -1;
+	else direction = 1;
+	vx = direction * KOOPA_WALKING_SPEED;
+	SetState(KOOPA_STATE_DIE);
 }
 
 void CKoopa::OnNoCollision(DWORD dt)
@@ -171,6 +185,14 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithKoopa(e);
 		return;
 	}
+	if (dynamic_cast<CVenusFireTrap*>(e->obj)) {
+		OnCollisionWithVenus(e);
+		return;
+	}
+	if (dynamic_cast<CPiranhaPlant*>(e->obj)) {
+		OnCollisionWithPiranha(e);
+		return;
+	}
 	if (!e->obj->IsBlocking()) return;
 
 	if (e->ny != 0)
@@ -193,7 +215,8 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 void CKoopa::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 {
 	if (state == KOOPA_STATE_SPINNING) {
-		((CGoomba*)e->obj)->GetKoopaHit();
+		if (e->obj->GetState() == GOOMBA_STATE_WALKING || e->obj->GetState() == GOOMBA_STATE_PARA) 
+			((CGoomba*)e->obj)->GetKoopaHit(-e->nx);
 		return;
 	}
 	else if (e->obj->GetState() == GOOMBA_STATE_PARA) return;
@@ -205,12 +228,26 @@ void CKoopa::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 void CKoopa::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 {
 	if (state == KOOPA_STATE_SPINNING) {
-		if (e->obj->GetState() == KOOPA_STATE_SPINNING) GetKoopaHit();
-		((CKoopa*)e->obj)->GetKoopaHit();
+		if (e->obj->GetState() == KOOPA_STATE_SPINNING) GetKoopaHit(-e->nx);
+		((CKoopa*)e->obj)->GetKoopaHit(e->nx);
 	}
 	else {
 		ReverseDirection();
 		((CKoopa*)e->obj)->ReverseDirection();
+	}
+}
+
+void CKoopa::OnCollisionWithVenus(LPCOLLISIONEVENT e)
+{
+	if (state == KOOPA_STATE_SPINNING) {
+		((CVenusFireTrap*)e->obj)->HittedByKoopa();
+	}
+}
+
+void CKoopa::OnCollisionWithPiranha(LPCOLLISIONEVENT e)
+{
+	if (state == KOOPA_STATE_SPINNING) {
+		((CPiranhaPlant*)e->obj)->HittedByKoopa();
 	}
 }
 

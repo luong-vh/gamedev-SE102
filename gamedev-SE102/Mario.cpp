@@ -161,6 +161,13 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 			koopa->GetStomped();
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
+		return;
+	}
+	if (e->nx != 0 &&
+		(koopa -> GetState() == KOOPA_STATE_INSHELL ||
+		koopa -> GetState() == KOOPA_STATE_REVIVING))
+	{
+		koopa->GetKicked(-e->nx);
 	}
 	else
 	{

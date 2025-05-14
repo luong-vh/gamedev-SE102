@@ -45,6 +45,8 @@ public:
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
 	void SetState(int state);
+	void HittedByTail();
+	void HittedByKoopa();	
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	int IsCollidable() { return 1; };
 	int IsBlocking() { return 1; }

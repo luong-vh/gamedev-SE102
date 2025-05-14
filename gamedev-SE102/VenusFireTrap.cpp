@@ -126,3 +126,13 @@ void CVenusFireTrap::GetBoundingBox(float& l, float& t, float& r, float& b)
 	r = l + VENUS_CELL_WIDTH;
 	b = t + VENUS_CELL_HEIGHT * this->height;
 }
+
+void CVenusFireTrap::HittedByTail()
+{
+	SetState(VENUS_DIE_STATE);
+}
+
+void CVenusFireTrap::HittedByKoopa()
+{
+	SetState(VENUS_DIE_STATE);
+}

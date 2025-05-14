@@ -3,7 +3,7 @@
 
 #define GOOMBA_GRAVITY 0.002f
 #define GOOMBA_WALKING_SPEED 0.04f
-
+#define GOOMBA_DIE_SPEED_BY_KOOPA -0.4f
 
 #define GOOMBA_BBOX_WIDTH 16
 #define GOOMBA_BBOX_HEIGHT 14
@@ -14,6 +14,8 @@
 #define GOOMBA_STATE_WAITING 0
 #define GOOMBA_STATE_WALKING 100
 #define GOOMBA_STATE_DIE 200
+#define GOOMBA_STATE_DIE_BY_TAIL 300
+#define GOOMBA_STATE_DIE_BY_KOOPA 400
 
 #define ID_ANI_GOOMBA_WALKING 20000
 #define ID_ANI_GOOMBA_DIE 20100
@@ -46,5 +48,5 @@ public:
 	CGoomba(float x, float y);
 	virtual void SetState(int state);
 	virtual void GetStomped();
-	virtual void GetKoopaHit();
+	virtual void GetKoopaHit(int);
 };

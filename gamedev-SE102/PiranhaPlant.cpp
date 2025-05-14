@@ -86,6 +86,17 @@ void CPiranhaPlant::SetState(int _state)
 	}
 }
 
+void CPiranhaPlant::HittedByTail()
+{
+	SetState(PIRANHA_DIE_STATE);
+}
+
+void CPiranhaPlant::HittedByKoopa()
+{
+	SetState(PIRANHA_DIE_STATE);
+
+}
+
 void CPiranhaPlant::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	l = x - PIRANHA_CELL_WIDTH / 2;

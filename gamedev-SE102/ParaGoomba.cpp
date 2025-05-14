@@ -16,9 +16,9 @@ void CParaGoomba::Render()
 		else if (currentStep == PARA_GOOMBA_TOTALSTEPS - 1) aniId = ID_ANI_PARA_GOOMBA_FLY;
 		else aniId = ID_ANI_PARA_GOOMBA_JUMP;
 	}
-	
+	if (state == GOOMBA_STATE_DIE_BY_TAIL || state == GOOMBA_STATE_DIE_BY_KOOPA)
+		aniId = ID_ANI_PARA_GOOMBA_DIE_BY_TAIL;
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
-	RenderBoundingBox();
 }
 
 void CParaGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
