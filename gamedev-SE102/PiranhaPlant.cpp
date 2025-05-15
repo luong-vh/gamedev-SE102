@@ -52,7 +52,7 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CPiranhaPlant::Render()
 {
-	if (state == PIRANHA_HIDE_STATE) return;
+	if (state == PIRANHA_HIDE_STATE || state == PIRANHA_DIE_STATE) return;
 	CAnimations::GetInstance()->Get(PIRANHA_ANIMATION_ID)->Render(x, y);
 }
 

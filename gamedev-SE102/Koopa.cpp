@@ -16,6 +16,7 @@ void CKoopa::GetBoundingBox(float& left, float& top, float& right, float& bottom
 
 void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+
 	if (state == KOOPA_STATE_WAITING) {
 		float cx, cy;
 		CGame::GetInstance()->GetCamPos(cx, cy);
@@ -44,7 +45,7 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		SetState(KOOPA_STATE_WALKING);
 		return;
 	}
-	CCollision::GetInstance()->Process(this, dt, coObjects);
+	if (!isBeingHeld) CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
 void CKoopa::Render()
@@ -77,14 +78,13 @@ void CKoopa::Render()
 		break;
 	}
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
-	RenderBoundingBox();
 }
 
 CKoopa::CKoopa(float x, float y)
 {
 	SetState(KOOPA_STATE_WAITING);
 	state_start = -1;
-
+	isBeingHeld = false;
 }
 
 void CKoopa::SetState(int _state)
@@ -94,18 +94,21 @@ void CKoopa::SetState(int _state)
 	switch (_state)
 	{
 	case KOOPA_STATE_WAITING:
+		isBeingHeld = false;
 		vx = 0;
 		vy = 0;
 		ax = 0;
 		ay = 0;
 		break;
 	case KOOPA_STATE_WALKING:
+		isBeingHeld = false;
 		ay = KOOPA_GRAVITY;
 		vx = direction * KOOPA_WALKING_SPEED;
 		break;
 	case KOOPA_STATE_DIE:
 		ay = KOOPA_GRAVITY;
 		vy = KOOPA_DIE_SPEED_BY_KOOPA;
+		isBeingHeld = false;
 		break;
 	case KOOPA_STATE_INSHELL:
 
@@ -115,6 +118,7 @@ void CKoopa::SetState(int _state)
 		ax = 0;
 		break;
 	case KOOPA_STATE_SPINNING:
+		isBeingHeld = false;
 		ay = KOOPA_GRAVITY;
 		vx = direction * KOOPA_SPINNING_SPEED;
 		break;
@@ -158,6 +162,16 @@ void CKoopa::GetKoopaHit(int _direction)
 	else direction = 1;
 	vx = direction * KOOPA_WALKING_SPEED;
 	SetState(KOOPA_STATE_DIE);
+}
+
+void CKoopa::Release(int nx)
+{
+	y -= 5;
+	isBeingHeld = false;	
+	if (nx < 0) direction = -1;
+	else direction = 1;
+	SetState(KOOPA_STATE_SPINNING);
+	
 }
 
 void CKoopa::OnNoCollision(DWORD dt)
@@ -230,6 +244,10 @@ void CKoopa::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 	if (state == KOOPA_STATE_SPINNING) {
 		if (e->obj->GetState() == KOOPA_STATE_SPINNING) GetKoopaHit(-e->nx);
 		((CKoopa*)e->obj)->GetKoopaHit(e->nx);
+	}
+	else if (((CKoopa*)e->obj)->isBeingHeld) {
+		GetKoopaHit(nx);
+		((CKoopa*)e->obj)->GetKoopaHit(-nx);
 	}
 	else {
 		ReverseDirection();

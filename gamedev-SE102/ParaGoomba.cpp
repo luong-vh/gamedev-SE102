@@ -101,6 +101,11 @@ void CParaGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 	{
 		if (state != GOOMBA_STATE_PARA) OnCollisionWithGoomba(e);
 	}
+	if (dynamic_cast<CKoopa*>(e->obj)) {
+		if (e->obj->GetState() == KOOPA_STATE_DIE) return;
+		OnCollisionWithKoopa(e);
+		return;
+	}
 	if (!e->obj->IsBlocking()) return;
 
 	if (e->ny != 0)

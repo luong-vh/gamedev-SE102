@@ -34,7 +34,7 @@ protected:
    int direction;
    float ax;
    float ay;
-   bool isBeingHeld;
+ 
    bool isFlipped;
 
    ULONGLONG state_start;
@@ -55,6 +55,7 @@ protected:
    
 
 public:
+	bool isBeingHeld;
    CKoopa(float x, float y);
    virtual void ReverseDirection();
    virtual void SetState(int state);
@@ -62,6 +63,8 @@ public:
    virtual void GetKicked(int);
    virtual void GetTailHit(int);
    virtual void GetKoopaHit(int);
+   virtual void BeingHeld() { isBeingHeld = true; }
+   virtual void Release(int nx);
 };
 
 

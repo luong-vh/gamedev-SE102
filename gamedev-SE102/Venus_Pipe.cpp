@@ -2,6 +2,7 @@
 
 void CVenus_Pipe::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (!venusFireTrap) return;
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	float ml, mt, mr, mb;
 	mario->GetBoundingBox(ml, mt, mr, mb);

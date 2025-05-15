@@ -3,6 +3,7 @@
 #include "PlayScene.h"
 void CPiranha_Pipe::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (!piranhaPlant) return;	
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	float ml, mt, mr, mb;
 	mario->GetBoundingBox(ml, mt, mr, mb);

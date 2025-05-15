@@ -73,6 +73,11 @@ void CGoomba::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 }
 void CGoomba::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 {
+	if (((CKoopa*)e->obj)->isBeingHeld && ! this->IsDeleted()) {
+		GetKoopaHit(nx);
+		((CKoopa*)e->obj)->GetKoopaHit(-nx);
+		return;
+	}
 	if (state == GOOMBA_STATE_PARA) return;
 	if (e->nx != 0)
 	{

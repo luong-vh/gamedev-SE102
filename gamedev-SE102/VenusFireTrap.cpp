@@ -62,7 +62,7 @@ void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CVenusFireTrap::Render()
 {
-	if (state == VENUS_HIDE_STATE) return;
+	if (state == VENUS_HIDE_STATE || state == VENUS_DIE_STATE) return;
 	
 	
 	int aniId = state + objectId;

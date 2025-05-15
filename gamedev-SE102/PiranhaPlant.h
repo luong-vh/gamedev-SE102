@@ -49,7 +49,7 @@ public:
 	void HittedByKoopa();	
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	int IsCollidable() { return 1; };
-	int IsBlocking() { return 1; }
+	int IsBlocking() { return 0; }
 };
 typedef CPiranhaPlant* LPPIRANHAPLANT;
 

@@ -5,6 +5,7 @@
 #include "Animations.h"
 
 #include "debug.h"
+#include "Koopa.h"
 
 #define MARIO_WALKING_SPEED		0.1f
 #define MARIO_RUNNING_SPEED		0.2f
@@ -32,6 +33,7 @@
 
 #define MARIO_STATE_SIT				600
 #define MARIO_STATE_SIT_RELEASE		601
+
 
 
 #pragma region ANIMATION_ID
@@ -63,11 +65,32 @@
 #define ID_ANI_MARIO_BRACE_RIGHT 1800
 #define ID_ANI_MARIO_BRACE_LEFT 1810
 
+#define ID_ANI_MARIO_IDLE_HOLD_RIGHT 1900
+#define ID_ANI_MARIO_IDLE_HOLD_LEFT 1910
+#define ID_ANI_MARIO_JUMP_HOLD_RIGHT 1902
+#define ID_ANI_MARIO_JUMP_HOLD_LEFT 1912
+#define ID_ANI_MARIO_RUNNING_HOLD_RIGHT 1901
+#define ID_ANI_MARIO_RUNNING_HOLD_LEFT 1911
+#define ID_ANI_MARIO_KICK_RIGHT 1903
+#define ID_ANI_MARIO_KICK_LEFT 1913
+
 #define ID_ANI_MARIO_DIE 3000
 
 // SMALL MARIO
 #define ID_ANI_MARIO_SMALL_IDLE_RIGHT 0
 #define ID_ANI_MARIO_SMALL_IDLE_LEFT 10
+
+#define ID_ANI_MARIO_SMALL_IDLE_HOLD_RIGHT 900
+#define ID_ANI_MARIO_SMALL_IDLE_HOLD_LEFT 910
+
+#define ID_ANI_MARIO_SMALL_JUMP_HOLD_RIGHT 901
+#define ID_ANI_MARIO_SMALL_JUMP_HOLD_LEFT 911
+
+#define ID_ANI_MARIO_SMALL_RUNNING_HOLD_RIGHT 902
+#define ID_ANI_MARIO_SMALL_RUNNING_HOLD_LEFT 912
+
+#define ID_ANI_MARIO_SMALL_KICK_RIGHT 903
+#define ID_ANI_MARIO_SMALL_KICK_LEFT 913
 
 #define ID_ANI_MARIO_SMALL_WALKING_RIGHT 100
 #define ID_ANI_MARIO_SMALL_WALKING_LEFT 110
@@ -112,6 +135,15 @@
 #define ID_ANI_MARIO_RACOON_BRACE_RIGHT 2800
 #define ID_ANI_MARIO_RACOON_BRACE_LEFT 2810
 
+#define ID_ANI_MARIO_RACOON_IDLE_HOLD_RIGHT 2900
+#define ID_ANI_MARIO_RACOON_IDLE_HOLD_LEFT 2910
+#define ID_ANI_MARIO_RACOON_JUMP_HOLD_RIGHT 2902
+#define ID_ANI_MARIO_RACOON_JUMP_HOLD_LEFT 2912
+#define ID_ANI_MARIO_RACOON_RUNNING_HOLD_RIGHT 2901
+#define ID_ANI_MARIO_RACOON_RUNNING_HOLD_LEFT 2911
+#define ID_ANI_MARIO_RACOON_KICK_RIGHT 2903
+#define ID_ANI_MARIO_RACOON_KICK_LEFT 2913
+
 #pragma endregion
 
 #define GROUND_Y 160.0f
@@ -135,6 +167,12 @@
 
 
 #define MARIO_UNTOUCHABLE_TIME 2500
+#define MARIO_KICK_TIMEOUT 200
+
+#define SMALL_OFFSET_X 10
+#define SMALL_OFFSET_Y 0
+#define BIG_OFFSET_X 12
+#define BIG_OFFSET_Y 1
 
 class CMario : public CGameObject
 {
@@ -145,7 +183,10 @@ class CMario : public CGameObject
 
 	int level; 
 	int untouchable; 
+	bool isKicking;
+	CKoopa* koopa;
 	ULONGLONG untouchable_start;
+	ULONGLONG kick_start;
 	BOOLEAN isOnPlatform;
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
@@ -159,16 +200,20 @@ class CMario : public CGameObject
 	int GetAniIdRacoon();
 
 public:
+	bool ableToHold;
 	CMario(float x, float y) : CGameObject(x, y)
 	{
 		isSitting = false;
+		isKicking = false;
 		maxVx = 0.0f;
 		ax = 0.0f;
 		ay = MARIO_GRAVITY; 
-
-		level = MARIO_LEVEL_BIG;
+		ableToHold = false;
+		koopa = NULL;
+		level = MARIO_LEVEL_SMALL;
 		untouchable = 0;
 		untouchable_start = -1;
+		kick_start = -1;
 		isOnPlatform = false;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
@@ -188,6 +233,13 @@ public:
 	void SetLevel(int l);
 	int GetLevel() { return level; }
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
-
+	void HoldKoopa(CKoopa* k) { koopa = k; }
+	void ReleaseKoopa() 
+	{ 
+		koopa = NULL; 
+		OnGetDamage();
+	}
+	void GetKoopaOffset(float& offsetX, float& offsetY);
+	
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 };
