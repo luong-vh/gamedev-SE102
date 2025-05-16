@@ -8,5 +8,10 @@ public:
     CCloudBlock(float x, float y) : CBrick(x, y) {}
 
     void Render();
+	virtual int IsDirectionColliable(float nx, float ny)
+	{
+		if (nx == 0 && ny == -1) return 1;
+		return 0;
+	}
 };
 
