@@ -380,6 +380,22 @@ void CPlayScene::Update(DWORD dt)
 {
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
+	
+	vector<LPGAMEOBJECT> coObjects;
+	for (size_t i = 1; i < objects.size(); i++)
+	{
+		coObjects.push_back(objects[i]);
+	}
+	if (isMarioPaused)
+	{
+		if (GetTickCount64() - marioPause_start > marioPause_time)
+		{
+			isMarioPaused = false;
+			marioPause_start = 0;
+			marioPause_time = 0;
+		}
+		return;
+	}
 	time -= dt * 1.0f / 1000;
 	if (time <= 0)
 	{
@@ -387,12 +403,6 @@ void CPlayScene::Update(DWORD dt)
 		return;
 	}
 	CPlayHUD::GetInstance()->SetTime(floor(time));
-	vector<LPGAMEOBJECT> coObjects;
-	for (size_t i = 1; i < objects.size(); i++)
-	{
-		coObjects.push_back(objects[i]);
-	}
-
 	for (size_t i = 0; i < objects.size(); i++)
 	{
 		objects[i]->Update(dt, &coObjects);
@@ -420,10 +430,19 @@ void CPlayScene::Render()
 {
 	for (int i = 0; i < tiles.size(); i++)
 		tiles[i]->Draw();
-	for (int i = 1; i < objects.size(); i++)
-		objects[i]->Render();
-	objects[0]->Render();
+	
 	CPlayHUD::GetInstance()->Render();
+
+	if (isMarioPaused) {
+		for (int i = 1; i < objects.size(); i++)
+			objects[i]->RenderWhenMarioPaused();
+		objects[0]->RenderWhenMarioPaused();
+	}
+	else {
+		for (int i = 1; i < objects.size(); i++)
+			objects[i]->Render();
+		objects[0]->Render();
+	}
 	
 }
 
@@ -455,6 +474,13 @@ void CPlayScene::Unload()
 	player = NULL;
 
 	DebugOut(L"[INFO] Scene %d unloaded! \n", id);
+}
+
+void CPlayScene::MarioPause(float time)
+{
+	marioPause_start = GetTickCount64();
+	marioPause_time = time;
+	isMarioPaused = true;
 }
 
 bool CPlayScene::IsGameObjectDeleted(const LPGAMEOBJECT& o) { return o == NULL; }

@@ -14,7 +14,10 @@ class CPlayScene: public CScene
 {
 protected: 
 	// A play scene has to have player, right? 
-	LPGAMEOBJECT player;					
+	LPGAMEOBJECT player;	
+	ULONGLONG marioPause_start;
+	float marioPause_time;
+	bool isMarioPaused = false;
 
 	vector<LPGAMEOBJECT> objects;
 	vector<CBackgroundTile*> tiles;
@@ -34,6 +37,7 @@ public:
 	virtual void Update(DWORD dt);
 	virtual void Render();
 	virtual void Unload();
+	virtual void MarioPause(float time);
 
 	LPGAMEOBJECT GetPlayer() { return player; }
 

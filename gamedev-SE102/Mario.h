@@ -197,7 +197,7 @@ class CMario : public CGameObject
 	int untouchable; 
 	bool isKicking;
 	bool isAttacking;
-
+	int idAniTransform;
 	CKoopa* koopa;
 	ULONGLONG untouchable_start;
 	ULONGLONG kick_start;
@@ -265,4 +265,7 @@ public:
 	void GetKoopaOffset(float& offsetX, float& offsetY);
 	
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+	void RenderWhenMarioPaused() {
+		CAnimations::GetInstance()->Get(idAniTransform)->Render(x, y);
+	}
 };

@@ -271,7 +271,7 @@ void CMario::OnGetDamage()
 	if (untouchable) return;
 	if (level > MARIO_LEVEL_SMALL)
 	{
-		level -= 1;
+		SetLevel(level - 1);
 		StartUntouchable();
 	}
 	else
@@ -721,6 +721,18 @@ void CMario::SetLevel(int l)
 	if (this->level == MARIO_LEVEL_SMALL)
 	{
 		y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
+	}
+	if (l == 1) {
+		idAniTransform = nx>0 ? ID_ANI_MARIO_TRANSFORM_BIG_TO_SMALL_RIGHT : ID_ANI_MARIO_TRANSFORM_BIG_TO_SMALL_LEFT;
+		((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->MarioPause(900);
+	}
+	else if (l == 2 && level == 1) {
+			idAniTransform = nx > 0 ? ID_ANI_MARIO_TRANSFORM_SMALL_TO_BIG_RIGHT : ID_ANI_MARIO_TRANSFORM_SMALL_TO_BIG_LEFT;
+			((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->MarioPause(900);
+	}
+	else {
+		idAniTransform = ID_ANI_MARIO_TRANSFORM_SMOKE;
+		((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->MarioPause(375);
 	}
 	level = l;
 	if (level == MARIO_LEVEL_RACOON && tail == NULL) tail = new CTail(x, y);
