@@ -7,7 +7,7 @@
 #define TAIL_BBOX_WIDTH 10
 #define TAIL_BBOX_HEIGHT 3
 
-#define TAIL_ATTACK_TIMEOUT 200
+#define TAIL_ATTACK_TIMEOUT 300
 class CTail :
     public CGameObject
 {

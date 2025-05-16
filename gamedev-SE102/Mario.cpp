@@ -376,6 +376,10 @@ int CMario::GetAniIdSmall()
 
 int CMario::GetAniIdRacoon()
 {
+	if (isAttacking) {
+		if (nx > 0) return ID_ANI_MARIO_RACOON_TAIL_ATTACK_RIGHT;
+		else return ID_ANI_MARIO_RACOON_TAIL_ATTACK_LEFT;
+	}
 	if (isKicking) {
 		if (nx > 0) return ID_ANI_MARIO_RACOON_KICK_RIGHT;
 		else return ID_ANI_MARIO_RACOON_KICK_LEFT;
