@@ -6,6 +6,7 @@
 
 #include "debug.h"
 #include "Koopa.h"
+#include "Tail.h"
 
 #define MARIO_WALKING_SPEED		0.1f
 #define MARIO_RUNNING_SPEED		0.2f
@@ -174,6 +175,9 @@
 #define BIG_OFFSET_X 12
 #define BIG_OFFSET_Y 1
 
+#define TAIL_OFFSET_X 10
+#define TAIL_OFFSET_Y 4
+
 class CMario : public CGameObject
 {
 	BOOLEAN isSitting;
@@ -184,9 +188,12 @@ class CMario : public CGameObject
 	int level; 
 	int untouchable; 
 	bool isKicking;
+	bool isAttacking;
+
 	CKoopa* koopa;
 	ULONGLONG untouchable_start;
 	ULONGLONG kick_start;
+	ULONGLONG attack_start;
 	BOOLEAN isOnPlatform;
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
@@ -195,25 +202,33 @@ class CMario : public CGameObject
 	void OnCollisionWithVenus(LPCOLLISIONEVENT e);
 	void OnCollisionWithPiranha(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
+	void HandleTailAttack(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
+	void HandleKoopaHold();
 	int GetAniIdBig();
 	int GetAniIdSmall();
 	int GetAniIdRacoon();
+	CTail* tail;
 
 public:
 	bool ableToHold;
+	bool ableToAttack;
 	CMario(float x, float y) : CGameObject(x, y)
 	{
 		isSitting = false;
 		isKicking = false;
+		isAttacking = false;
 		maxVx = 0.0f;
 		ax = 0.0f;
 		ay = MARIO_GRAVITY; 
 		ableToHold = false;
+		ableToAttack = false;
 		koopa = NULL;
 		level = MARIO_LEVEL_SMALL;
+		tail = NULL;
 		untouchable = 0;
 		untouchable_start = -1;
 		kick_start = -1;
+		attack_start = -1;
 		isOnPlatform = false;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);

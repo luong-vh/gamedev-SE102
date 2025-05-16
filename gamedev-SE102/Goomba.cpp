@@ -97,6 +97,10 @@ void CGoomba::GetKoopaHit(int direction)
 	vx = direction * GOOMBA_WALKING_SPEED;
 	SetState(GOOMBA_STATE_DIE_BY_KOOPA);
 }
+void CGoomba::GetTailHit(int direction)
+{
+	GetKoopaHit(direction);
+}
 void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	if (state == GOOMBA_STATE_WAITING) {

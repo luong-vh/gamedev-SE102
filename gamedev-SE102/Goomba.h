@@ -49,4 +49,5 @@ public:
 	virtual void SetState(int state);
 	virtual void GetStomped();
 	virtual void GetKoopaHit(int);
+	virtual void GetTailHit(int);
 };

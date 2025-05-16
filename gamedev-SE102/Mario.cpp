@@ -16,6 +16,7 @@
 #include "Koopa.h"
 #include "GameData.h"
 #include "PlayHUD.h"
+
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	vy += ay * dt;
@@ -33,30 +34,13 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		isKicking = false;
 		kick_start = -1;
 	}
+
+	HandleTailAttack(dt,coObjects);
+
 	CCollision::GetInstance()->Process(this, dt, coObjects);
-	if (koopa)
-	{
-		if (koopa->GetState() == KOOPA_STATE_DIE) {
-			koopa->isBeingHeld = false;
-			koopa = NULL;
-			return;
-		}
-		
-		if (!koopa->isBeingHeld) ReleaseKoopa();
-		else if (!ableToHold) {
-			koopa->Release(nx);
-			koopa = NULL;
-			isKicking = true;
-			kick_start = GetTickCount64();
-		}
-		else {
-			float offsetX, offsetY;
-			GetKoopaOffset(offsetX, offsetY);
-			if (nx < 0) offsetX *= -1;
-			koopa->SetPosition(x + offsetX, y + offsetY);
-			koopa->SetSpeed(vx, vy);
-		}
-	}
+
+	HandleKoopaHold();
+	
 }
 
 void CMario::OnNoCollision(DWORD dt)
@@ -214,6 +198,65 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 			{
 				OnGetDamage();
 			}
+		}
+	}
+}
+
+void CMario::HandleTailAttack(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	if (ableToAttack && level == MARIO_LEVEL_RACOON && isAttacking == false) {
+		ableToAttack = false;
+		isAttacking = true;
+		attack_start = GetTickCount64();
+		tail->Attack();
+	}
+	if (isAttacking) {
+		if (GetTickCount64() - attack_start > TAIL_ATTACK_TIMEOUT) {
+			isAttacking = false;
+			attack_start = -1;
+			tail->Wait();
+		}
+		else {
+			if (tail == NULL) tail = new CTail(x, y);
+			float tx = x, ty = y + TAIL_OFFSET_Y;
+			if (GetTickCount64() - attack_start > TAIL_ATTACK_TIMEOUT / 2) {
+				if (nx > 0) tx += TAIL_OFFSET_X;
+				else tx -= TAIL_OFFSET_X;
+			}
+			else {
+				if (nx > 0) tx -= TAIL_OFFSET_X;
+				else tx += TAIL_OFFSET_X;
+			}
+			tail->SetPosition(tx, ty);
+			tail->Update(dt, coObjects);
+		}
+	}
+	else if (tail) tail->SetPosition(x, y);
+}
+
+void CMario::HandleKoopaHold()
+{
+	if (koopa)
+	{
+		if (koopa->GetState() == KOOPA_STATE_DIE) {
+			koopa->isBeingHeld = false;
+			koopa = NULL;
+			return;
+		}
+
+		if (!koopa->isBeingHeld) ReleaseKoopa();
+		else if (!ableToHold) {
+			koopa->Release(nx);
+			koopa = NULL;
+			isKicking = true;
+			kick_start = GetTickCount64();
+		}
+		else {
+			float offsetX, offsetY;
+			GetKoopaOffset(offsetX, offsetY);
+			if (nx < 0) offsetX *= -1;
+			koopa->SetPosition(x + offsetX, y + offsetY);
+			koopa->SetSpeed(vx, vy);
 		}
 	}
 }
@@ -539,6 +582,7 @@ void CMario::Render()
 	else if (level == MARIO_LEVEL_RACOON)
 		aniId = GetAniIdRacoon();
 	animations->Get(aniId)->Render(x, y);
+	if (tail) tail->Render();
 }
 
 void CMario::SetState(int state)
@@ -672,5 +716,6 @@ void CMario::SetLevel(int l)
 		y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
 	}
 	level = l;
+	if (level == MARIO_LEVEL_RACOON && tail == NULL) tail = new CTail(x, y);
 }
 

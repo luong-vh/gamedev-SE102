@@ -64,6 +64,7 @@ void CPiranhaPlant::SetState(int _state)
 	{
 	case PIRANHA_DIE_STATE:
 		pipe->piranhaPlant = NULL;
+		Delete();
 		vx = 0;
 		vy = 0;
 		break;

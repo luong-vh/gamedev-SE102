@@ -151,9 +151,9 @@ void CKoopa::GetStomped()
 	}
 }
 
-void CKoopa::GetTailHit(int direction)
+void CKoopa::GetTailHit(int _direction)
 {
-
+	GetKoopaHit(_direction);
 }
 
 void CKoopa::GetKoopaHit(int _direction)

@@ -96,6 +96,7 @@ void CVenusFireTrap::SetState(int state)
 	{
 	case VENUS_DIE_STATE:
 		this->pipe->venusFireTrap = NULL;
+		Delete();
 		vx = 0;
 		vy = 0;
 		break;
