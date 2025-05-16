@@ -431,7 +431,7 @@ void CPlayScene::Render()
 	for (int i = 0; i < tiles.size(); i++)
 		tiles[i]->Draw();
 	
-	CPlayHUD::GetInstance()->Render();
+	
 
 	if (isMarioPaused) {
 		for (int i = 1; i < objects.size(); i++)
@@ -443,7 +443,7 @@ void CPlayScene::Render()
 			objects[i]->Render();
 		objects[0]->Render();
 	}
-	
+	CPlayHUD::GetInstance()->Render();
 }
 
 /*
