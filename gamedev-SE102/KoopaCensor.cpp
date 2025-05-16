@@ -1,10 +1,5 @@
 #include "KoopaCensor.h"
-
-void CKoopaCensor::OnNoCollision(DWORD dt)
-{
-	isOnPlatform = false;
-	y += vy * dt;
-}
+#include "debug.h"
 
 void CKoopaCensor::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
@@ -19,32 +14,18 @@ void CKoopaCensor::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		return;
 	}
-	vy += ay * dt;
-	CCollision::GetInstance()->Process(this, dt, coObjects);
-}
-void CKoopaCensor::SetState(int state)
-{
-	CGameObject::SetState(state);
-	switch (state)
-	{
-	case CENSOR_STATE_WAITING:
-		ay = 0;
-		vy = 0;
-		break;
-	case CENSOR_STATE_ACTIVE:
-		ay = CENSOR_GRAVITY;
-		break;
-	}
-}
-void CKoopaCensor::OnCollisionWith(LPCOLLISIONEVENT e)
-{
-	if (e->ny != 0 && e->obj->IsBlocking())
-	{
-		vy = 0;
-		if (e->ny < 0)
-		{
+
+	for (int i = 0; i < coObjects->size(); i++) {
+		if ((*coObjects)[i]->IsBlocking() == false) continue;
+		float l, t, r, b, l1, t1, r1, b1;
+		GetBoundingBox(l, t, r, b);
+		(*coObjects)[i]->GetBoundingBox(l1, t1, r1, b1);
+		if (!(r < l1 || l > r1 || b < t1 || t > b1)) {
 			isOnPlatform = true;
+			return;
 		}
 	}
+	isOnPlatform = false;
 	
 }
+
