@@ -147,6 +147,7 @@
     <ClCompile Include="HUDTile.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="Koopa.cpp" />
+    <ClCompile Include="KoopaCensor.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mario.cpp" />
     <ClCompile Include="ParaGoomba.cpp" />
@@ -189,6 +190,7 @@
     <ClInclude Include="Item.h" />
     <ClInclude Include="KeyEventHandler.h" />
     <ClInclude Include="Koopa.h" />
+    <ClInclude Include="KoopaCensor.h" />
     <ClInclude Include="Mario.h" />
     <ClInclude Include="ParaGoomba.h" />
     <ClInclude Include="Pipe.h" />
