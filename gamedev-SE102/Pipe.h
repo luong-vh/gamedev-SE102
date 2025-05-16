@@ -5,21 +5,18 @@
 #define PIPE_BORDER 2
 #define PIPE_CELL_WIDTH 32
 #define PIPE_CELL_HEIGHT 16
+#define PIPE_HEAD_ID 80000
+#define PIPE_BODY_ID 80001
 class CPipe : public CGameObject
 {
 private:
 	int height;
-	int spriteIdHead, spriteIdBody;
 	
 public:
 
-	CPipe(float x, float y,
-		int height,
-		int spriteIdHead, int spriteIdBody) :CGameObject(x, y)
+	CPipe(float x, float y, int height) :CGameObject(x, y)
 	{
 		this->height = height;
-		this->spriteIdHead = spriteIdHead;
-		this->spriteIdBody = spriteIdBody;
 	}
 
 	void Render();

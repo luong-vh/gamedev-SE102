@@ -11,12 +11,12 @@ void CPipe::Render()
 	float yy = y;
 	CSprites* s = CSprites::GetInstance();
 
-	s->Get(this->spriteIdHead)->Draw(x, y);
+	s->Get(PIPE_HEAD_ID)->Draw(x, y);
 
 	for (int i = 1; i < this->height; i++)
 	{
 		yy += PIPE_CELL_HEIGHT;
-		s->Get(this->spriteIdBody)->Draw(x, yy);
+		s->Get(PIPE_BODY_ID)->Draw(x, yy);
 	}
 
 	//RenderBoundingBox();

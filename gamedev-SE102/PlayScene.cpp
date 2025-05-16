@@ -204,28 +204,22 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	case OBJECT_TYPE_PIPE:
 	{
-		if (tokens.size() < 6) return;
+		if (tokens.size() < 4) return;
 		int height = atoi(tokens[3].c_str());
-		int cell_id_head = atoi(tokens[4].c_str());
-		int cell_id_body = atoi(tokens[5].c_str());
 
 
 		obj = new CPipe(
-			x, y, height,
-			cell_id_head, cell_id_body
+			x, y, height
 		);
 		break;
 	}
 	case OBJECT_TYPE_RED_VENUS:
 	{
-		if (tokens.size() < 4) return;
+		if (tokens.size() < 5) return;
 		int height = atoi(tokens[3].c_str());
 		int pipeHeight = atoi(tokens[4].c_str());
-		int pipeHeadId = atoi(tokens[5].c_str());
-		int pipeBodyId = atoi(tokens[6].c_str());
 		LPVenusPipe pipe = new CVenus_Pipe(
-			x, y + height * VENUS_CELL_HEIGHT / 2 + PIPE_CELL_HEIGHT / 2, pipeHeight,
-			pipeHeadId, pipeBodyId, NULL
+			x, y + height * VENUS_CELL_HEIGHT / 2 + PIPE_CELL_HEIGHT / 2, pipeHeight, NULL
 		);
 		obj = new CVenusFireTrap(x, y, height, pipe, RED_VENUSFIRETRAP_ID);
 		pipe->venusFireTrap = (LPVENUSFIRETRAP)obj;
@@ -240,8 +234,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int pipeHeadId = atoi(tokens[5].c_str());
 		int pipeBodyId = atoi(tokens[6].c_str());
 		LPVenusPipe pipe = new CVenus_Pipe(
-			x, y + height * VENUS_CELL_HEIGHT / 2 + PIPE_CELL_HEIGHT / 2, pipeHeight,
-			pipeHeadId, pipeBodyId, NULL
+			x, y + height * VENUS_CELL_HEIGHT / 2 + PIPE_CELL_HEIGHT / 2, pipeHeight, NULL
 		);
 		obj = new CVenusFireTrap(x, y, height, pipe, GREEN_VENUSFIRETRAP_ID);
 		pipe->venusFireTrap = (LPVENUSFIRETRAP)obj;
@@ -250,14 +243,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	case OBJECT_TYPE_PIRANHA:
 	{
-		if (tokens.size() < 4) return;
+		if (tokens.size() < 5) return;
 		int height = atoi(tokens[3].c_str());
 		int pipeHeight = atoi(tokens[4].c_str());
-		int pipeHeadId = atoi(tokens[5].c_str());
-		int pipeBodyId = atoi(tokens[6].c_str());
 		LPPIRANHAPIPE pipe = new CPiranha_Pipe(
-			x, y + height * PIRANHA_CELL_HEIGHT / 2 + PIPE_CELL_HEIGHT / 2, pipeHeight,
-			pipeHeadId, pipeBodyId, NULL
+			x, y + height * PIRANHA_CELL_HEIGHT / 2 + PIPE_CELL_HEIGHT / 2, pipeHeight, NULL
 		);
 		obj = new CPiranhaPlant(x, y, height, pipe);
 		pipe->piranhaPlant = (LPPIRANHAPLANT)obj;

@@ -6,9 +6,7 @@ class CPiranha_Pipe :
 {
 public:
 	LPPIRANHAPLANT piranhaPlant;
-	CPiranha_Pipe(float x, float y,
-		int height,
-		int spriteIdHead, int spriteIdBody, LPPIRANHAPLANT piranha) :CPipe(x, y, height, spriteIdHead, spriteIdBody)
+	CPiranha_Pipe(float x, float y, int height, LPPIRANHAPLANT piranha) :CPipe(x, y, height)
 	{
 		this->piranhaPlant = piranha;
 	}

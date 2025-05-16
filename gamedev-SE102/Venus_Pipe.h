@@ -7,7 +7,7 @@ public:
 	LPVENUSFIRETRAP venusFireTrap;
 	CVenus_Pipe(float x, float y,
 		int height,
-		int spriteIdHead, int spriteIdBody, LPVENUSFIRETRAP venus) :CPipe(x, y, height, spriteIdHead, spriteIdBody)
+		 LPVENUSFIRETRAP venus) :CPipe(x, y, height)
 	{
 		this->venusFireTrap = venus;
 	}
