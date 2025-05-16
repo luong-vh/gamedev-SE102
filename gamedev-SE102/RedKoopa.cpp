@@ -3,7 +3,7 @@
 
 void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	censor->SetPosition(x + KOOPA_BBOX_WIDTH / 2 * direction, y);
+	censor->SetPosition(x + KOOPA_BBOX_WIDTH / 4 * direction, y);
 	
 	if (state == KOOPA_STATE_WALKING && isOnPlatform && !censor->IsOnPlatform())
 	{
@@ -69,5 +69,5 @@ void CRedKoopa::SetState(int _state)
 void CRedKoopa::ReverseDirection()
 {
 	CKoopa::ReverseDirection();
-	censor->SetPosition(x + KOOPA_BBOX_WIDTH / 2 * direction, y);
+	censor->SetPosition(x + KOOPA_BBOX_WIDTH / 4 * direction, y);
 }
