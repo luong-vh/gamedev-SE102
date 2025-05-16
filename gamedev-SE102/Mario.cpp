@@ -17,7 +17,7 @@
 #include "GameData.h"
 #include "PlayHUD.h"
 #include "GoldenBrick.h"
-
+#include "ButtonBrick.h"
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	vy += ay * dt;
@@ -112,6 +112,12 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 			CGameData::AddScore(100);
 			CPlayHUD::GetInstance()->SetCoin(CGameData::coin);
 			CPlayHUD::GetInstance()->SetScore(CGameData::score);
+		}
+	}
+	else if (dynamic_cast<CButtonBrick*>(e->obj)) {
+		CButtonBrick* buttonBrick = dynamic_cast<CButtonBrick*>(e->obj);
+		if (e->ny > 0) {
+			buttonBrick->SetState(BUTTON_BRICK_STATE_MOVE_UP);
 		}
 	}
 

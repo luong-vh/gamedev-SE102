@@ -24,7 +24,7 @@ void CButtonBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (y >= maxY)
 		{
 			y = maxY;
-			SetState(BUTTON_BRICK_STATE_NORMAL);
+			SetState(BUTTON_BRICK_STATE_HIT);
 		}
 	}
 

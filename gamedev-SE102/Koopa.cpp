@@ -7,6 +7,7 @@
 #include "VenusFireTrap.h"
 #include "PiranhaPlant.h"
 #include "GoldenBrick.h"
+#include "ButtonBrick.h"
 void CKoopa::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	left = x - KOOPA_BBOX_WIDTH / 2;
@@ -240,11 +241,19 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (!e->obj->IsBlocking()) return;
 	if (dynamic_cast<CGoldenBrick*>(e->obj)) {
 			CGoldenBrick* goldenBrick = dynamic_cast<CGoldenBrick*>(e->obj);
-			if (goldenBrick->GetState() == GOLDEN_BRICK_STATE_NORMAL && state == KOOPA_STATE_SPINNING) {
+			if (e->nx!=0 && goldenBrick->GetState() == GOLDEN_BRICK_STATE_NORMAL && state == KOOPA_STATE_SPINNING) {
 				goldenBrick->Break();
 				ReverseDirection();
 			}
 		
+		return;
+	}
+	else if (dynamic_cast<CButtonBrick*>(e->obj)) {
+		CButtonBrick* buttonBrick = dynamic_cast<CButtonBrick*>(e->obj);
+		if (e->ny != 0 && buttonBrick->GetState() == BUTTON_BRICK_STATE_NORMAL) {
+			buttonBrick->SetState(BUTTON_BRICK_STATE_MOVE_UP);
+		}
+		else if (e->ny !=0) ReverseDirection();
 		return;
 	}
 

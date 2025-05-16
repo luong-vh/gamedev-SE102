@@ -5,6 +5,7 @@
 #include "PiranhaPlant.h"
 #include "VenusFireTrap.h"
 #include "GoldenBrick.h"
+#include "ButtonBrick.h"
 void CTail::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
     left = x - TAIL_BBOX_WIDTH / 2;
@@ -69,6 +70,12 @@ void CTail::OnOverlapWith(LPGAMEOBJECT obj)
 		CGoldenBrick* goldenBrick = dynamic_cast<CGoldenBrick*>(obj);
 		if (goldenBrick->GetState() == GOLDEN_BRICK_STATE_NORMAL) {
 			goldenBrick->Break();
+		}
+	}
+	else if (dynamic_cast<CButtonBrick*>(obj)) {
+		CButtonBrick* buttonBrick = dynamic_cast<CButtonBrick*>(obj);
+		if (buttonBrick->GetState() == BUTTON_BRICK_STATE_NORMAL) {
+			buttonBrick->SetState(BUTTON_BRICK_STATE_MOVE_UP);
 		}
 	}
 	
