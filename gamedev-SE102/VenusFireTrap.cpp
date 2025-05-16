@@ -70,7 +70,6 @@ void CVenusFireTrap::Render()
 	GetAniId(aniId);
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 	this->fireBullet->Render();
-	//RenderBoundingBox();
 }
 
 void CVenusFireTrap::RenderWhenMarioPaused()
@@ -139,10 +138,14 @@ void CVenusFireTrap::SetState(int state)
 
 void CVenusFireTrap::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-	l = x - VENUS_CELL_WIDTH /2;
-	t = y - VENUS_CELL_HEIGHT / 2 * this ->height +1;
-	r = l + VENUS_CELL_WIDTH;
-	b = t + VENUS_CELL_HEIGHT * this->height;
+	if (state == VENUS_HIDE_STATE || state == VENUS_DIE_STATE) l = t = r = b = 0;
+	else
+	{
+		l = x - VENUS_CELL_WIDTH / 2;
+		t = y - VENUS_CELL_HEIGHT / 2 * this->height + 1;
+		r = l + VENUS_CELL_WIDTH;
+		b = t + VENUS_CELL_HEIGHT * this->height;
+	}
 }
 
 void CVenusFireTrap::HitByTail()

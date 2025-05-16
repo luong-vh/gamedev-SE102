@@ -106,9 +106,14 @@ void CPiranhaPlant::HitByKoopa()
 
 void CPiranhaPlant::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-	l = x - PIRANHA_CELL_WIDTH / 2;
-	t = y - PIRANHA_CELL_HEIGHT / 2 * this->height + 1;
-	r = l + PIRANHA_CELL_WIDTH;
-	b = t + PIRANHA_CELL_HEIGHT * this->height;
+	if (state == PIRANHA_HIDE_STATE || state == PIRANHA_DIE_STATE) l = t = r = b = 0;
+	else
+	{
+		l = x - PIRANHA_CELL_WIDTH / 2;
+		t = y - PIRANHA_CELL_HEIGHT / 2 * this->height + 1;
+		r = l + PIRANHA_CELL_WIDTH;
+		b = t + PIRANHA_CELL_HEIGHT * this->height;
+	}
+	
 }
 
