@@ -5,20 +5,39 @@
 #include "PlayScene.h"
 void CParaGoomba::Render()
 {
-	if (state == GOOMBA_STATE_WAITING) return;
 	int aniId = ID_ANI_PARA_GOOMBA_WALKING;
+	GetAniId(aniId);
+	if (aniId != 0)CAnimations::GetInstance()->Get(aniId)->Render(x, y);
+}
+
+void CParaGoomba::RenderWhenMarioPaused()
+{
+	int aniId = ID_ANI_PARA_GOOMBA_WALKING;
+	GetAniId(aniId);
+	if (aniId != 0) CAnimations::GetInstance()->Get(aniId)->RenderCurrentFrame(x, y);
+}
+
+void CParaGoomba::GetAniId(int& aniId)
+{
+	if (state == GOOMBA_STATE_WAITING)
+	{
+		aniId = 0;
+		return;
+	}
+	
 	if (state == GOOMBA_STATE_DIE)
 	{
 		aniId = ID_ANI_PARA_GOOMBA_DIE;
+		return;
 	}
 	if (state == GOOMBA_STATE_PARA) {
 		if (currentStep == 0) aniId = ID_ANI_PARA_GOOMBA_WALKING_WING;
 		else if (currentStep == PARA_GOOMBA_TOTALSTEPS - 1) aniId = ID_ANI_PARA_GOOMBA_FLY;
 		else aniId = ID_ANI_PARA_GOOMBA_JUMP;
+		return;
 	}
 	if (state == GOOMBA_STATE_DIE_BY_TAIL || state == GOOMBA_STATE_DIE_BY_KOOPA)
 		aniId = ID_ANI_PARA_GOOMBA_DIE_BY_TAIL;
-	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 }
 
 void CParaGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)

@@ -44,6 +44,7 @@ public:
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
+	void RenderWhenMarioPaused();
 	void SetState(int state);
 	void HitByTail();
 	void HitByKoopa();	

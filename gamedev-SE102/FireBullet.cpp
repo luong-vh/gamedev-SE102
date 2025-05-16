@@ -15,6 +15,12 @@ void CFireBullet::Render()
 	int aniId = state == FIRE_BULLET_STATE_LEFT_SHOOTING ? FIRE_BULLET_ANIMATION_ID_LEFT : FIRE_BULLET_ANIMATION_ID_RIGHT;
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 }
+void CFireBullet::RenderWhenMarioPaused()
+{
+	if (state == FIRE_BULLET_STATE_WAITING) return;
+	int aniId = state == FIRE_BULLET_STATE_LEFT_SHOOTING ? FIRE_BULLET_ANIMATION_ID_LEFT : FIRE_BULLET_ANIMATION_ID_RIGHT;
+	CAnimations::GetInstance()->Get(aniId)->RenderCurrentFrame(x, y);
+}
 void CFireBullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	

@@ -36,6 +36,9 @@ public:
 		
 	}
 	void Render();
+	void RenderWhenMarioPaused();
+	void GetAniId(int& aniId);
+	
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void SetState(int state);
 	void WakeUp();

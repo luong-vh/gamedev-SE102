@@ -58,6 +58,8 @@ public:
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
+	void RenderWhenMarioPaused();
+	void GetAniId(int& aniId);
 	void SetState(int state);
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	void HitByTail();

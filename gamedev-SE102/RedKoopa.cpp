@@ -15,11 +15,25 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CRedKoopa::Render()
 {
-	censor->Render();
+	//censor->Render();
 	int aniId = ID_ANI_KOOPA_WALKING_RIGHT;
+	GetAniId(aniId);
+	if (aniId != 0) CAnimations::GetInstance()->Get(aniId)->Render(x, y);
+}
+
+void CRedKoopa::RenderWhenMarioPaused()
+{
+	int aniId = ID_ANI_KOOPA_WALKING_RIGHT;
+	GetAniId(aniId);
+	if (aniId != 0) CAnimations::GetInstance()->Get(aniId)->RenderCurrentFrame(x, y);
+}
+
+void CRedKoopa::GetAniId(int& aniId)
+{
 	switch (state)
 	{
 	case KOOPA_STATE_WAITING:
+		aniId = 0;
 		return;
 	case KOOPA_STATE_INSHELL:
 		if (isFlipped) aniId = ID_ANI_RED_KOOPA_INSHELL_FLIP;
@@ -43,7 +57,6 @@ void CRedKoopa::Render()
 	default:
 		break;
 	}
-	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 }
 
 void CRedKoopa::SetState(int _state)

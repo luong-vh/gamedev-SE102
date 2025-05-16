@@ -24,6 +24,8 @@ public:
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
+	void RenderWhenMarioPaused();
+	void GetAniId(int& aniId);
 	void SetState(int _state);
 	void ReverseDirection();
 };

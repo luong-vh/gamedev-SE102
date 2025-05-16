@@ -67,6 +67,26 @@ void CVenusFireTrap::Render()
 	
 	int aniId = state + objectId;
 
+	GetAniId(aniId);
+	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
+	this->fireBullet->Render();
+	//RenderBoundingBox();
+}
+
+void CVenusFireTrap::RenderWhenMarioPaused()
+{
+	if (state == VENUS_HIDE_STATE || state == VENUS_DIE_STATE) return;
+
+
+	int aniId = state + objectId;
+
+	GetAniId(aniId);
+	CAnimations::GetInstance()->Get(aniId)->RenderCurrentFrame(x, y);
+	this->fireBullet->RenderWhenMarioPaused();
+}
+
+void CVenusFireTrap::GetAniId(int& aniId)
+{
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	float mx, my;
 	mario->GetPosition(mx, my);
@@ -83,9 +103,6 @@ void CVenusFireTrap::Render()
 	else {
 		aniId += VENUS_HEAD_LEFT;
 	}
-	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
-	this->fireBullet->Render();
-	//RenderBoundingBox();
 }
 
 void CVenusFireTrap::SetState(int state)

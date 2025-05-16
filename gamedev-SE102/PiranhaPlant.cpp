@@ -56,6 +56,12 @@ void CPiranhaPlant::Render()
 	CAnimations::GetInstance()->Get(PIRANHA_ANIMATION_ID)->Render(x, y);
 }
 
+void CPiranhaPlant::RenderWhenMarioPaused()
+{
+	if (state == PIRANHA_HIDE_STATE || state == PIRANHA_DIE_STATE) return;
+	CAnimations::GetInstance()->Get(PIRANHA_ANIMATION_ID)->RenderCurrentFrame(x, y);
+}
+
 void CPiranhaPlant::SetState(int _state)
 {
 	this->state = _state;

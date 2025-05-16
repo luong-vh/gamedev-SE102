@@ -145,22 +145,36 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 void CGoomba::Render()
 {
 	int aniId = ID_ANI_GOOMBA_WALKING;
+	GetAniId(aniId);
+	if (aniId != 0) CAnimations::GetInstance()->Get(aniId)->Render(x,y);
+}
+
+void CGoomba::RenderWhenMarioPaused()
+{
+	int aniId = ID_ANI_GOOMBA_WALKING;
+	GetAniId(aniId);
+	if (aniId !=0) CAnimations::GetInstance()->Get(aniId)->RenderCurrentFrame(x, y);
+}
+
+void CGoomba::GetAniId(int& aniId)
+{
+	aniId = ID_ANI_GOOMBA_WALKING;
 	switch (state)
 	{
 	case GOOMBA_STATE_DIE:
 		aniId = ID_ANI_GOOMBA_DIE;
-		break;
+		return;
 	case GOOMBA_STATE_DIE_BY_KOOPA:
 	case GOOMBA_STATE_DIE_BY_TAIL:
 		aniId = ID_ANI_GOOMBA_DIE_BY_TAIL;
-		break;
+		return;
 	case GOOMBA_STATE_WALKING:
 		aniId = ID_ANI_GOOMBA_WALKING;
-		break;
+		return;
 	case GOOMBA_STATE_WAITING:
+		aniId = 0;
 		return;
 	}
-	CAnimations::GetInstance()->Get(aniId)->Render(x,y);
 }
 
 void CGoomba::SetState(int _state)
