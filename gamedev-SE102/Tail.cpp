@@ -56,13 +56,13 @@ void CTail::OnOverlapWith(LPGAMEOBJECT obj)
 	else if (dynamic_cast<CPiranhaPlant*>(obj)) {
 		CPiranhaPlant* piranha = dynamic_cast<CPiranhaPlant*>(obj);
 		if (piranha->GetState() != PIRANHA_DIE_STATE) {
-			piranha->HittedByTail();
+			piranha->HitByTail();
 		}
 	}
 	else if (dynamic_cast<CVenusFireTrap*>(obj)) {
 		CVenusFireTrap* venus = dynamic_cast<CVenusFireTrap*>(obj);
 		if (venus->GetState() != VENUS_DIE_STATE) {
-			venus->HittedByTail();
+			venus->HitByTail();
 		}
 	}
 }

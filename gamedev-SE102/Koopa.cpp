@@ -46,6 +46,7 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		return;
 	}
 	if (!isBeingHeld) CCollision::GetInstance()->Process(this, dt, coObjects);
+	if (state == KOOPA_STATE_INSHELL && isOnPlatform) vx = 0;
 }
 
 void CKoopa::Render()
@@ -85,6 +86,7 @@ CKoopa::CKoopa(float x, float y)
 	SetState(KOOPA_STATE_WAITING);
 	state_start = -1;
 	isBeingHeld = false;
+	isOnPlatform = false;
 }
 
 void CKoopa::SetState(int _state)
@@ -101,6 +103,7 @@ void CKoopa::SetState(int _state)
 		ay = 0;
 		break;
 	case KOOPA_STATE_WALKING:
+		isFlipped = false;
 		isBeingHeld = false;
 		ay = KOOPA_GRAVITY;
 		vx = direction * KOOPA_WALKING_SPEED;
@@ -153,7 +156,13 @@ void CKoopa::GetStomped()
 
 void CKoopa::GetTailHit(int _direction)
 {
-	GetKoopaHit(_direction);
+	isFlipped = true;
+	if (_direction < 0) direction = -1;
+	else direction = 1;
+
+	SetState(KOOPA_STATE_INSHELL);
+	vx = direction * KOOPA_TAIL_HIT_VX;
+	vy = -KOOPA_TAIL_HIT_VY;
 }
 
 void CKoopa::GetKoopaHit(int _direction)
@@ -178,6 +187,7 @@ void CKoopa::OnNoCollision(DWORD dt)
 {
 	x += vx * dt;
 	y += vy * dt;
+	isOnPlatform = false;
 }
 
 void CKoopa::WakeUp()
@@ -189,6 +199,11 @@ void CKoopa::WakeUp()
 
 void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 {
+	if (e->ny != 0 && e->obj->IsBlocking())
+	{
+		vy = 0;
+		if (e->ny < 0) isOnPlatform = true;
+	}
 	if (dynamic_cast<CGoomba*>(e->obj)) {
 		if (e->obj->GetState() == GOOMBA_STATE_DIE) return;
 		OnCollisionWithGoomba(e);
@@ -209,10 +224,7 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 	}
 	if (!e->obj->IsBlocking()) return;
 
-	if (e->ny != 0)
-	{
-		vy = 0;
-	}
+
 	else if (e->nx != 0)
 	{
 		ReverseDirection();
@@ -220,7 +232,7 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 		if (brick) {
 			if (brick->GetState() == QUESTION_BRICK_STATE_NORMAL && state == KOOPA_STATE_SPINNING) {
 				brick->SpawnItem();
-				brick->SetState(QUESTION_BRICK_STATE_HITTED);
+				brick->SetState(QUESTION_BRICK_STATE_HIT);
 			}
 		}
 	}
@@ -258,14 +270,14 @@ void CKoopa::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 void CKoopa::OnCollisionWithVenus(LPCOLLISIONEVENT e)
 {
 	if (state == KOOPA_STATE_SPINNING) {
-		((CVenusFireTrap*)e->obj)->HittedByKoopa();
+		((CVenusFireTrap*)e->obj)->HitByKoopa();
 	}
 }
 
 void CKoopa::OnCollisionWithPiranha(LPCOLLISIONEVENT e)
 {
 	if (state == KOOPA_STATE_SPINNING) {
-		((CPiranhaPlant*)e->obj)->HittedByKoopa();
+		((CPiranhaPlant*)e->obj)->HitByKoopa();
 	}
 }
 

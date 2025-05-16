@@ -87,12 +87,12 @@ void CPiranhaPlant::SetState(int _state)
 	}
 }
 
-void CPiranhaPlant::HittedByTail()
+void CPiranhaPlant::HitByTail()
 {
 	SetState(PIRANHA_DIE_STATE);
 }
 
-void CPiranhaPlant::HittedByKoopa()
+void CPiranhaPlant::HitByKoopa()
 {
 	SetState(PIRANHA_DIE_STATE);
 

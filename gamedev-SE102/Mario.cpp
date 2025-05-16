@@ -78,7 +78,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		CQuestionBrick* questionBrick = dynamic_cast<CQuestionBrick*>(e->obj);
 		if (e->ny > 0)
 		{
-			questionBrick->OnMarioHitted(e);
+			questionBrick->OnMarioHit(e);
 		}
 	}
 	else if (dynamic_cast<CSuperMushroom*>(e->obj))
@@ -173,7 +173,8 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 		}
 		return;
 	}
-	if (e->nx != 0 &&
+	
+	if ((e->nx != 0 || e->ny >0) &&
 		(koopa -> GetState() == KOOPA_STATE_INSHELL ||
 		koopa -> GetState() == KOOPA_STATE_REVIVING))
 	{
@@ -190,6 +191,7 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 		}
 		
 	}
+	
 	else
 	{
 		if (untouchable == 0)
@@ -204,6 +206,7 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 
 void CMario::HandleTailAttack(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+
 	if (ableToAttack && level == MARIO_LEVEL_RACOON && isAttacking == false) {
 		ableToAttack = false;
 		isAttacking = true;
@@ -211,7 +214,7 @@ void CMario::HandleTailAttack(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		tail->Attack();
 	}
 	if (isAttacking) {
-		if (GetTickCount64() - attack_start > TAIL_ATTACK_TIMEOUT) {
+		if (GetTickCount64() - attack_start > TAIL_ATTACK_TIMEOUT || level != MARIO_LEVEL_RACOON) {
 			isAttacking = false;
 			attack_start = -1;
 			tail->Wait();

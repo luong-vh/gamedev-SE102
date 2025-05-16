@@ -12,14 +12,14 @@ void CQuestionBrick::Render()
 	if (state == QUESTION_BRICK_STATE_NORMAL)
 		aniId = ID_ANI_QUESTION_BRICK;
 	else
-		aniId = ID_ANI_QUESTION_BRICK_HITTED;
+		aniId = ID_ANI_QUESTION_BRICK_HIT;
 	animations->Get(aniId)->Render(x, y);
 }
 void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	
 	
-	if (state == QUESTION_BRICK_STATE_NORMAL || state == QUESTION_BRICK_STATE_HITTED)
+	if (state == QUESTION_BRICK_STATE_NORMAL || state == QUESTION_BRICK_STATE_HIT)
 		return;
 	y += vy * dt;
 	if (state == QUESTION_BRICK_STATE_MOVING_UP)
@@ -35,11 +35,11 @@ void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (y >= maxY)
 		{
 			y = maxY;
-			SetState(QUESTION_BRICK_STATE_HITTED);
+			SetState(QUESTION_BRICK_STATE_HIT);
 		}
 	}
 }
-void CQuestionBrick::OnMarioHitted(LPCOLLISIONEVENT e)
+void CQuestionBrick::OnMarioHit(LPCOLLISIONEVENT e)
 {
 	if ( state == QUESTION_BRICK_STATE_NORMAL) {
 		SetState(QUESTION_BRICK_STATE_MOVING_UP);
@@ -51,7 +51,7 @@ void CQuestionBrick::SetState(int _state)
 	CGameObject::SetState(_state);
 	switch (_state)
 	{
-	case QUESTION_BRICK_STATE_HITTED:
+	case QUESTION_BRICK_STATE_HIT:
 		vy = 0;
 		break;
 	case QUESTION_BRICK_STATE_MOVING_UP:

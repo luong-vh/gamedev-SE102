@@ -4,6 +4,7 @@
 #define KOOPA_WALKING_SPEED 0.04f
 #define KOOPA_SPINNING_SPEED 0.15f
 #define KOOPA_DIE_SPEED_BY_KOOPA -0.4f
+
 #define KOOPA_BBOX_WIDTH 16
 #define KOOPA_BBOX_HEIGHT 16
 
@@ -27,6 +28,8 @@
 #define KOOPA_DIE_TIMEOUT 500
 #define KOOPA_SHELL_TIMEOUT 10000
 #define KOOPA_REVIVING_TIMEOUT 5000
+#define KOOPA_TAIL_HIT_VY 0.5f
+#define KOOPA_TAIL_HIT_VX 0.1f
 
 class CKoopa : public CGameObject
 {
@@ -36,6 +39,7 @@ protected:
    float ay;
  
    bool isFlipped;
+   bool isOnPlatform;
 
    ULONGLONG state_start;
 
