@@ -18,6 +18,7 @@
 #include "RedKoopa.h"
 #include "PlayHUD.h"
 #include "WoodenBlock.h"
+#include "CloudBlock.h"
 using namespace std;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath):
@@ -145,6 +146,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		if (tokens.size() < 4) return;
 		int id = atoi(tokens[3].c_str());
 		if (id == ID_WOODENBLOCK) obj = new CWoodenBlock(x, y);
+		if (id == ID_CLOUDBRICK) obj = new CCloudBlock(x, y);;
 		break;
 	}
 	case OBJECT_TYPE_COIN: 
@@ -419,7 +421,8 @@ void CPlayScene::Update(DWORD dt)
 
 	if (cx < 0) cx = 0;
 	if (cx > 2495) cx = 2495;
-	CGame::GetInstance()->SetCamPos(cx, 236.0f /*cy*/);
+	if (cy > 100) cy = 236;
+	CGame::GetInstance()->SetCamPos(cx, cy);
 
 	PurgeDeletedObjects();
 }

@@ -7,6 +7,7 @@
 #define BRICK_BBOX_HEIGHT 16
 #define ID_BRICK 0
 #define ID_WOODENBLOCK 1
+#define ID_CLOUDBRICK 2
 class CBrick : public CGameObject {
 public:
 	CBrick(float x, float y) : CGameObject(x, y) {}
