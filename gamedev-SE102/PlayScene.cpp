@@ -17,6 +17,7 @@
 #include "ParaGoomba.h"
 #include "RedKoopa.h"
 #include "PlayHUD.h"
+#include "WoodenBlock.h"
 using namespace std;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath):
@@ -139,8 +140,15 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			obj = new CGoomba(x, y);
 		else obj = new CParaGoomba(x, y);
 		break;
-		//case OBJECT_TYPE_BRICK: obj = new CBrick(x, y); break;
-	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
+	case OBJECT_TYPE_BRICK: 
+	{
+		if (tokens.size() < 4) return;
+		int id = atoi(tokens[3].c_str());
+		if (id == ID_WOODENBLOCK) obj = new CWoodenBlock(x, y);
+		break;
+	}
+	case OBJECT_TYPE_COIN: 
+		obj = new CCoin(x, y); break;
 
 	case OBJECT_TYPE_PLATFORM:
 	{

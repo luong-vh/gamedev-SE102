@@ -30,7 +30,7 @@ public:
 	}
 	void Render();
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
-	int IsBlocking() { return 1; }
+
 	void SpawnItem();
 	void OnMarioHit(LPCOLLISIONEVENT e);
 	void SetState(int _state);

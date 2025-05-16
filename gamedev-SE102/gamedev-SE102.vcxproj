@@ -170,6 +170,7 @@
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="VenusFireTrap.cpp" />
     <ClCompile Include="Venus_Pipe.cpp" />
+    <ClCompile Include="WoodenBlock.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
@@ -215,6 +216,7 @@
     <ClInclude Include="Utils.h" />
     <ClInclude Include="VenusFireTrap.h" />
     <ClInclude Include="Venus_Pipe.h" />
+    <ClInclude Include="WoodenBlock.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="brick.txt" />
