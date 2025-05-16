@@ -106,7 +106,13 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 				else goldenBrick->Break();
 			}
 		}
-		
+		if (e->obj->GetState() == GOLDEN_BRICK_STATE_GOLD) {
+			e->obj->Delete();
+			CGameData::AddCoin(1);
+			CGameData::AddScore(100);
+			CPlayHUD::GetInstance()->SetCoin(CGameData::coin);
+			CPlayHUD::GetInstance()->SetScore(CGameData::score);
+		}
 	}
 
 }

@@ -20,6 +20,7 @@
 #include "WoodenBlock.h"
 #include "CloudBlock.h"
 #include "GoldenBrick.h"
+#include "ButtonBrick.h"
 using namespace std;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath):
@@ -149,6 +150,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		if (id == ID_WOODEN_BLOCK) obj = new CWoodenBlock(x, y);
 		if (id == ID_CLOUD_BLOCK) obj = new CCloudBlock(x, y);
 		if (id == ID_GOLDEN_BRICK) obj = new CGoldenBrick(x, y);
+		if (id == ID_BUTTON_BRICK) obj = new CButtonBrick(x, y);
 		break;
 	}
 	case OBJECT_TYPE_COIN: 

@@ -40,6 +40,10 @@ void CAnimation::Render(float x, float y)
 void CAnimation::RenderCurrentFrame(float x, float y)
 {
 	lastFrameTime = GetTickCount64();
+	if (currentFrame < 0 || currentFrame >= frames.size()) {
+		currentFrame = 0;
+	}
 	frames[currentFrame]->GetSprite()->Draw(x, y);
+
 }
 
