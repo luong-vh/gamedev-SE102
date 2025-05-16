@@ -207,7 +207,7 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 void CMario::HandleTailAttack(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 
-	if (ableToAttack && level == MARIO_LEVEL_RACOON && isAttacking == false) {
+	if (ableToAttack && level == MARIO_LEVEL_RACOON && isAttacking == false && koopa == NULL) {
 		ableToAttack = false;
 		isAttacking = true;
 		attack_start = GetTickCount64();

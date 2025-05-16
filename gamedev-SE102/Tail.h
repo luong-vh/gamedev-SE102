@@ -24,7 +24,6 @@ public:
     }
     virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
     virtual void Render() {
-        RenderBoundingBox(); 
     }
     virtual void CheckOverlap(vector<LPGAMEOBJECT>* coObjects);
     virtual void OnOverlapWith(LPGAMEOBJECT obj);

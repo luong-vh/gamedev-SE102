@@ -79,4 +79,9 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 		mario->SetState(MARIO_STATE_IDLE);
 	if (game->IsKeyDown(DIK_A)) mario->ableToHold = true;
 	else mario->ableToHold = false;
+	if(game->IsKeyDown(DIK_Z))
+	{
+		mario->ableToAttack = true;
+	}
+	
 }
