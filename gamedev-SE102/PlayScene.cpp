@@ -15,7 +15,7 @@
 #include "Piranha_Pipe.h"
 #include "QuestionBrick.h"
 #include "ParaGoomba.h"
-#include "Koopa.h"
+#include "RedKoopa.h"
 #include "PlayHUD.h"
 using namespace std;
 
@@ -133,13 +133,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
-	case OBJECT_TYPE_GOOMBA: 
+	case OBJECT_TYPE_GOOMBA:
 		if (tokens.size() < 4) return;
 		if (atoi(tokens[3].c_str()) == 0)
 			obj = new CGoomba(x, y);
-		else obj = new CParaGoomba(x, y); 
+		else obj = new CParaGoomba(x, y);
 		break;
-	//case OBJECT_TYPE_BRICK: obj = new CBrick(x, y); break;
+		//case OBJECT_TYPE_BRICK: obj = new CBrick(x, y); break;
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
 
 	case OBJECT_TYPE_PLATFORM:
@@ -264,8 +264,22 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 	case OBJECT_TYPE_KOOPAS:
-		obj = new CKoopa(x, y);
+	{
+		if (tokens.size() < 4) return;
+		int id = atoi(tokens[3].c_str());
+		switch (id)
+		{
+		case ID_GREEN_KOOPA:
+			obj = new CKoopa(x, y);
+			break;
+		case ID_RED_KOOPA:
+			obj = new CRedKoopa(x, y);
+			break;
+		default:
+			break;
+		}
 		break;
+	}
 
 	default:
 		DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);

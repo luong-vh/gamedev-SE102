@@ -192,7 +192,7 @@ void CKoopa::OnNoCollision(DWORD dt)
 
 void CKoopa::WakeUp()
 {
-	direction = 1;
+	direction = -1;
 	SetState(KOOPA_STATE_WALKING);
 	isFlipped = false;
 }

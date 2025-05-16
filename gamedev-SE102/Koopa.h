@@ -31,6 +31,8 @@
 #define KOOPA_TAIL_HIT_VY 0.5f
 #define KOOPA_TAIL_HIT_VX 0.07f
 
+#define ID_GREEN_KOOPA 0
+#define ID_RED_KOOPA 1
 class CKoopa : public CGameObject
 {
 protected:
