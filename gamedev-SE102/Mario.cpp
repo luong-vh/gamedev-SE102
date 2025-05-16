@@ -16,6 +16,7 @@
 #include "Koopa.h"
 #include "GameData.h"
 #include "PlayHUD.h"
+#include "GoldenBrick.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
@@ -97,6 +98,16 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	}
 	else if (dynamic_cast<CKoopa*>(e->obj))
 		OnCollisionWithKoopa(e);
+	else if (dynamic_cast<CGoldenBrick*>(e->obj)) {
+		if (e->ny > 0) {
+			CGoldenBrick* goldenBrick = dynamic_cast<CGoldenBrick*>(e->obj);
+			if (goldenBrick->GetState() == GOLDEN_BRICK_STATE_NORMAL) {
+				if (level == MARIO_LEVEL_SMALL) goldenBrick->HitByMario();
+				else goldenBrick->Break();
+			}
+		}
+		
+	}
 
 }
 

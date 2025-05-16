@@ -4,7 +4,7 @@
 #include "Goomba.h"
 #include "PiranhaPlant.h"
 #include "VenusFireTrap.h"
-
+#include "GoldenBrick.h"
 void CTail::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
     left = x - TAIL_BBOX_WIDTH / 2;
@@ -65,4 +65,11 @@ void CTail::OnOverlapWith(LPGAMEOBJECT obj)
 			venus->HitByTail();
 		}
 	}
+	else if (dynamic_cast<CGoldenBrick*>(obj)) {
+		CGoldenBrick* goldenBrick = dynamic_cast<CGoldenBrick*>(obj);
+		if (goldenBrick->GetState() == GOLDEN_BRICK_STATE_NORMAL) {
+			goldenBrick->Break();
+		}
+	}
+	
 }
