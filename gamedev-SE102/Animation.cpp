@@ -37,3 +37,9 @@ void CAnimation::Render(float x, float y)
 	frames[currentFrame]->GetSprite()->Draw(x, y);
 }
 
+void CAnimation::RenderCurrentFrame(float x, float y)
+{
+	lastFrameTime = GetTickCount64();
+	frames[currentFrame]->GetSprite()->Draw(x, y);
+}
+
