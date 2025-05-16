@@ -29,7 +29,7 @@
 #define KOOPA_SHELL_TIMEOUT 10000
 #define KOOPA_REVIVING_TIMEOUT 5000
 #define KOOPA_TAIL_HIT_VY 0.5f
-#define KOOPA_TAIL_HIT_VX 0.1f
+#define KOOPA_TAIL_HIT_VX 0.07f
 
 class CKoopa : public CGameObject
 {

@@ -90,16 +90,29 @@ void CGoomba::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 }
 void CGoomba::GetStomped()
 {
+	if (state == GOOMBA_STATE_DIE
+		|| state == GOOMBA_STATE_DIE_BY_TAIL
+		|| state == GOOMBA_STATE_DIE_BY_KOOPA
+		) return;
 	SetState(GOOMBA_STATE_DIE);
 }
 void CGoomba::GetKoopaHit(int direction)
 {
+	if (state == GOOMBA_STATE_DIE 
+		|| state == GOOMBA_STATE_DIE_BY_TAIL
+		|| state == GOOMBA_STATE_DIE_BY_KOOPA
+		) return;
 	vx = direction * GOOMBA_WALKING_SPEED;
 	SetState(GOOMBA_STATE_DIE_BY_KOOPA);
 }
 void CGoomba::GetTailHit(int direction)
 {
-	GetKoopaHit(direction);
+	if (state == GOOMBA_STATE_DIE
+		|| state == GOOMBA_STATE_DIE_BY_TAIL
+		|| state == GOOMBA_STATE_DIE_BY_KOOPA
+		) return;
+	vx = direction * GOOMBA_WALKING_SPEED;
+	SetState(GOOMBA_STATE_DIE_BY_TAIL);
 }
 void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
@@ -116,7 +129,10 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	vy += ay * dt;
 	vx += ax * dt;
 
-	if ( (state==GOOMBA_STATE_DIE || state == GOOMBA_STATE_DIE_BY_KOOPA) )
+	if (state == GOOMBA_STATE_DIE
+		|| state == GOOMBA_STATE_DIE_BY_TAIL
+		|| state == GOOMBA_STATE_DIE_BY_KOOPA
+		)
 	{
 		OnNoCollision(dt);
 		if (GetTickCount64() - die_start > GOOMBA_DIE_TIMEOUT) isDeleted = true;
@@ -163,6 +179,10 @@ void CGoomba::SetState(int _state)
 			vx = -GOOMBA_WALKING_SPEED;
 			break;
 		case GOOMBA_STATE_DIE_BY_TAIL:
+			die_start = GetTickCount64();
+			vy = GOOMBA_DIE_SPEED_BY_TAIL;
+			ay = GOOMBA_GRAVITY;
+			break;
 		case GOOMBA_STATE_DIE_BY_KOOPA:
 			die_start = GetTickCount64();
 			vy = GOOMBA_DIE_SPEED_BY_KOOPA;
