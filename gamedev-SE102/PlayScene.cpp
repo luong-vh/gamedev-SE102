@@ -21,6 +21,7 @@
 #include "CloudBlock.h"
 #include "GoldenBrick.h"
 #include "ButtonBrick.h"
+#include "InvisibleWall.h"
 using namespace std;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath):
@@ -282,6 +283,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		default:
 			break;
 		}
+		break;
+	}
+	case OBJECT_TYPE_INVISIBLE_WALL:
+	{
+		obj = new CInvisibleWall(x, y);
 		break;
 	}
 

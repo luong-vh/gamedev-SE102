@@ -150,6 +150,9 @@
     <ClCompile Include="Button.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="InvisibleWall.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -294,6 +297,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Button.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="InvisibleWall.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
