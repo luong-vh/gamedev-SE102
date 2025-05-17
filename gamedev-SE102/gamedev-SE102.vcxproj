@@ -149,6 +149,7 @@
     <ClCompile Include="GoldenBrick.cpp" />
     <ClCompile Include="Goomba.cpp" />
     <ClCompile Include="HUDTile.cpp" />
+    <ClCompile Include="InvisibleWall.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="Koopa.cpp" />
     <ClCompile Include="KoopaCensor.cpp" />
@@ -197,6 +198,7 @@
     <ClInclude Include="GoldenBrick.h" />
     <ClInclude Include="Goomba.h" />
     <ClInclude Include="HUDTile.h" />
+    <ClInclude Include="InvisibleWall.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="KeyEventHandler.h" />
     <ClInclude Include="Koopa.h" />
