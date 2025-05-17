@@ -9,9 +9,18 @@
 #include "Portal.h"
 #include "Coin.h"
 #include "Platform.h"
-
+#include "Block.h"
+#include "Venus_Pipe.h"
 #include "SampleKeyEventHandler.h"
-
+#include "Piranha_Pipe.h"
+#include "QuestionBrick.h"
+#include "ParaGoomba.h"
+#include "RedKoopa.h"
+#include "PlayHUD.h"
+#include "WoodenBlock.h"
+#include "CloudBlock.h"
+#include "GoldenBrick.h"
+#include "ButtonBrick.h"
 using namespace std;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath):
@@ -29,6 +38,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 #define ASSETS_SECTION_UNKNOWN -1
 #define ASSETS_SECTION_SPRITES 1
 #define ASSETS_SECTION_ANIMATIONS 2
+#define ASSETS_SECTION_TILES 3
 
 #define MAX_SCENE_LINE 1024
 
@@ -87,6 +97,17 @@ void CPlayScene::_ParseSection_ANIMATIONS(string line)
 	CAnimations::GetInstance()->Add(ani_id, ani);
 }
 
+void CPlayScene::_ParseSection_TILES(string line)
+{
+	vector<string> tokens = split(line);
+	if (tokens.size() < 3) return; // skip invalid lines
+	int ID = atoi(tokens[0].c_str());
+	int x = atoi(tokens[1].c_str());
+	int y = atoi(tokens[2].c_str());
+	CBackgroundTile* tile = new CBackgroundTile(CSprites::GetInstance()->Get(ID), x, y);
+	tiles.push_back(tile);
+}
+
 /*
 	Parse a line in section [OBJECTS] 
 */
@@ -106,34 +127,53 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	switch (object_type)
 	{
 	case OBJECT_TYPE_MARIO:
-		if (player!=NULL) 
+		if (player != NULL)
 		{
 			DebugOut(L"[ERROR] MARIO object was created before!\n");
 			return;
 		}
-		obj = new CMario(x,y); 
-		player = (CMario*)obj;  
+		obj = new CMario(x, y);
+		player = (CMario*)obj;
 
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
-	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
-	case OBJECT_TYPE_BRICK: obj = new CBrick(x,y); break;
-	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
+	case OBJECT_TYPE_GOOMBA:
+		if (tokens.size() < 4) return;
+		if (atoi(tokens[3].c_str()) == 0)
+			obj = new CGoomba(x, y);
+		else obj = new CParaGoomba(x, y);
+		break;
+	case OBJECT_TYPE_BRICK: 
+	{
+		if (tokens.size() < 4) return;
+		int id = atoi(tokens[3].c_str());
+		if (id == ID_WOODEN_BLOCK) obj = new CWoodenBlock(x, y);
+		if (id == ID_CLOUD_BLOCK) obj = new CCloudBlock(x, y);
+		if (id == ID_GOLDEN_BRICK) obj = new CGoldenBrick(x, y);
+		if (id == ID_BUTTON_BRICK) obj = new CButtonBrick(x, y);
+		break;
+	}
+	case OBJECT_TYPE_COIN: 
+		obj = new CCoin(x, y); break;
 
 	case OBJECT_TYPE_PLATFORM:
 	{
-
+		if (tokens.size() < 13) return;
 		float cell_width = (float)atof(tokens[3].c_str());
 		float cell_height = (float)atof(tokens[4].c_str());
 		int length = atoi(tokens[5].c_str());
-		int sprite_begin = atoi(tokens[6].c_str());
-		int sprite_middle = atoi(tokens[7].c_str());
-		int sprite_end = atoi(tokens[8].c_str());
-
+		int thick = atoi(tokens[6].c_str());
+		int sprite_begin = atoi(tokens[7].c_str());
+		int sprite_middle = atoi(tokens[8].c_str());
+		int sprite_end = atoi(tokens[9].c_str());
+		int sprite_begin2 = atoi(tokens[10].c_str());
+		int sprite_middle2 = atoi(tokens[11].c_str());
+		int sprite_end2 = atoi(tokens[12].c_str());
 		obj = new CPlatform(
 			x, y,
-			cell_width, cell_height, length,
-			sprite_begin, sprite_middle, sprite_end
+			cell_width, cell_height, length, thick,
+			sprite_begin, sprite_middle, sprite_end,
+			sprite_begin2, sprite_middle2, sprite_end2
 		);
 
 		break;
@@ -145,9 +185,105 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		float b = (float)atof(tokens[4].c_str());
 		int scene_id = atoi(tokens[5].c_str());
 		obj = new CPortal(x, y, r, b, scene_id);
+		break;
 	}
-	break;
+	case OBJECT_TYPE_BLOCK:
+	{
+		if (tokens.size() < 9) return;
+		float cell_width = (float)atof(tokens[3].c_str());
+		float cell_height = (float)atof(tokens[4].c_str());
+		int width = atoi(tokens[5].c_str());
+		int height = atoi(tokens[6].c_str());
+		int cell_id_1 = atoi(tokens[7].c_str());
 
+		int shadow_cell_id = atoi(tokens[8].c_str());
+		int has = atoi(tokens[8].c_str());
+
+
+		obj = new CBlock(
+			x, y,
+			cell_width, cell_height, width, height,
+			cell_id_1,
+			shadow_cell_id, has == 1
+		);
+		break;
+	}
+	case OBJECT_TYPE_PIPE:
+	{
+		if (tokens.size() < 4) return;
+		int height = atoi(tokens[3].c_str());
+
+
+		obj = new CPipe(
+			x, y, height
+		);
+		break;
+	}
+	case OBJECT_TYPE_RED_VENUS:
+	{
+		if (tokens.size() < 5) return;
+		int height = atoi(tokens[3].c_str());
+		int pipeHeight = atoi(tokens[4].c_str());
+		LPVenusPipe pipe = new CVenus_Pipe(
+			x, y + height * VENUS_CELL_HEIGHT / 2 + PIPE_CELL_HEIGHT / 2, pipeHeight, NULL
+		);
+		obj = new CVenusFireTrap(x, y, height, pipe, RED_VENUSFIRETRAP_ID);
+		pipe->venusFireTrap = (LPVENUSFIRETRAP)obj;
+		y += height * VENUS_CELL_HEIGHT;
+		break;
+	}
+	case OBJECT_TYPE_GREEN_VENUS:
+	{
+		if (tokens.size() < 4) return;
+		int height = atoi(tokens[3].c_str());
+		int pipeHeight = atoi(tokens[4].c_str());
+		int pipeHeadId = atoi(tokens[5].c_str());
+		int pipeBodyId = atoi(tokens[6].c_str());
+		LPVenusPipe pipe = new CVenus_Pipe(
+			x, y + height * VENUS_CELL_HEIGHT / 2 + PIPE_CELL_HEIGHT / 2, pipeHeight, NULL
+		);
+		obj = new CVenusFireTrap(x, y, height, pipe, GREEN_VENUSFIRETRAP_ID);
+		pipe->venusFireTrap = (LPVENUSFIRETRAP)obj;
+		y += height * VENUS_CELL_HEIGHT;
+		break;
+	}
+	case OBJECT_TYPE_PIRANHA:
+	{
+		if (tokens.size() < 5) return;
+		int height = atoi(tokens[3].c_str());
+		int pipeHeight = atoi(tokens[4].c_str());
+		LPPIRANHAPIPE pipe = new CPiranha_Pipe(
+			x, y + height * PIRANHA_CELL_HEIGHT / 2 + PIPE_CELL_HEIGHT / 2, pipeHeight, NULL
+		);
+		obj = new CPiranhaPlant(x, y, height, pipe);
+		pipe->piranhaPlant = (LPPIRANHAPLANT)obj;
+		y += height * PIRANHA_CELL_HEIGHT;
+		break;
+	}
+	case OBJECT_TYPE_QUESTION_BRICK:
+	{
+		if (tokens.size() < 4) return;
+		int item_type = atoi(tokens[3].c_str());
+		obj = new CQuestionBrick(x, y, item_type);
+		break;
+	}
+	case OBJECT_TYPE_KOOPAS:
+	{
+		if (tokens.size() < 4) return;
+		int id = atoi(tokens[3].c_str());
+		switch (id)
+		{
+		case ID_GREEN_KOOPA:
+			obj = new CKoopa(x, y);
+			break;
+		case ID_RED_KOOPA:
+			obj = new CRedKoopa(x, y);
+			break;
+		default:
+			break;
+		}
+		break;
+	}
 
 	default:
 		DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);
@@ -159,6 +295,15 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 
 	objects.push_back(obj);
+	if (object_type == OBJECT_TYPE_RED_VENUS || object_type == OBJECT_TYPE_GREEN_VENUS)
+	{
+		objects.push_back(((LPVENUSFIRETRAP)obj)->pipe);
+	}
+	if (object_type == OBJECT_TYPE_PIRANHA)
+	{
+		objects.push_back(((LPPIRANHAPLANT)obj)->pipe);
+	}
+	
 }
 
 void CPlayScene::LoadAssets(LPCWSTR assetFile)
@@ -179,6 +324,7 @@ void CPlayScene::LoadAssets(LPCWSTR assetFile)
 
 		if (line == "[SPRITES]") { section = ASSETS_SECTION_SPRITES; continue; };
 		if (line == "[ANIMATIONS]") { section = ASSETS_SECTION_ANIMATIONS; continue; };
+		if (line == "[TILES]") { section = ASSETS_SECTION_TILES; continue; };
 		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }
 
 		//
@@ -188,6 +334,7 @@ void CPlayScene::LoadAssets(LPCWSTR assetFile)
 		{
 		case ASSETS_SECTION_SPRITES: _ParseSection_SPRITES(line); break;
 		case ASSETS_SECTION_ANIMATIONS: _ParseSection_ANIMATIONS(line); break;
+		case ASSETS_SECTION_TILES: _ParseSection_TILES(line); break;
 		}
 	}
 
@@ -214,6 +361,7 @@ void CPlayScene::Load()
 		if (line[0] == '#') continue;	// skip comment lines	
 		if (line == "[ASSETS]") { section = SCENE_SECTION_ASSETS; continue; };
 		if (line == "[OBJECTS]") { section = SCENE_SECTION_OBJECTS; continue; };
+
 		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }	
 
 		//
@@ -223,6 +371,7 @@ void CPlayScene::Load()
 		{ 
 			case SCENE_SECTION_ASSETS: _ParseSection_ASSETS(line); break;
 			case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
+
 		}
 	}
 
@@ -235,13 +384,29 @@ void CPlayScene::Update(DWORD dt)
 {
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
-
+	
 	vector<LPGAMEOBJECT> coObjects;
 	for (size_t i = 1; i < objects.size(); i++)
 	{
 		coObjects.push_back(objects[i]);
 	}
-
+	if (isMarioPaused)
+	{
+		if (GetTickCount64() - marioPause_start > marioPause_time)
+		{
+			isMarioPaused = false;
+			marioPause_start = 0;
+			marioPause_time = 0;
+		}
+		return;
+	}
+	time -= dt * 1.0f / 1000;
+	if (time <= 0)
+	{
+		//GameOver
+		return;
+	}
+	CPlayHUD::GetInstance()->SetTime(floor(time));
 	for (size_t i = 0; i < objects.size(); i++)
 	{
 		objects[i]->Update(dt, &coObjects);
@@ -259,16 +424,31 @@ void CPlayScene::Update(DWORD dt)
 	cy -= game->GetBackBufferHeight() / 2;
 
 	if (cx < 0) cx = 0;
-
-	CGame::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
+	if (cx > 2495) cx = 2495;
+	if (cy > 100) cy = 236;
+	CGame::GetInstance()->SetCamPos(cx, cy);
 
 	PurgeDeletedObjects();
 }
 
 void CPlayScene::Render()
 {
-	for (int i = 0; i < objects.size(); i++)
-		objects[i]->Render();
+	for (int i = 0; i < tiles.size(); i++)
+		tiles[i]->Draw();
+	
+	
+
+	if (isMarioPaused) {
+		for (int i = 1; i < objects.size(); i++)
+			objects[i]->RenderWhenMarioPaused();
+		objects[0]->RenderWhenMarioPaused();
+	}
+	else {
+		for (int i = 1; i < objects.size(); i++)
+			objects[i]->Render();
+		objects[0]->Render();
+	}
+	CPlayHUD::GetInstance()->Render();
 }
 
 /*
@@ -299,6 +479,13 @@ void CPlayScene::Unload()
 	player = NULL;
 
 	DebugOut(L"[INFO] Scene %d unloaded! \n", id);
+}
+
+void CPlayScene::MarioPause(float time)
+{
+	marioPause_start = GetTickCount64();
+	marioPause_time = time;
+	isMarioPaused = true;
 }
 
 bool CPlayScene::IsGameObjectDeleted(const LPGAMEOBJECT& o) { return o == NULL; }

@@ -13,6 +13,9 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 
 	switch (KeyCode)
 	{
+	case DIK_A:
+		mario->ableToAttack = true;
+		break;
 	case DIK_DOWN:
 		mario->SetState(MARIO_STATE_SIT);
 		break;
@@ -25,9 +28,14 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_2:
 		mario->SetLevel(MARIO_LEVEL_BIG);
 		break;
+	case DIK_3:
+		mario->SetLevel(MARIO_LEVEL_RACOON);
+		break;
 	case DIK_0:
 		mario->SetState(MARIO_STATE_DIE);
 		break;
+	case DIK_F1:
+		mario->SetPosition(1326, 106);
 	case DIK_R: // reset
 		//Reload();
 		break;
@@ -71,4 +79,11 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 	}
 	else
 		mario->SetState(MARIO_STATE_IDLE);
+	if (game->IsKeyDown(DIK_A)) mario->ableToHold = true;
+	else mario->ableToHold = false;
+	if(game->IsKeyDown(DIK_Z))
+	{
+		mario->ableToAttack = true;
+	}
+	
 }
