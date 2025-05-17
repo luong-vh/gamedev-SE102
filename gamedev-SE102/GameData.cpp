@@ -19,6 +19,7 @@ void CGameData::AddScore(int _score)
 void CGameData::AddCoin(int _coin)
 {
 	CGameData::coin += _coin;
+	if (coin >= 100) coin = 0;
 	SaveData();
 }
 void CGameData::InitData()
