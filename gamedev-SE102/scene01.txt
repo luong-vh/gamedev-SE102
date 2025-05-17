@@ -36,7 +36,7 @@ hud.txt
 # See OBJECT_TYPE constants in AssetIDs.h
 
 # MARIO
-0	20	350
+0	2700	350
 #0	1326	106
 #Portal 
 50	300	110	316	140	2
@@ -184,5 +184,3 @@ hud.txt
 3	591	371	1
 3	2111	375	1
 
-16	3	423
-16	2756	423

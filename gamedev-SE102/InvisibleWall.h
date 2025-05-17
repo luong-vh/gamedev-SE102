@@ -16,14 +16,12 @@ public:
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		
-		CGameObject* mario = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
-		vector<LPGAMEOBJECT> temp ;
-		temp.push_back(mario); // Explicit cast to LPGAMEOBJECT*
-		CCollision::GetInstance()->Process(this, dt, &temp);
 
 	}
+
 	void Render()
 	{
+		RenderBoundingBox();
 	}
 	void GetBoundingBox(float& l, float& t, float& r, float& b)
 	{
@@ -33,6 +31,6 @@ public:
 		b = t + 2000;
 	}
 	int IsCollidable() { return 1; };
-	int IsBlocking() { return 1; }
+	int IsBlocking() { return 0; }
 };
 

@@ -18,6 +18,7 @@
 #include "PlayHUD.h"
 #include "GoldenBrick.h"
 #include "ButtonBrick.h"
+#include "InvisibleWall.h"
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	vy += ay * dt;
@@ -41,6 +42,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 
 	HandleKoopaHold();
+	if (x < 12) x = 12;
+	if (x > 2750) x = 2750;
 	
 }
 
@@ -124,6 +127,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		if (e->ny < 0 && e->obj->GetState() == BUTTON_STATE_NORMAL) 
 			e->obj->SetState(BUTTON_STATE_PRESSED);
 	}
+	else if (dynamic_cast<CInvisibleWall*>(e->obj)) {
+		x -= 3 * nx;
+	}
+	
 
 }
 
