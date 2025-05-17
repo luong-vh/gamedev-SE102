@@ -33,6 +33,7 @@ void CButton::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				goldenBrick->SetState(GOLDEN_BRICK_STATE_GOLD);
 			}
 		}
+		handled = true;
 	}
 }
 
