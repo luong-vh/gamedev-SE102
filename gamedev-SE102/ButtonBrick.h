@@ -1,5 +1,6 @@
 #pragma once
 #include "Brick.h"
+#include "Button.h"
 #define BUTTON_BRICK_STATE_NORMAL 0
 #define BUTTON_BRICK_STATE_MOVE_UP 1
 #define BUTTON_BRICK_STATE_MOVE_DOWN 2
@@ -14,12 +15,14 @@ class CButtonBrick :
 {
 protected:
 	float minY, maxY;
+	CButton* button;
 public:
 	CButtonBrick(float x, float y) : CBrick(x, y)
 	{
 		minY = y - BRICK_WIDTH / 2;
 		maxY = y;
 		SetState(BUTTON_BRICK_STATE_NORMAL);
+		button = NULL;
 	}
 	void Render();
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);

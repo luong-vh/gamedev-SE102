@@ -120,6 +120,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 			buttonBrick->SetState(BUTTON_BRICK_STATE_MOVE_UP);
 		}
 	}
+	else if (dynamic_cast<CButton*>(e->obj)) {
+		if (e->ny < 0 && e->obj->GetState() == BUTTON_STATE_NORMAL) 
+			e->obj->SetState(BUTTON_STATE_PRESSED);
+	}
 
 }
 

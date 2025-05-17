@@ -1,4 +1,6 @@
 #include "ButtonBrick.h"
+#include "Game.h"
+#include "PlayScene.h"
 
 void CButtonBrick::Render()
 {
@@ -27,7 +29,7 @@ void CButtonBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			SetState(BUTTON_BRICK_STATE_HIT);
 		}
 	}
-
+	if (button) button->SetPosition(x, y - BRICK_BBOX_HEIGHT);
 }
 
 void CButtonBrick::SetState(int _state)
@@ -42,6 +44,8 @@ void CButtonBrick::SetState(int _state)
 		vy = 0;
 		break;
 	case BUTTON_BRICK_STATE_MOVE_UP:
+		button = new CButton(x, y - BRICK_BBOX_HEIGHT);
+		((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->AddObject(button);
 		vy = -BUTTON_BRICK_MOVE_SPEED;
 		break;
 	case BUTTON_BRICK_STATE_MOVE_DOWN:
