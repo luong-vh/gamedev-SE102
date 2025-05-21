@@ -36,6 +36,10 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 		break;
 	case DIK_F1:
 		mario->SetPosition(1326, 106);
+		break;
+	case DIK_F2:
+		mario->SetPosition(2047, 350);
+		break;
 	case DIK_R: // reset
 		//Reload();
 		break;
@@ -51,6 +55,9 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 	{
 	case DIK_S:
 		mario->SetState(MARIO_STATE_RELEASE_JUMP);
+		break;
+	case DIK_A:
+		mario->ableToAttack = false;
 		break;
 	case DIK_DOWN:
 		mario->SetState(MARIO_STATE_SIT_RELEASE);

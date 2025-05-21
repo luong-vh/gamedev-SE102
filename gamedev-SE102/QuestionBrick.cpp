@@ -5,6 +5,7 @@
 #include "Mario.h"
 #include "PlayScene.h"
 #include "SuperLeaf.h"
+#include "OneUpMushroom.h"
 void CQuestionBrick::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
@@ -71,13 +72,14 @@ void CQuestionBrick::SpawnItem()
 {
 	CItem* item = NULL;
 	float mx, my;
+	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	switch (item_type)
 	{
 	case QUESTION_BRICK_ITEM_TYPE_COIN:
 		item = new CCoin(x, y,COIN_STATE_WAITING);
 		break;
 	case QUESTION_BRICK_ITEM_TYPE_MUSHROOM:
-		CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+		
 		if (mario->GetLevel() >= MARIO_LEVEL_BIG)
 			item = new CSuperLeaf(x, y - BRICK_BBOX_HEIGHT, 0);
 		else 
@@ -89,7 +91,16 @@ void CQuestionBrick::SpawnItem()
 				item = new CSuperMushroom(x, y - BRICK_BBOX_HEIGHT, -1);
 		}
 		break;
+	case QUESTION_BRICK_ITEM_TYPE_ONEUP:
+		mario->GetPosition(mx, my);
+		if (x >= mx)
+			item = new COneUpMushroom(x, y - BRICK_BBOX_HEIGHT, 1);
+		else
+			item = new COneUpMushroom(x, y - BRICK_BBOX_HEIGHT, -1);
+		break;
+
 	}
+	
 	((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObject(item);
 	item->WakeUp();
 }

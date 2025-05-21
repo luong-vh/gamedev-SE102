@@ -245,6 +245,9 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 				goldenBrick->Break();
 				ReverseDirection();
 			}
+			else if (e->nx != 0 && goldenBrick->GetState() == GOLDEN_BRICK_STATE_NORMAL && state == KOOPA_STATE_WALKING) {
+				ReverseDirection();
+			}
 		
 		return;
 	}

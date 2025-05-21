@@ -19,6 +19,7 @@
 #include "GoldenBrick.h"
 #include "ButtonBrick.h"
 #include "InvisibleWall.h"
+#include "OneUpMushroom.h"
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	vy += ay * dt;
@@ -87,7 +88,12 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	}
 	else if (dynamic_cast<CSuperMushroom*>(e->obj))
 	{
-		SetLevel(this->level + 1);
+		if (dynamic_cast<COneUpMushroom*>(e->obj)) 
+		{
+			// 1UP
+			DebugOut(L"[MARIO] 1UP\n");
+		}
+		else SetLevel(this->level + 1);
 		(dynamic_cast<CSuperMushroom*>(e->obj))->Delete();
 		CGameData::AddScore(1000);
 		CPlayHUD::GetInstance()->SetScore(CGameData::score);
@@ -120,7 +126,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	else if (dynamic_cast<CButtonBrick*>(e->obj)) {
 		CButtonBrick* buttonBrick = dynamic_cast<CButtonBrick*>(e->obj);
 		if (e->ny > 0) {
-			buttonBrick->SetState(BUTTON_BRICK_STATE_MOVE_UP);
+			if (buttonBrick->GetState()!= BUTTON_BRICK_STATE_HIT) buttonBrick->SetState(BUTTON_BRICK_STATE_MOVE_UP);
 		}
 	}
 	else if (dynamic_cast<CButton*>(e->obj)) {

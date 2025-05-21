@@ -14,6 +14,7 @@
 
 #define QUESTION_BRICK_ITEM_TYPE_COIN 0
 #define QUESTION_BRICK_ITEM_TYPE_MUSHROOM 1
+#define QUESTION_BRICK_ITEM_TYPE_ONEUP 2
 class CQuestionBrick :public CBrick
 {
 private:
