@@ -21,13 +21,20 @@
 #include "InvisibleWall.h"
 #include "OneUpMushroom.h"
 #include "KillZone.h"
+#include "ParaGoomba.h"
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	vy += ay * dt;
 	vx += ax * dt;
 
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
-
+	if (state == MARIO_STATE_DIE) {
+		ULONGLONG deltaTime = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetDeltaTime(die_start);
+		if (deltaTime > MARIO_DIE_TIMEOUT) {
+			CPlayScene* s = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+			s->GameOver(); 
+		}
+	}
 	// reset untouchable timer if untouchable time has passed
 	ULONGLONG deltaTime = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetDeltaTime(untouchable_start);
 	if (deltaTime > MARIO_UNTOUCHABLE_TIME)
@@ -165,7 +172,8 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 	{
 		if (untouchable == 0)
 		{
-			if (goomba->GetState() != GOOMBA_STATE_DIE)
+			int _state = goomba->GetState();
+			if (_state == GOOMBA_STATE_WALKING || _state == GOOMBA_STATE_PARA )
 			{
 				OnGetDamage();
 			}
@@ -325,6 +333,7 @@ void CMario::OnGetDamage()
 	{
 		DebugOut(L">>> Mario DIE >>> \n");
 		SetState(MARIO_STATE_DIE);
+		
 	}
 }
 
@@ -712,6 +721,7 @@ void CMario::SetState(int state)
 
 	case MARIO_STATE_DIE:
 		vy = -MARIO_JUMP_DEFLECT_SPEED;
+		die_start = GetTickCount64();
 		vx = 0;
 		ax = 0;
 		break;

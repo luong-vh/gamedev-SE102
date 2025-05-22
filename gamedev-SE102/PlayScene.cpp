@@ -450,7 +450,7 @@ void CPlayScene::Render()
 	{
 		for (int i = 1; i < objects.size(); i++)
 			objects[i]->RenderWhenGamePaused();
-		if (isGameOver) CPlayHUD::GetInstance()->RenderWhilePaused();
+		if (isGameOver) CPlayHUD::GetInstance()->RenderWhileGameOver();
 		else if (isGamePaused) CPlayHUD::GetInstance()->RenderWhilePaused();
 		return;
 	}

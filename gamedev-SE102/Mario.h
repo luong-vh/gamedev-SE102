@@ -177,6 +177,7 @@
 
 #define MARIO_UNTOUCHABLE_TIME 2500
 #define MARIO_KICK_TIMEOUT 200
+#define MARIO_DIE_TIMEOUT 500
 
 #define SMALL_OFFSET_X 10
 #define SMALL_OFFSET_Y 0
@@ -202,6 +203,7 @@ class CMario : public CGameObject
 	ULONGLONG untouchable_start;
 	ULONGLONG kick_start;
 	ULONGLONG attack_start;
+	ULONGLONG die_start;
 	BOOLEAN isOnPlatform;
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
