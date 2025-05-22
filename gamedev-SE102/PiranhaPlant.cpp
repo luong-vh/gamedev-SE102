@@ -48,6 +48,7 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 		break;
 	}
+	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
 void CPiranhaPlant::Render()
@@ -102,6 +103,21 @@ void CPiranhaPlant::HitByKoopa()
 {
 	SetState(PIRANHA_DIE_STATE);
 
+}
+
+void CPiranhaPlant::OnCollisionWith(LPCOLLISIONEVENT e)
+{
+	if (dynamic_cast<CKoopa*>(e->obj)) {
+		if (((CKoopa*)e->obj)->isBeingHeld && !this->IsDeleted()) {
+			HitByKoopa();
+			float kx, ky;
+			e->obj->GetPosition(kx, ky);
+			if (kx > x) ky = -1;
+			else ky = 1;
+			((CKoopa*)e->obj)->GetKoopaHit(ky);
+			return;
+		}
+	}
 }
 
 void CPiranhaPlant::GetBoundingBox(float& l, float& t, float& r, float& b)
