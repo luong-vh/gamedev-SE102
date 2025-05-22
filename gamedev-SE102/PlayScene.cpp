@@ -397,9 +397,10 @@ void CPlayScene::Update(DWORD dt)
 	{
 		coObjects.push_back(objects[i]);
 	}
+	if (isGameOver || isGamePaused) return;
 	if (isMarioPaused)
 	{
-		if (GetTickCount64() - marioPause_start > marioPause_time)
+		if  (GetDeltaTime(marioPause_start) > marioPause_time)
 		{
 			isMarioPaused = false;
 			marioPause_start = 0;
@@ -407,10 +408,11 @@ void CPlayScene::Update(DWORD dt)
 		}
 		return;
 	}
+
 	time -= dt * 1.0f / 1000;
 	if (time <= 0)
 	{
-		//GameOver
+		GameOver();
 		return;
 	}
 	CPlayHUD::GetInstance()->SetTime(floor(time));
@@ -444,6 +446,14 @@ void CPlayScene::Render()
 		tiles[i]->Draw();
 	
 	
+	if (isGamePaused || isGameOver)
+	{
+		for (int i = 1; i < objects.size(); i++)
+			objects[i]->RenderWhenGamePaused();
+		if (isGameOver) CPlayHUD::GetInstance()->RenderWhilePaused();
+		else if (isGamePaused) CPlayHUD::GetInstance()->RenderWhilePaused();
+		return;
+	}
 
 	if (isMarioPaused) {
 		for (int i = 1; i < objects.size(); i++)
@@ -493,6 +503,35 @@ void CPlayScene::MarioPause(float time)
 	marioPause_start = GetTickCount64();
 	marioPause_time = time;
 	isMarioPaused = true;
+}
+
+void CPlayScene::GamePause()
+{
+	gamePause_time = GetTickCount64();
+	isGamePaused = true;
+
+}
+
+void CPlayScene::GameResume()
+{
+	gameResume_time = GetTickCount64();
+	isGamePaused = false;
+}
+
+void CPlayScene::GameOver()
+{
+	isGameOver = true;
+}
+
+ULONGLONG CPlayScene::GetDeltaTime(ULONGLONG start)
+{
+	ULONGLONG result = GetTickCount64()-start;
+	if (start < marioPause_start) result -= marioPause_time;
+	if (start < gameResume_time) {
+		if (start > gamePause_time) result -= (gameResume_time - start);
+		else result -= (gameResume_time - gamePause_time);;
+	}
+	return result;
 }
 
 bool CPlayScene::IsGameObjectDeleted(const LPGAMEOBJECT& o) { return o == NULL; }

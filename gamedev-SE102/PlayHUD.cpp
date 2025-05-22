@@ -4,6 +4,8 @@ CPlayHUD* CPlayHUD::__instance = NULL;
 CPlayHUD::CPlayHUD()
 {
 	background = new CHUDTile(CSprites::GetInstance()->Get(ID_HUD_BACKGROUND), 128, 16);
+	pauseText = new CHUDTile(CSprites::GetInstance()->Get(ID_HUD_PAUSE_TEXT), 128, 130);
+	gameOverText = new CHUDTile(CSprites::GetInstance()->Get(ID_HUD_GAMEOVER_TEXT), 128, 130);
 
 	for (int i = 0; i < 7; i++)
 	{
@@ -43,6 +45,19 @@ void CPlayHUD::Render()
 	{
 		time[i]->Draw();
 	}
+}
+
+void CPlayHUD::RenderWhilePaused()
+{
+	Render();
+	pauseText->Draw();
+	
+}
+
+void CPlayHUD::RenderWhileGameOver()
+{
+	Render();
+	gameOverText->Draw();
 }
 
 void CPlayHUD::SetCoin(int coinValue)

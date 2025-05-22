@@ -17,8 +17,11 @@ protected:
 	LPGAMEOBJECT player;	
 	ULONGLONG marioPause_start;
 	float marioPause_time;
+	float gamePause_time;
+	float gameResume_time;
 	bool isMarioPaused = false;
-
+	bool isGamePaused = false;
+	bool isGameOver = false;
 	vector<LPGAMEOBJECT> objects;
 	vector<CBackgroundTile*> tiles;
 	void _ParseSection_SPRITES(string line);
@@ -38,6 +41,11 @@ public:
 	virtual void Render();
 	virtual void Unload();
 	virtual void MarioPause(float time);
+	virtual void GamePause();
+	virtual void GameResume();
+	virtual void GameOver();
+	virtual bool IsPaused() { return isGamePaused; }
+	virtual ULONGLONG GetDeltaTime(ULONGLONG start);
 
 	LPGAMEOBJECT GetPlayer() { return player; }
 

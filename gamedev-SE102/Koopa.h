@@ -49,6 +49,7 @@ protected:
    virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
    virtual void Render();
    virtual void RenderWhenMarioPaused();
+   void RenderWhenGamePaused() {}
    virtual void GetAniId(int& aniId);
    virtual int IsCollidable() { return 1; };
    virtual int IsBlocking() { return 0; }

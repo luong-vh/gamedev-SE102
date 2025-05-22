@@ -14,6 +14,8 @@
 #define ID_NUMBER_8		21000008
 #define ID_NUMBER_9		21000009
 #define ID_HUD_BACKGROUND	20000000
+#define ID_HUD_PAUSE_TEXT 	20000001
+#define ID_HUD_GAMEOVER_TEXT 20000002
 using namespace std;
 class CPlayHUD
 {
@@ -22,10 +24,14 @@ class CPlayHUD
 	vector<CHUDTile*> score;
 	vector<CHUDTile*> time;
 	CHUDTile* background;
+	CHUDTile* pauseText;
+	CHUDTile* gameOverText;
 public:
 	CPlayHUD();
 	static CPlayHUD* GetInstance();
 	void Render();
+	void RenderWhilePaused();
+	void RenderWhileGameOver();
 	void SetCoin(int coin);
 	void SetScore(int score);
 	void SetTime(int time);

@@ -11,6 +11,7 @@ public:
 	int IsBlocking() { return 0; }
 	virtual void WakeUp() {}
 	virtual void OnCollisionWithMario(LPCOLLISIONEVENT e) {}
+	void RenderWhenGamePaused() {}
 	CItem(float x, float y) : CGameObject(x, y){}
 };
 typedef CItem* LPItem;

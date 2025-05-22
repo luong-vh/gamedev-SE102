@@ -50,6 +50,7 @@ public:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {};
 	virtual void Render() = 0;
 	virtual void RenderWhenMarioPaused() { Render(); }
+	virtual void RenderWhenGamePaused() { Render(); }
 	virtual void SetState(int state) { this->state = state; }
 
 	//

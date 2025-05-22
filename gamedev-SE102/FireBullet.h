@@ -34,6 +34,7 @@ public:
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	void Render();
 	void RenderWhenMarioPaused();
+	void RenderWhenGamePaused() {}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
 	void SetState(int state);
 	int IsBlocking() { return 0; }

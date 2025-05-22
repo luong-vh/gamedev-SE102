@@ -10,6 +10,7 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 {
 	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 	CMario* mario = (CMario *)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer(); 
+	CPlayScene* playScene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
 
 	switch (KeyCode)
 	{
@@ -40,8 +41,9 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_F2:
 		mario->SetPosition(2047, 350);
 		break;
-	case DIK_R: // reset
-		//Reload();
+	case DIK_W:
+		if (playScene->IsPaused()) playScene->GameResume();
+		else playScene->GamePause();
 		break;
 	}
 }
