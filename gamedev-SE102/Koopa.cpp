@@ -22,19 +22,24 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (state == KOOPA_STATE_WAITING) {
 		float cx, cy;
 		CGame::GetInstance()->GetCamPos(cx, cy);
+		float w = CGame::GetInstance()->GetBackBufferWidth();
 
-		if (x - cx <= CGame::GetInstance()->GetBackBufferWidth() + KOOPA_BBOX_WIDTH)
+		if ((x < cx - KOOPA_BBOX_WIDTH && x > cx - 2 * KOOPA_BBOX_WIDTH) ||
+			(x > cx + w + KOOPA_BBOX_WIDTH && x < cx + w + 2 * KOOPA_BBOX_WIDTH))
 		{
+			x = start_x;
+			y = start_y;
 			WakeUp();
+			return;
 		}
-		return;
+		
 	}
 	vy += ay * dt;
 	vx += ax * dt;
 
 	if ((state == KOOPA_STATE_DIE) && (GetTickCount64() - state_start > KOOPA_DIE_TIMEOUT))
 	{
-		isDeleted = true;
+		SetState(KOOPA_STATE_WAITING);
 		return;
 	}
 	if ((state == KOOPA_STATE_INSHELL) && (GetTickCount64() - state_start > KOOPA_SHELL_TIMEOUT))
@@ -103,6 +108,8 @@ CKoopa::CKoopa(float x, float y)
 	state_start = -1;
 	isBeingHeld = false;
 	isOnPlatform = false;
+	start_x = x;
+	start_y = y;
 }
 
 void CKoopa::SetState(int _state)
@@ -117,8 +124,11 @@ void CKoopa::SetState(int _state)
 		vy = 0;
 		ax = 0;
 		ay = 0;
+		x = start_x;
+		y = start_y + 500;
 		break;
 	case KOOPA_STATE_WALKING:
+
 		isFlipped = false;
 		isBeingHeld = false;
 		ay = KOOPA_GRAVITY;

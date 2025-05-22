@@ -39,7 +39,7 @@ protected:
    int direction;
    float ax;
    float ay;
- 
+   float start_x, start_y;
    bool isFlipped;
    bool isOnPlatform;
 
