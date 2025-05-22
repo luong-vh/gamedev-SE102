@@ -22,8 +22,8 @@ void CSuperMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	
 	if (state == SUPER_MUSHROOM_STATE_RISE)
 	{
-		
-		if (GetTickCount64() - timeState >= SUPER_MUSHROOM_TIMEOUT_RISE) SetState(SUPER_MUSHROOM_STATE_MOVING);
+		ULONGLONG deltaTime = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetDeltaTime(timeState);
+		if (deltaTime >= SUPER_MUSHROOM_TIMEOUT_RISE) SetState(SUPER_MUSHROOM_STATE_MOVING);
 		
 	}
 	else if (state == SUPER_MUSHROOM_STATE_MOVING)

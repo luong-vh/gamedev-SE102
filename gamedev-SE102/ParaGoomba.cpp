@@ -54,10 +54,11 @@ void CParaGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				return;
 			}
 		}
+		ULONGLONG deltaTime = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetDeltaTime(timeStep);
 		switch (currentStep)
 		{
 		case 0:
-			if (GetTickCount64() - timeStep >= PARA_GOOMBA_WALK_TIMEOUT) {
+			if (deltaTime >= PARA_GOOMBA_WALK_TIMEOUT) {
 				vy = -PARA_GOOMBA_JUMP_SPEED;
 				vx = direction * GOOMBA_WALKING_SPEED;
 				currentStep++;

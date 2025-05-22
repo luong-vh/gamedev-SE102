@@ -29,12 +29,14 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
 
 	// reset untouchable timer if untouchable time has passed
-	if ( GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME) 
+	ULONGLONG deltaTime = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetDeltaTime(untouchable_start);
+	if (deltaTime > MARIO_UNTOUCHABLE_TIME)
 	{
 		untouchable_start = 0;
 		untouchable = 0;
 	}
-	if (GetTickCount64() - kick_start > MARIO_KICK_TIMEOUT) {
+	deltaTime = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetDeltaTime(kick_start);
+	if (deltaTime > MARIO_KICK_TIMEOUT) {
 		isKicking = false;
 		kick_start = -1;
 	}
@@ -258,7 +260,8 @@ void CMario::HandleTailAttack(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		tail->Attack();
 	}
 	if (isAttacking) {
-		if (GetTickCount64() - attack_start > TAIL_ATTACK_TIMEOUT || level != MARIO_LEVEL_RACOON) {
+		ULONGLONG deltaTime = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetDeltaTime(attack_start);
+		if (deltaTime > TAIL_ATTACK_TIMEOUT || level != MARIO_LEVEL_RACOON) {
 			isAttacking = false;
 			attack_start = -1;
 			tail->Wait();
@@ -266,7 +269,7 @@ void CMario::HandleTailAttack(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		else {
 			if (tail == NULL) tail = new CTail(x, y);
 			float tx = x, ty = y + TAIL_OFFSET_Y;
-			if (GetTickCount64() - attack_start > TAIL_ATTACK_TIMEOUT / 2) {
+			if (deltaTime > TAIL_ATTACK_TIMEOUT / 2) {
 				if (nx > 0) tx += TAIL_OFFSET_X;
 				else tx -= TAIL_OFFSET_X;
 			}

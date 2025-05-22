@@ -37,18 +37,18 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 	vy += ay * dt;
 	vx += ax * dt;
-
-	if ((state == KOOPA_STATE_DIE) && (GetTickCount64() - state_start > KOOPA_DIE_TIMEOUT))
+	ULONGLONG deltaTime =  ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetDeltaTime(state_start);
+	if ((state == KOOPA_STATE_DIE) && (deltaTime > KOOPA_DIE_TIMEOUT))
 	{
 		SetState(KOOPA_STATE_WAITING);
 		return;
 	}
-	if ((state == KOOPA_STATE_INSHELL) && (GetTickCount64() - state_start > KOOPA_SHELL_TIMEOUT))
+	if ((state == KOOPA_STATE_INSHELL) && (deltaTime > KOOPA_SHELL_TIMEOUT))
 	{
 		SetState(KOOPA_STATE_REVIVING);
 		return;
 	}
-	if ((state == KOOPA_STATE_REVIVING) && (GetTickCount64() - state_start > KOOPA_REVIVING_TIMEOUT))
+	if ((state == KOOPA_STATE_REVIVING) && (deltaTime > KOOPA_REVIVING_TIMEOUT))
 	{
 		SetState(KOOPA_STATE_WALKING);
 		return;

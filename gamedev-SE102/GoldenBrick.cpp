@@ -1,10 +1,12 @@
 #include "GoldenBrick.h"
+#include "PlayScene.h"
 
 void CGoldenBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (state == GOLDEN_BRICK_STATE_NORMAL) return;
+	ULONGLONG deltaTime = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetDeltaTime(state_start);
 	if (state == GOLDEN_BRICK_STATE_GOLD 
-		&& GetTickCount64() - state_start > GOLDEN_BRICK_STATE_GOLD_TIMEOUT) 
+		&& deltaTime > GOLDEN_BRICK_STATE_GOLD_TIMEOUT)
 		SetState(GOLDEN_BRICK_STATE_NORMAL);
 	y += vy * dt;
 	if (state == GOLDEN_BRICK_STATE_MOVE_UP)

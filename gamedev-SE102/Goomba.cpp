@@ -3,6 +3,7 @@
 #include "Game.h"
 #include "Koopa.h"
 #include "KillZone.h"
+#include "PlayScene.h"
 CGoomba::CGoomba(float x, float y):CGameObject(x, y)
 {
 	this->ax = 0;
@@ -141,7 +142,8 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		)
 	{
 		OnNoCollision(dt);
-		if (GetTickCount64() - die_start > GOOMBA_DIE_TIMEOUT) isDeleted = true;
+		ULONGLONG deltaTime = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetDeltaTime(die_start);
+		if (deltaTime > GOOMBA_DIE_TIMEOUT) isDeleted = true;
 		return;
 	}
 	CCollision::GetInstance()->Process(this, dt, coObjects);

@@ -6,7 +6,7 @@ void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	
 	y += vy * dt;
-	ULONGLONG deltaTime = GetTickCount64() - state_start; 
+	ULONGLONG deltaTime = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetDeltaTime(state_start);
 	switch (state)
 	{
 	case VENUS_DIE_STATE:
