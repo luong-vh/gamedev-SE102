@@ -2,6 +2,7 @@
 #include "debug.h"
 #include "Game.h"
 #include "Koopa.h"
+#include "KillZone.h"
 CGoomba::CGoomba(float x, float y):CGameObject(x, y)
 {
 	this->ax = 0;
@@ -52,6 +53,10 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithKoopa(e);
 		return;
 	}
+	else if (dynamic_cast<CKillZone*>(e->obj)) {
+		SetState(GOOMBA_STATE_DIE);
+		return;
+	}
 	if (!e->obj->IsBlocking()) return;
 
 	if (e->ny != 0 )
@@ -62,6 +67,7 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 	{
 		ReverseDirection();
 	}
+
 }
 void CGoomba::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 {

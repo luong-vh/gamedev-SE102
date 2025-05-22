@@ -22,6 +22,7 @@
 #include "GoldenBrick.h"
 #include "ButtonBrick.h"
 #include "InvisibleWall.h"
+#include "KillZone.h"
 using namespace std;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath):
@@ -297,7 +298,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 
 	// General object setup
-	obj->SetPosition(x, y);
+	//obj->SetPosition(x, y);
 
 
 	objects.push_back(obj);
@@ -382,7 +383,7 @@ void CPlayScene::Load()
 	}
 
 	f.close();
-
+	objects.push_back(new CKillZone());
 	DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath);
 }
 

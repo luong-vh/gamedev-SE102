@@ -20,6 +20,7 @@
 #include "ButtonBrick.h"
 #include "InvisibleWall.h"
 #include "OneUpMushroom.h"
+#include "KillZone.h"
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	vy += ay * dt;
@@ -134,7 +135,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 			e->obj->SetState(BUTTON_STATE_PRESSED);
 	}
 	else if (dynamic_cast<CInvisibleWall*>(e->obj)) {
-		x -= 3 * nx;
+		
+	}
+	else if (dynamic_cast<CKillZone*>(e->obj)) {
+		SetState(MARIO_STATE_DIE);
 	}
 	
 

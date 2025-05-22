@@ -151,6 +151,7 @@
     <ClCompile Include="HUDTile.cpp" />
     <ClCompile Include="InvisibleWall.cpp" />
     <ClCompile Include="Item.cpp" />
+    <ClCompile Include="KillZone.cpp" />
     <ClCompile Include="Koopa.cpp" />
     <ClCompile Include="KoopaCensor.cpp" />
     <ClCompile Include="main.cpp" />
@@ -202,6 +203,7 @@
     <ClInclude Include="InvisibleWall.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="KeyEventHandler.h" />
+    <ClInclude Include="KillZone.h" />
     <ClInclude Include="Koopa.h" />
     <ClInclude Include="KoopaCensor.h" />
     <ClInclude Include="Mario.h" />

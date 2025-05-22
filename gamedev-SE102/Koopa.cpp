@@ -8,6 +8,7 @@
 #include "PiranhaPlant.h"
 #include "GoldenBrick.h"
 #include "ButtonBrick.h"
+#include "KillZone.h"
 void CKoopa::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	left = x - KOOPA_BBOX_WIDTH / 2;
@@ -104,12 +105,12 @@ void CKoopa::GetAniId(int& aniId)
 
 CKoopa::CKoopa(float x, float y)
 {
-	SetState(KOOPA_STATE_WAITING);
 	state_start = -1;
 	isBeingHeld = false;
 	isOnPlatform = false;
 	start_x = x;
 	start_y = y;
+	SetState(KOOPA_STATE_WAITING);
 }
 
 void CKoopa::SetState(int _state)
@@ -246,6 +247,10 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 	}
 	if (dynamic_cast<CPiranhaPlant*>(e->obj)) {
 		OnCollisionWithPiranha(e);
+		return;
+	}
+	else if (dynamic_cast<CKillZone*>(e->obj)) {
+		SetState(KOOPA_STATE_WAITING);
 		return;
 	}
 	if (!e->obj->IsBlocking()) return;
