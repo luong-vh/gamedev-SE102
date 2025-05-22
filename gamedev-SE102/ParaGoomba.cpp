@@ -3,6 +3,7 @@
 #include "Game.h"
 #include "Mario.h"
 #include "PlayScene.h"
+#include "KillZone.h"
 void CParaGoomba::Render()
 {
 	int aniId = ID_ANI_PARA_GOOMBA_WALKING;
@@ -124,6 +125,10 @@ void CParaGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (dynamic_cast<CKoopa*>(e->obj)) {
 		if (e->obj->GetState() == KOOPA_STATE_DIE) return;
 		OnCollisionWithKoopa(e);
+		return;
+	}
+	else if (dynamic_cast<CKillZone*>(e->obj)) {
+		SetState(GOOMBA_STATE_DIE);
 		return;
 	}
 	if (!e->obj->IsBlocking()) return;

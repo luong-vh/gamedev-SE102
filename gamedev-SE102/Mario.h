@@ -180,9 +180,9 @@
 #define MARIO_DIE_TIMEOUT 500
 
 #define SMALL_OFFSET_X 10
-#define SMALL_OFFSET_Y 0
+#define SMALL_OFFSET_Y -2
 #define BIG_OFFSET_X 12
-#define BIG_OFFSET_Y 1
+#define BIG_OFFSET_Y -1
 
 #define TAIL_OFFSET_X 10
 #define TAIL_OFFSET_Y 4

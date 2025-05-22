@@ -12,9 +12,9 @@
 void CKoopa::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	left = x - KOOPA_BBOX_WIDTH / 2;
-	top = y - KOOPA_BBOX_HEIGHT / 2;
+	top = y - KOOPA_BBOX_HEIGHT / 2 ;
 	right = left + KOOPA_BBOX_WIDTH;
-	bottom = top + KOOPA_BBOX_HEIGHT;
+	bottom = top + KOOPA_BBOX_HEIGHT ;
 }
 
 void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -304,9 +304,10 @@ void CKoopa::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 void CKoopa::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 {
 	if (state == KOOPA_STATE_SPINNING) {
-		if (e->obj->GetState() == KOOPA_STATE_SPINNING) GetKoopaHit(-e->nx);
+		
 		((CKoopa*)e->obj)->GetKoopaHit(e->nx);
 	}
+	if (e->obj->GetState() == KOOPA_STATE_SPINNING) GetKoopaHit(-e->nx);
 	else if (((CKoopa*)e->obj)->isBeingHeld) {
 		GetKoopaHit(nx);
 		((CKoopa*)e->obj)->GetKoopaHit(-nx);
