@@ -410,7 +410,7 @@ int CMario::GetAniIdSmall()
 	
 
 	if (aniId == -1) aniId = ID_ANI_MARIO_SMALL_IDLE_RIGHT;
-
+	if (untouchable != 0) aniId *= -1;
 	return aniId;
 }
 
@@ -509,7 +509,7 @@ int CMario::GetAniIdRacoon()
 			}
 
 	if (aniId == -1) aniId = ID_ANI_MARIO_RACOON_IDLE_RIGHT;
-
+	if (untouchable != 0) aniId *= -1;
 	return aniId;
 }
 
@@ -611,6 +611,7 @@ int CMario::GetAniIdBig()
 			}
 
 	if (aniId == -1) aniId = ID_ANI_MARIO_IDLE_RIGHT;
+	if (untouchable != 0) aniId *= -1;
 
 	return aniId;
 }
