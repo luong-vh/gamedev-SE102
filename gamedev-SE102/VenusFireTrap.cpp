@@ -58,6 +58,7 @@ void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 	}
 	this->fireBullet->Update(dt, coObjects);
+	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
 void CVenusFireTrap::Render()
@@ -156,4 +157,19 @@ void CVenusFireTrap::HitByTail()
 void CVenusFireTrap::HitByKoopa()
 {
 	SetState(VENUS_DIE_STATE);
+}
+
+void CVenusFireTrap::OnCollisionWith(LPCOLLISIONEVENT e)
+{
+	if (dynamic_cast<CKoopa*>(e->obj)) {
+		if (((CKoopa*)e->obj)->isBeingHeld && !this->IsDeleted()) {
+			HitByKoopa();
+			float kx, ky;
+			e->obj->GetPosition(kx, ky);
+			if (kx > x) ky = -1;
+			else ky = 1;
+			((CKoopa*)e->obj)->GetKoopaHit(ky);
+			return;
+		}
+	}
 }

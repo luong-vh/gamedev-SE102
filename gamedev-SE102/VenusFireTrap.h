@@ -66,5 +66,6 @@ public:
 	void HitByKoopa();
 	int IsCollidable() { return 1; };
 	int IsBlocking() { return 0; }
+	void OnCollisionWith(LPCOLLISIONEVENT e);
 };
 typedef CVenusFireTrap* LPVENUSFIRETRAP;
