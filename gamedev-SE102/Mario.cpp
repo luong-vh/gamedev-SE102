@@ -24,6 +24,13 @@
 #include "ParaGoomba.h"
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
+	if (untouchable == 1 && state != MARIO_STATE_DIE) {
+		ULONGLONG deltaTime = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetDeltaTime(flicker_start);
+		if (deltaTime > MARIO_FLICKER_TIMEOUT) {
+			flicker_start = GetTickCount64();
+			isRenderable = !isRenderable;
+		}
+	}
 	vy += ay * dt;
 	vx += ax * dt;
 
@@ -41,6 +48,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	{
 		untouchable_start = 0;
 		untouchable = 0;
+		flicker_start = 0;
+		isRenderable = true;
+		
 	}
 	deltaTime = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetDeltaTime(kick_start);
 	if (deltaTime > MARIO_KICK_TIMEOUT) {
@@ -426,7 +436,6 @@ int CMario::GetAniIdSmall()
 	
 
 	if (aniId == -1) aniId = ID_ANI_MARIO_SMALL_IDLE_RIGHT;
-	if (untouchable != 0) aniId *= -1;
 	return aniId;
 }
 
@@ -525,7 +534,6 @@ int CMario::GetAniIdRacoon()
 			}
 
 	if (aniId == -1) aniId = ID_ANI_MARIO_RACOON_IDLE_RIGHT;
-	if (untouchable != 0) aniId *= -1;
 	return aniId;
 }
 
@@ -627,13 +635,13 @@ int CMario::GetAniIdBig()
 			}
 
 	if (aniId == -1) aniId = ID_ANI_MARIO_IDLE_RIGHT;
-	if (untouchable != 0) aniId *= -1;
 
 	return aniId;
 }
 
 void CMario::Render()
 {
+	if (!isRenderable) return;
 	CAnimations* animations = CAnimations::GetInstance();
 	int aniId = -1;
 

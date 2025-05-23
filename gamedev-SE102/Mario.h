@@ -178,7 +178,7 @@
 #define MARIO_UNTOUCHABLE_TIME 2500
 #define MARIO_KICK_TIMEOUT 200
 #define MARIO_DIE_TIMEOUT 500
-
+#define MARIO_FLICKER_TIMEOUT 20
 #define SMALL_OFFSET_X 10
 #define SMALL_OFFSET_Y -2
 #define BIG_OFFSET_X 12
@@ -198,12 +198,14 @@ class CMario : public CGameObject
 	int untouchable; 
 	bool isKicking;
 	bool isAttacking;
+	bool isRenderable;
 	int idAniTransform;
 	CKoopa* koopa;
 	ULONGLONG untouchable_start;
 	ULONGLONG kick_start;
 	ULONGLONG attack_start;
 	ULONGLONG die_start;
+	ULONGLONG flicker_start;
 	BOOLEAN isOnPlatform;
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
@@ -240,6 +242,7 @@ public:
 		kick_start = -1;
 		attack_start = -1;
 		isOnPlatform = false;
+		isRenderable = true;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
@@ -257,7 +260,13 @@ public:
 
 	void SetLevel(int l);
 	int GetLevel() { return level; }
-	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
+	void StartUntouchable() 
+	{ 
+		untouchable = 1; 
+		untouchable_start = GetTickCount64(); 
+		flicker_start = untouchable_start;
+		isRenderable = true;
+	}
 	void HoldKoopa(CKoopa* k) { koopa = k; }
 	void ReleaseKoopa() 
 	{ 

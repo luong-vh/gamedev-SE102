@@ -1,2 +1,2 @@
-Score: 568400
-Coin: 43
+Score: 574300
+Coin: 53
