@@ -33,6 +33,7 @@
 
 #define ID_GREEN_KOOPA 0
 #define ID_RED_KOOPA 1
+#define ID_PARA_KOOPA 2
 class CKoopa : public CGameObject
 {
 protected:

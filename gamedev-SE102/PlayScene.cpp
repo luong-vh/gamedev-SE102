@@ -23,6 +23,7 @@
 #include "ButtonBrick.h"
 #include "InvisibleWall.h"
 #include "KillZone.h"
+#include "ParaKoopa.h"
 using namespace std;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath):
@@ -281,6 +282,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		case ID_RED_KOOPA:
 			obj = new CRedKoopa(x, y);
 			break;
+		case ID_PARA_KOOPA:
+			obj = new CParaKoopa(x, y);
 		default:
 			break;
 		}

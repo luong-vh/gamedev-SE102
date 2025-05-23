@@ -9,6 +9,8 @@
 #include "GoldenBrick.h"
 #include "ButtonBrick.h"
 #include "KillZone.h"
+#include "ParaKoopa.h"
+
 void CKoopa::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	left = x - KOOPA_BBOX_WIDTH / 2;
@@ -176,7 +178,7 @@ void CKoopa::GetStomped()
 		break;
 	case KOOPA_STATE_INSHELL:
 		float mx, my;
-		((CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer())->GetPosition(mx, my);
+		((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer()->GetPosition(mx, my);
 		direction = mx < x ? 1 : -1;
 		SetState(KOOPA_STATE_SPINNING);
 	}
@@ -312,6 +314,9 @@ void CKoopa::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 	else if (((CKoopa*)e->obj)->isBeingHeld) {
 		GetKoopaHit(nx);
 		((CKoopa*)e->obj)->GetKoopaHit(-nx);
+	}
+	else if (dynamic_cast<CParaKoopa*>(e->obj)) {
+		return;
 	}
 	else {
 		ReverseDirection();
