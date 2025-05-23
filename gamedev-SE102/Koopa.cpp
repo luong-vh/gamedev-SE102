@@ -25,12 +25,13 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		CGame::GetInstance()->GetCamPos(cx, cy);
 		float w = CGame::GetInstance()->GetBackBufferWidth();
 
-		if ((x < cx - KOOPA_BBOX_WIDTH && x > cx - 2 * KOOPA_BBOX_WIDTH) ||
-			(x > cx + w + KOOPA_BBOX_WIDTH && x < cx + w + 2 * KOOPA_BBOX_WIDTH))
+		if ((start_x < cx - KOOPA_BBOX_WIDTH && start_x > cx - 2 * KOOPA_BBOX_WIDTH) ||
+			(start_x > cx + w + KOOPA_BBOX_WIDTH && start_x < cx + w + 2 * KOOPA_BBOX_WIDTH))
 		{
 			x = start_x;
 			y = start_y;
-			WakeUp();
+			int direc = x > cx ? -1 : 1;
+			WakeUp(direc);
 			return;
 		}
 		
@@ -217,9 +218,9 @@ void CKoopa::OnNoCollision(DWORD dt)
 	isOnPlatform = false;
 }
 
-void CKoopa::WakeUp()
+void CKoopa::WakeUp(int direc = -1)
 {
-	direction = -1;
+	direction = direc;
 	SetState(KOOPA_STATE_WALKING);
 	isFlipped = false;
 }

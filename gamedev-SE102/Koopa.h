@@ -54,7 +54,7 @@ protected:
    virtual int IsCollidable() { return 1; };
    virtual int IsBlocking() { return 0; }
    virtual void OnNoCollision(DWORD dt);
-   virtual void WakeUp();
+   virtual void WakeUp(int direc);
    virtual void OnCollisionWith(LPCOLLISIONEVENT e);
    virtual void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
    virtual void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
