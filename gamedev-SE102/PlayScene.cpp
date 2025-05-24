@@ -24,6 +24,7 @@
 #include "InvisibleWall.h"
 #include "KillZone.h"
 #include "ParaKoopa.h"
+#include "CGoalCard.h"
 using namespace std;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath):
@@ -154,6 +155,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		if (id == ID_CLOUD_BLOCK) obj = new CCloudBlock(x, y);
 		if (id == ID_GOLDEN_BRICK) obj = new CGoldenBrick(x, y);
 		if (id == ID_BUTTON_BRICK) obj = new CButtonBrick(x, y);
+		if (id == ID_GOAL_CARD) obj = new CGoalCard(x, y);
 		break;
 	}
 	case OBJECT_TYPE_COIN: 
@@ -436,7 +438,7 @@ void CPlayScene::Update(DWORD dt)
 	cy -= game->GetBackBufferHeight() / 2;
 
 	if (cx < 0) cx = 0;
-	if (cx > 2495) cx = 2495;
+	if (cx > 2567) cx = 2564;
 	if (cy > 100) cy = 236;
 	CGame::GetInstance()->SetCamPos(cx, cy);
 

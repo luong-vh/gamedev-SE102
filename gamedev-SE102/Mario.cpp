@@ -64,7 +64,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 	HandleKoopaHold();
 	if (x < 12) x = 12;
-	if (x > 2750) x = 2750;
+	if (x > 2810) x = 2810;
 	
 }
 
@@ -228,9 +228,11 @@ void CMario::OnCollisionWithPiranha(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 {
 	CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
+	int _state = koopa->GetState();
+	if (_state == KOOPA_STATE_DIE || _state == KOOPA_STATE_WAITING) return;
 	if (e->ny < 0)
 	{
-		if (koopa->GetState() != KOOPA_STATE_DIE)
+		if (_state != KOOPA_STATE_DIE)
 		{
 			koopa->GetStomped();
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
@@ -239,8 +241,8 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 	}
 	
 	if ((e->nx != 0 || e->ny >0) &&
-		(koopa -> GetState() == KOOPA_STATE_INSHELL ||
-		koopa -> GetState() == KOOPA_STATE_REVIVING))
+		(_state == KOOPA_STATE_INSHELL ||
+			_state == KOOPA_STATE_REVIVING))
 	{
 		if (ableToHold)
 		{

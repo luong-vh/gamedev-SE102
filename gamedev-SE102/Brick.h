@@ -10,6 +10,7 @@
 #define ID_CLOUD_BLOCK 2
 #define ID_GOLDEN_BRICK 3
 #define ID_BUTTON_BRICK 4
+#define ID_GOAL_CARD 5
 class CBrick : public CGameObject {
 public:
 	CBrick(float x, float y) : CGameObject(x, y) {}
