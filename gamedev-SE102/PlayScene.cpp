@@ -441,7 +441,7 @@ void CPlayScene::Update(DWORD dt)
 	if (cx > 2567) cx = 2564;
 	if (cy > 100) cy = 236;
 	CGame::GetInstance()->SetCamPos(cx, cy);
-
+	CGameManager::GetInstance()->Update(dt);
 	PurgeDeletedObjects();
 }
 
@@ -471,6 +471,7 @@ void CPlayScene::Render()
 		objects[0]->Render();
 	}
 	CPlayHUD::GetInstance()->Render();
+	CGameManager::GetInstance()->Render();
 }
 
 /*

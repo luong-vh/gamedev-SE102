@@ -46,6 +46,7 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 		else playScene->GamePause();
 		break;
 	}
+
 }
 
 void CSampleKeyHandler::OnKeyUp(int KeyCode)

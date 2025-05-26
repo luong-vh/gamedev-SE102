@@ -7,6 +7,7 @@
 #include "Mario.h"
 #include "Goomba.h"
 #include "BackgroundTile.h"
+#include "GameManager.h"
 //#include "Koopas.h"
 #define MAX_TIME_PLAYSCENE 300
 
