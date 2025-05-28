@@ -113,6 +113,7 @@ void CGoomba::GetKoopaHit(int direction)
 	vx = direction * GOOMBA_WALKING_SPEED;
 	SetState(GOOMBA_STATE_DIE_BY_KOOPA);
 	CGameManager::GetInstance()->AddScoreEffect(x, y - GOOMBA_BBOX_HEIGHT,100);
+	CGameManager::GetInstance()->AddDamageEffect(x, y);
 }
 void CGoomba::GetTailHit(int direction)
 {
@@ -123,6 +124,7 @@ void CGoomba::GetTailHit(int direction)
 	vx = direction * GOOMBA_WALKING_SPEED;
 	SetState(GOOMBA_STATE_DIE_BY_TAIL);
 	CGameManager::GetInstance()->AddScoreEffect(x, y - GOOMBA_BBOX_HEIGHT, 100);
+	CGameManager::GetInstance()->AddDamageEffect(x, y);
 }
 void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {

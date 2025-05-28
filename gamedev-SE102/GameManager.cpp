@@ -1,5 +1,6 @@
 #include "GameManager.h"
 #include "ScoreEffect.h"
+#include "DamageEffect.h"
 #include "GameData.h"
 #include "PlayHUD.h"
 #define ID_ANI_SCORE_100 100000100
@@ -11,6 +12,7 @@
 #define ID_ANI_SCORE_4000 100004000
 #define ID_ANI_SCORE_8000 100008000
 #define ID_ANI_ONEUP_EFFECT 100010000
+
 #define DOUBLE_SCORE_TIME_OUT 500
 CGameManager* CGameManager::instance = nullptr;
 CGameManager* CGameManager::GetInstance()
@@ -44,6 +46,11 @@ void CGameManager::AddScore(int value)
 void CGameManager::AddOneUpEffect(float x, float y)
 {
 	objects.push_back(new CScoreEffect(x, y, ID_ANI_ONEUP_EFFECT));
+}
+
+void CGameManager::AddDamageEffect(float x, float y)
+{
+	objects.push_back(new CDamageEffect(x, y));
 }
 
 void CGameManager::StomKoopa(float x, float y)
