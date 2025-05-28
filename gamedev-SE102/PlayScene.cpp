@@ -394,6 +394,7 @@ void CPlayScene::Load()
 
 void CPlayScene::Update(DWORD dt)
 {
+	
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
 	
@@ -403,6 +404,7 @@ void CPlayScene::Update(DWORD dt)
 		coObjects.push_back(objects[i]);
 	}
 	if (isGameOver || isGamePaused) return;
+	CGameManager::GetInstance()->Update(dt);
 	if (isMarioPaused)
 	{
 		if  (GetDeltaTime(marioPause_start) > marioPause_time)
@@ -441,7 +443,7 @@ void CPlayScene::Update(DWORD dt)
 	if (cx > 2567) cx = 2564;
 	if (cy > 100) cy = 236;
 	CGame::GetInstance()->SetCamPos(cx, cy);
-	CGameManager::GetInstance()->Update(dt);
+	
 	PurgeDeletedObjects();
 }
 

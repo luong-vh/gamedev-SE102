@@ -3,7 +3,7 @@
 #include "Koopa.h"
 #include "Goomba.h"
 #include "Mario.h"
-#define KILL_ZONE_L 0
+#define KILL_ZONE_L -1000
 #define KILL_ZONE_T 455
 #define KILL_ZONE_R 3000
 #define KILL_ZONE_B 470

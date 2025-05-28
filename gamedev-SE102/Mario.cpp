@@ -110,20 +110,21 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	{
 		if (dynamic_cast<COneUpMushroom*>(e->obj)) 
 		{
-			// 1UP
-			DebugOut(L"[MARIO] 1UP\n");
+			CGameManager::GetInstance()->AddOneUpEffect(x, y - 16);
 		}
-		else SetLevel(this->level + 1);
+		else {
+			SetLevel(this->level + 1);
+			CGameManager::GetInstance()->AddScoreEffect(x, y - 16, 1000);
+		}
+
 		(dynamic_cast<CSuperMushroom*>(e->obj))->Delete();
-		CGameData::AddScore(1000);
-		CPlayHUD::GetInstance()->SetScore(CGameData::score);
+		
 	}
 	else if (dynamic_cast<CSuperLeaf*>(e->obj))
 	{
 		SetLevel(this->level + 1);
 		(dynamic_cast<CSuperLeaf*>(e->obj))->Delete();
-		CGameData::AddScore(1000);
-		CPlayHUD::GetInstance()->SetScore(CGameData::score);
+		CGameManager::GetInstance()->AddScoreEffect(x, y - 16, 1000);
 	}
 	else if (dynamic_cast<CKoopa*>(e->obj))
 		OnCollisionWithKoopa(e);
@@ -137,10 +138,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		}
 		if (e->obj->GetState() == GOLDEN_BRICK_STATE_GOLD) {
 			e->obj->Delete();
-			CGameData::AddCoin(1);
-			CGameData::AddScore(100);
-			CPlayHUD::GetInstance()->SetCoin(CGameData::coin);
-			CPlayHUD::GetInstance()->SetScore(CGameData::score);
+			CGameManager::GetInstance()->AddCoin(1);
+			CGameData::AddScore(50);
 		}
 	}
 	else if (dynamic_cast<CButtonBrick*>(e->obj)) {
@@ -173,8 +172,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 		if (goomba->GetState() != GOOMBA_STATE_DIE)
 		{
 			goomba->GetStomped();
-			CGameData::AddScore(100);
-			CPlayHUD::GetInstance()->SetScore(CGameData::score);
+
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
 	}
@@ -195,10 +193,8 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
 	if (e->obj->IsCollidable() == 0) return;
 	e->obj->Delete();
-	CGameData::AddCoin(1);
-	CGameData::AddScore(100);
-	CPlayHUD::GetInstance()->SetCoin(CGameData::coin);
-	CPlayHUD::GetInstance()->SetScore(CGameData::score);
+	CGameManager::GetInstance()->AddCoin(1);
+	CGameManager::GetInstance()->AddScore(50);
 }
 
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
@@ -235,6 +231,7 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 		if (_state != KOOPA_STATE_DIE)
 		{
 			koopa->GetStomped();
+
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
 		return;

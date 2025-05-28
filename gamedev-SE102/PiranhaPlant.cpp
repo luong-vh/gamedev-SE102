@@ -97,11 +97,13 @@ void CPiranhaPlant::SetState(int _state)
 void CPiranhaPlant::HitByTail()
 {
 	SetState(PIRANHA_DIE_STATE);
+	CGameManager::GetInstance()->AddScoreEffect(x, y - 16, 100);
 }
 
 void CPiranhaPlant::HitByKoopa()
 {
 	SetState(PIRANHA_DIE_STATE);
+	CGameManager::GetInstance()->AddScoreEffect(x, y - 16, 100);
 
 }
 

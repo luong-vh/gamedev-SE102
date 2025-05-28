@@ -152,11 +152,13 @@ void CVenusFireTrap::GetBoundingBox(float& l, float& t, float& r, float& b)
 void CVenusFireTrap::HitByTail()
 {
 	SetState(VENUS_DIE_STATE);
+	CGameManager::GetInstance()->AddScoreEffect(x, y - 16, 100);
 }
 
 void CVenusFireTrap::HitByKoopa()
 {
 	SetState(VENUS_DIE_STATE);
+	CGameManager::GetInstance()->AddScoreEffect(x, y - 16, 100);
 }
 
 void CVenusFireTrap::OnCollisionWith(LPCOLLISIONEVENT e)

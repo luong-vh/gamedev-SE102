@@ -183,5 +183,9 @@ void CParaGoomba::GetStomped()
 		state = GOOMBA_STATE_WALKING;
 		vy = 0;
 	}
-	else SetState(GOOMBA_STATE_DIE);
+	else {
+
+		SetState(GOOMBA_STATE_DIE);
+	}
+	CGameManager::GetInstance()->StomGoomba(x, y - GOOMBA_BBOX_HEIGHT);
 }

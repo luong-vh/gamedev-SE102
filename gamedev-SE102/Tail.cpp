@@ -82,7 +82,6 @@ void CTail::OnOverlapWith(LPGAMEOBJECT obj)
 	else if (dynamic_cast<CQuestionBrick*>(obj)) {
 		CQuestionBrick* questionBrick = dynamic_cast<CQuestionBrick*>(obj);
 		if (questionBrick->GetState() == QUESTION_BRICK_STATE_NORMAL) {
-
 			questionBrick->OnMarioHit(NULL);
 		}
 	}

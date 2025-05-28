@@ -170,6 +170,7 @@ void CKoopa::GetKicked(int _direction)
 
 void CKoopa::GetStomped()
 {
+	CGameManager::GetInstance()->StomKoopa(x, y);
 	switch (state) {
 	case KOOPA_STATE_WALKING:
 	case KOOPA_STATE_SPINNING:
@@ -201,6 +202,7 @@ void CKoopa::GetKoopaHit(int _direction)
 	else direction = 1;
 	vx = direction * KOOPA_WALKING_SPEED;
 	SetState(KOOPA_STATE_DIE);
+	CGameManager::GetInstance()->AddScoreEffect(x, y - KOOPA_BBOX_HEIGHT, 100);
 }
 
 void CKoopa::Release(int nx)
@@ -307,7 +309,7 @@ void CKoopa::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 void CKoopa::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 {
 	if (state == KOOPA_STATE_SPINNING) {
-		
+		if (e->obj->GetState() == KOOPA_STATE_SPINNING) GetKoopaHit(-e->nx);
 		((CKoopa*)e->obj)->GetKoopaHit(e->nx);
 	}
 	if (e->obj->GetState() == KOOPA_STATE_SPINNING) GetKoopaHit(-e->nx);

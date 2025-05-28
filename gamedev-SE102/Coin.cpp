@@ -2,8 +2,7 @@
 #include "debug.h"
 #include "Game.h"
 #include "PlayScene.h"
-#include "GameData.h"
-#include "PlayHUD.h"
+#include "GameManager.h"
 void CCoin::Render()
 {
 	if (state == COIN_STATE_WAITING)
@@ -36,10 +35,8 @@ void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (y >= maxY)
 		{
 			Delete();
-			CGameData::AddCoin(1);
-			CGameData::AddScore(100);
-			CPlayHUD::GetInstance()->SetCoin(CGameData::coin);
-			CPlayHUD::GetInstance()->SetScore(CGameData::score);
+			CGameManager::GetInstance()->AddScoreEffect(x,y,100);
+			CGameManager::GetInstance()->AddCoin(1);
 			SetState(COIN_STATE_WAITING);
 		}
 	}

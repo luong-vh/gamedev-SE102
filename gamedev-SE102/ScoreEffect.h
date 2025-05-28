@@ -2,7 +2,7 @@
 #include "GameObject.h"
 #include "PlayScene.h"
 #define SCORE_EFFECT_TIMEOUT 500
-#define SCORE_EFFECT_SPEED 0.1f
+#define SCORE_EFFECT_SPEED 0.05f
 class CScoreEffect :
     public CGameObject
 {
