@@ -194,6 +194,7 @@ void CKoopa::GetTailHit(int _direction)
 	SetState(KOOPA_STATE_INSHELL);
 	vx = direction * KOOPA_TAIL_HIT_VX;
 	vy = -KOOPA_TAIL_HIT_VY;
+	CGameManager::GetInstance()->AddDamageEffect(x, y);
 }
 
 void CKoopa::GetKoopaHit(int _direction)
@@ -203,6 +204,7 @@ void CKoopa::GetKoopaHit(int _direction)
 	vx = direction * KOOPA_WALKING_SPEED;
 	SetState(KOOPA_STATE_DIE);
 	CGameManager::GetInstance()->AddScoreEffect(x, y - KOOPA_BBOX_HEIGHT, 100);
+	CGameManager::GetInstance()->AddDamageEffect(x, y);
 }
 
 void CKoopa::Release(int nx)
@@ -231,6 +233,10 @@ void CKoopa::WakeUp(int direc = -1)
 
 void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 {
+	if (dynamic_cast<CKillZone*>(e->obj)) {
+		SetState(KOOPA_STATE_WAITING);
+		return;
+	}
 	if (e->ny != 0 && e->obj->IsBlocking())
 	{
 		vy = 0;
@@ -254,10 +260,7 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithPiranha(e);
 		return;
 	}
-	else if (dynamic_cast<CKillZone*>(e->obj)) {
-		SetState(KOOPA_STATE_WAITING);
-		return;
-	}
+	
 	if (!e->obj->IsBlocking()) return;
 	if (dynamic_cast<CGoldenBrick*>(e->obj)) {
 			CGoldenBrick* goldenBrick = dynamic_cast<CGoldenBrick*>(e->obj);

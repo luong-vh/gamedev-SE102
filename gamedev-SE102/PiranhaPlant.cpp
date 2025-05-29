@@ -98,13 +98,14 @@ void CPiranhaPlant::HitByTail()
 {
 	SetState(PIRANHA_DIE_STATE);
 	CGameManager::GetInstance()->AddScoreEffect(x, y - 16, 100);
+	CGameManager::GetInstance()->AddDamageEffect(x, y - 16);
 }
 
 void CPiranhaPlant::HitByKoopa()
 {
 	SetState(PIRANHA_DIE_STATE);
 	CGameManager::GetInstance()->AddScoreEffect(x, y - 16, 100);
-
+	CGameManager::GetInstance()->AddDamageEffect(x, y - 16);
 }
 
 void CPiranhaPlant::OnCollisionWith(LPCOLLISIONEVENT e)

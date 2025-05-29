@@ -1,7 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include "PlayScene.h"
-#define DAMAGE_EFFECT_TIMEOUT 200
+#define DAMAGE_EFFECT_TIMEOUT 150
 #define ID_ANI_DAMAGE_EFFECT 110000000
 class CDamageEffect :
     public CGameObject
