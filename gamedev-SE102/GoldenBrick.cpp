@@ -48,6 +48,7 @@ void CGoldenBrick::HitByMario()
 
 void CGoldenBrick::Break()
 {
+	CGameManager::GetInstance()->AddBrokenEffect(x, y);
 	Delete();
 }
 

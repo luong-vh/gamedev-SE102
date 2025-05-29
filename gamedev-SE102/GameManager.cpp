@@ -3,6 +3,7 @@
 #include "DamageEffect.h"
 #include "GameData.h"
 #include "PlayHUD.h"
+#include "BrokenBrickEffect.h"
 #define ID_ANI_SCORE_100 100000100
 #define ID_ANI_SCORE_200 100000200
 #define ID_ANI_SCORE_400 100000400
@@ -51,6 +52,11 @@ void CGameManager::AddOneUpEffect(float x, float y)
 void CGameManager::AddDamageEffect(float x, float y)
 {
 	objects.push_back(new CDamageEffect(x, y));
+}
+
+void CGameManager::AddBrokenEffect(float x, float y)
+{
+	objects.push_back(new CBrokenBrickEffect(x, y));
 }
 
 void CGameManager::StomKoopa(float x, float y)

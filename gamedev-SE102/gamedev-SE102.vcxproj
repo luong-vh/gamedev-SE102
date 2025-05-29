@@ -136,6 +136,7 @@
     <ClCompile Include="BackgroundTile.cpp" />
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="Brick.cpp" />
+    <ClCompile Include="BrokenBrickEffect.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="ButtonBrick.cpp" />
     <ClCompile Include="CGoalCard.cpp" />
@@ -192,6 +193,7 @@
     <ClInclude Include="BackgroundTile.h" />
     <ClInclude Include="Block.h" />
     <ClInclude Include="Brick.h" />
+    <ClInclude Include="BrokenBrickEffect.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="ButtonBrick.h" />
     <ClInclude Include="CGoalCard.h" />

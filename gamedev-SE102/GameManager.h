@@ -17,6 +17,7 @@ public:
 	void AddScore(int value);
 	void AddOneUpEffect(float x, float y);
 	void AddDamageEffect(float x, float y);
+	void AddBrokenEffect(float x, float y);
 	void StomKoopa(float x, float y);
 	void StomGoomba(float x, float y);
 	void Update(DWORD dt);
