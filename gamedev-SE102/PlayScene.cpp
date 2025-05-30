@@ -134,6 +134,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_MARIO:
 		if (player != NULL)
 		{
+			objects.push_back(player);
 			DebugOut(L"[ERROR] MARIO object was created before!\n");
 			return;
 		}
@@ -301,7 +302,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CInvisibleWall(x, y);
 		break;
 	}
-
+	case OBJECT_TYPE_KILLZONE:
+		obj = new CKillZone();
+		break;
 	default:
 		DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);
 		return;
@@ -329,8 +332,8 @@ void CPlayScene::_ParseSection_SETTING(string line)
 	if (tokens.size() < 4) return;
 	cminX = atoi(tokens[0].c_str());
 	cmaxX = atoi(tokens[1].c_str());
-	cmaxY = atoi(tokens[2].c_str());
-	cminY = atoi(tokens[3].c_str());
+	cminY = atoi(tokens[2].c_str());
+	cmaxY = atoi(tokens[3].c_str());
 }
 
 void CPlayScene::LoadAssets(LPCWSTR assetFile)
@@ -373,7 +376,7 @@ void CPlayScene::LoadAssets(LPCWSTR assetFile)
 void CPlayScene::Load()
 {
 	DebugOut(L"[INFO] Start loading scene from : %s \n", sceneFilePath);
-
+	player = CGame::GetInstance()->GetPlayer();
 	ifstream f;
 	f.open(sceneFilePath);
 
@@ -403,8 +406,9 @@ void CPlayScene::Load()
 	}
 
 	f.close();
-	objects.push_back(new CKillZone());
+	
 	DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath);
+	time = CGame::GetInstance()->GetGameTime();
 }
 
 void CPlayScene::Update(DWORD dt)
@@ -528,13 +532,16 @@ void CPlayScene::Clear()
 */
 void CPlayScene::Unload()
 {
-	for (int i = 0; i < objects.size(); i++)
+	for (int i = 1; i < objects.size(); i++)
 		delete objects[i];
 
 	objects.clear();
+	CGame::GetInstance()->SetPlayer(player);
 	player = NULL;
-
+	CPlayHUD::GetInstance()->Clear();
+	CGame::GetInstance()->SetGameTime(time);
 	DebugOut(L"[INFO] Scene %d unloaded! \n", id);
+
 }
 
 void CPlayScene::MarioPause(float time)

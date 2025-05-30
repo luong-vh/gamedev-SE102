@@ -9,7 +9,7 @@
 #include "BackgroundTile.h"
 #include "GameManager.h"
 //#include "Koopas.h"
-#define MAX_TIME_PLAYSCENE 300
+
 
 class CPlayScene: public CScene
 {
@@ -35,7 +35,7 @@ protected:
 	void _ParseSection_OBJECTS(string line);
 	void _ParseSection_SETTING(string line);
 	void LoadAssets(LPCWSTR assetFile);
-	float time = MAX_TIME_PLAYSCENE;
+	float time =0;
 	
 public: 
 	CPlayScene(int id, LPCWSTR filePath);

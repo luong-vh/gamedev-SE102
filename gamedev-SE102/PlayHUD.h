@@ -35,5 +35,9 @@ public:
 	void SetCoin(int coin);
 	void SetScore(int score);
 	void SetTime(int time);
+	void Clear() {
+		delete __instance;
+		__instance = NULL;
+	}
 };
 

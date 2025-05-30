@@ -41,7 +41,7 @@
 
 #define ID_ANI_MARIO_IDLE_RIGHT 1000
 #define ID_ANI_MARIO_IDLE_LEFT 1010
-
+#define ID_ANI_MARIO_WARPING 1020
 #define ID_ANI_MARIO_WALKING_RIGHT 1100
 #define ID_ANI_MARIO_WALKING_LEFT 1110
 
@@ -80,7 +80,7 @@
 // SMALL MARIO
 #define ID_ANI_MARIO_SMALL_IDLE_RIGHT 2
 #define ID_ANI_MARIO_SMALL_IDLE_LEFT 10
-
+#define ID_ANI_MARIO_SMALL_WARPING 20
 #define ID_ANI_MARIO_SMALL_IDLE_HOLD_RIGHT 900
 #define ID_ANI_MARIO_SMALL_IDLE_HOLD_LEFT 910
 
@@ -114,6 +114,7 @@
 // RACOON MARIO
 #define ID_ANI_MARIO_RACOON_IDLE_RIGHT 2000
 #define ID_ANI_MARIO_RACOON_IDLE_LEFT 2010
+#define ID_ANI_MARIO_RACOON_WARPING 2020
 
 #define ID_ANI_MARIO_RACOON_WALKING_RIGHT 2100
 #define ID_ANI_MARIO_RACOON_WALKING_LEFT 2110
@@ -245,6 +246,7 @@ public:
 	float flyTime;
 	bool ableToHold;
 	bool ableToAttack;
+	bool isAbleToRise;
 	CMario(float x, float y) : CGameObject(x, y)
 	{
 		isSitting = false;
@@ -271,6 +273,7 @@ public:
 		chargeAble = 0;
 		flyTime = 0;
 		isFlyable = true;
+		isAbleToRise = false;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();

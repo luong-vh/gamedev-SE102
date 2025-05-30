@@ -74,7 +74,10 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 	if (((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer() == NULL) return;
 	LPGAME game = CGame::GetInstance();
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
-
+	if (game->IsKeyDown(DIK_UP)) {
+		mario->isAbleToRise = true;
+	}
+	else mario->isAbleToRise = false;
 	if (game->IsKeyDown(DIK_RIGHT))
 	{
 		if (game->IsKeyDown(DIK_A))
