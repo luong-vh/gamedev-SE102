@@ -39,7 +39,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 #define SCENE_SECTION_UNKNOWN -1
 #define SCENE_SECTION_ASSETS	1
 #define SCENE_SECTION_OBJECTS	2
-
+#define SCENE_SECTION_SETTING 3
 #define ASSETS_SECTION_UNKNOWN -1
 #define ASSETS_SECTION_SPRITES 1
 #define ASSETS_SECTION_ANIMATIONS 2
@@ -157,6 +157,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		if (id == ID_GOLDEN_BRICK) obj = new CGoldenBrick(x, y);
 		if (id == ID_BUTTON_BRICK) obj = new CButtonBrick(x, y);
 		if (id == ID_GOAL_CARD) obj = new CGoalCard(x, y);
+		if (id == ID_BRICK) obj = new CBrick(x, y);
 		break;
 	}
 	case OBJECT_TYPE_COIN: 
@@ -218,11 +219,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		if (tokens.size() < 4) return;
 		int height = atoi(tokens[3].c_str());
-
-
-		obj = new CPipe(
-			x, y, height
-		);
+		if (tokens.size() < 6) {
+			obj = new CPipe(x, y, height);
+		}
+		else {
+			int headId = atoi(tokens[4].c_str());
+			int bodyId = atoi(tokens[5].c_str());
+			obj = new CPipe(x, y, height, headId, bodyId);
+		}
 		break;
 	}
 	case OBJECT_TYPE_RED_VENUS:
@@ -319,6 +323,16 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	
 }
 
+void CPlayScene::_ParseSection_SETTING(string line)
+{
+	vector<string> tokens = split(line);
+	if (tokens.size() < 4) return;
+	cminX = atoi(tokens[0].c_str());
+	cmaxX = atoi(tokens[1].c_str());
+	cmaxY = atoi(tokens[2].c_str());
+	cminY = atoi(tokens[3].c_str());
+}
+
 void CPlayScene::LoadAssets(LPCWSTR assetFile)
 {
 	DebugOut(L"[INFO] Start loading assets from : %s \n", assetFile);
@@ -374,7 +388,7 @@ void CPlayScene::Load()
 		if (line[0] == '#') continue;	// skip comment lines	
 		if (line == "[ASSETS]") { section = SCENE_SECTION_ASSETS; continue; };
 		if (line == "[OBJECTS]") { section = SCENE_SECTION_OBJECTS; continue; };
-
+		if (line == "[SETTING]") { section = SCENE_SECTION_SETTING; continue; };
 		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }	
 
 		//
@@ -384,7 +398,7 @@ void CPlayScene::Load()
 		{ 
 			case SCENE_SECTION_ASSETS: _ParseSection_ASSETS(line); break;
 			case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
-
+			case SCENE_SECTION_SETTING: _ParseSection_SETTING(line); break;
 		}
 	}
 
@@ -440,8 +454,7 @@ void CPlayScene::Update(DWORD dt)
 	cx -= game->GetBackBufferWidth() / 2;
 	
 
-	if (cx < 0) cx = 0;
-	if (cx > 2564) cx = 2564;
+	
 	if (preY > 0) {
 		if (my - preY < 20) isFollowing = true;
 		if (isFollowing) {
@@ -454,10 +467,10 @@ void CPlayScene::Update(DWORD dt)
 		preY = my - game->GetBackBufferHeight() / 2;
 	}
 	if (((CMario*)player)->flyTime >0 || my < 180) preY = my - game->GetBackBufferHeight() / 2;
-	if (preY > 236) {
-		preY = 236;
-	}
-
+	if (cx < cminX) cx = cminX;
+	if (cx > cmaxX) cx = cmaxX;
+	if (preY < cminY) preY = cminY;
+	if (preY > cmaxY) preY = cmaxY;
 	CGame::GetInstance()->SetCamPos(cx, preY);
 
 	

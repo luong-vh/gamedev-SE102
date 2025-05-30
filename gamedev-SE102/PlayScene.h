@@ -21,6 +21,7 @@ protected:
 	float preY;
 	float gamePause_time;
 	float gameResume_time;
+	float cmaxX, cminX, cmaxY, cminY;
 	bool isMarioPaused = false;
 	bool isGamePaused = false;
 	bool isGameOver = false;
@@ -32,7 +33,7 @@ protected:
 	void _ParseSection_TILES(string line);
 	void _ParseSection_ASSETS(string line);
 	void _ParseSection_OBJECTS(string line);
-
+	void _ParseSection_SETTING(string line);
 	void LoadAssets(LPCWSTR assetFile);
 	float time = MAX_TIME_PLAYSCENE;
 	

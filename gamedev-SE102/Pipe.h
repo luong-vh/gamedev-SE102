@@ -11,14 +11,21 @@ class CPipe : public CGameObject
 {
 private:
 	int height;
-	
+	int headId;
+	int bodyId;
 public:
 
 	CPipe(float x, float y, int height) :CGameObject(x, y)
 	{
 		this->height = height;
+		headId = PIPE_HEAD_ID;
+		bodyId = PIPE_BODY_ID;
 	}
-
+	CPipe(float x,float y, int height, int headId, int bodyId) :CGameObject(x, y) {
+		this->height = height;
+		this->headId = headId;
+		this->bodyId = bodyId;
+	}
 	void Render();
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects=NULL){}
 	void GetBoundingBox(float& l, float& t, float& r, float& b);

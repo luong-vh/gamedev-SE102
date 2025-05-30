@@ -16,6 +16,8 @@ background.txt
 hud.txt
 effects.txt
 #
+[SETTING]
+0	2564	0	236
 [OBJECTS]
 # type	x	y	extra_settings per object type
 # type:
