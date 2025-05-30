@@ -63,6 +63,14 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 
 	HandleKoopaHold();
+	if (slowFallTime > 0) {
+		if (isOnPlatform || level != MARIO_LEVEL_RACOON) slowFallTime = -1;
+		else if (vy >0) {
+			slowFallTime -= dt;
+			vy = MARIO_FALLING_SPEED;
+		}
+		
+	}
 	if (x < 12) x = 12;
 	if (x > 2810) x = 2810;
 	
@@ -533,6 +541,10 @@ int CMario::GetAniIdRacoon()
 			}
 
 	if (aniId == -1) aniId = ID_ANI_MARIO_RACOON_IDLE_RIGHT;
+	if (slowFallTime > 0 && vy > 0) {
+		if (nx > 0) aniId = ID_ANI_MARIO_RACOON_SLOW_FALL_RIGHT;
+		else aniId = ID_ANI_MARIO_RACOON_SLOW_FALL_LEFT;
+	}
 	return aniId;
 }
 
@@ -801,5 +813,6 @@ void CMario::SetLevel(int l)
 	}
 	level = l;
 	if (level == MARIO_LEVEL_RACOON && tail == NULL) tail = new CTail(x, y);
+	if (level != MARIO_LEVEL_RACOON) slowFallTime = -1;
 }
 

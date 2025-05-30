@@ -135,6 +135,9 @@
 
 #define ID_ANI_MARIO_RACOON_BRACE_RIGHT 2800
 #define ID_ANI_MARIO_RACOON_BRACE_LEFT 2810
+
+#define ID_ANI_MARIO_RACOON_SLOW_FALL_RIGHT 2940
+#define ID_ANI_MARIO_RACOON_SLOW_FALL_LEFT 2942
 // TRANSFORM
 #define ID_ANI_MARIO_TRANSFORM_SMALL_TO_BIG_RIGHT 4000
 #define ID_ANI_MARIO_TRANSFORM_SMALL_TO_BIG_LEFT 4001
@@ -174,10 +177,11 @@
 #define MARIO_SMALL_BBOX_WIDTH  13
 #define MARIO_SMALL_BBOX_HEIGHT 12
 
-
+#define MARIO_FALLING_SPEED 0.05f
 #define MARIO_UNTOUCHABLE_TIME 2500
 #define MARIO_KICK_TIMEOUT 200
 #define MARIO_DIE_TIMEOUT 500
+#define MARIO_SLOW_FALL_TIMEOUT 200
 #define MARIO_FLICKER_TIMEOUT 20
 #define SMALL_OFFSET_X 10
 #define SMALL_OFFSET_Y -2
@@ -193,7 +197,7 @@ class CMario : public CGameObject
 	float maxVx;
 	float ax;				// acceleration on x 
 	float ay;				// acceleration on y 
-
+	float slowFallTime;
 	int level; 
 	int untouchable; 
 	bool isKicking;
@@ -243,6 +247,7 @@ public:
 		attack_start = -1;
 		isOnPlatform = false;
 		isRenderable = true;
+		slowFallTime = -1;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
@@ -278,5 +283,12 @@ public:
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	void RenderWhenMarioPaused() {
 		CAnimations::GetInstance()->Get(idAniTransform)->Render(x, y);
+	}
+	void SlowFall() {
+		if (level == MARIO_LEVEL_RACOON) {
+			if (isOnPlatform) SetState(MARIO_STATE_JUMP);
+			else slowFallTime = MARIO_SLOW_FALL_TIMEOUT;
+		}
+		else SetState(MARIO_STATE_JUMP);
 	}
 };

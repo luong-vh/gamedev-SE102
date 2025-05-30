@@ -21,7 +21,7 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 		mario->SetState(MARIO_STATE_SIT);
 		break;
 	case DIK_S:
-		mario->SetState(MARIO_STATE_JUMP);
+		mario->SlowFall();
 		break;
 	case DIK_1:
 		mario->SetLevel(MARIO_LEVEL_SMALL);
@@ -45,6 +45,7 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 		if (playScene->IsPaused()) playScene->GameResume();
 		else playScene->GamePause();
 		break;
+		
 	}
 
 }
@@ -94,6 +95,9 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 	if(game->IsKeyDown(DIK_Z))
 	{
 		mario->ableToAttack = true;
+	}
+	if (game->IsKeyDown(DIK_X)) {
+		mario->SlowFall();
 	}
 	
 }
