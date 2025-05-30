@@ -99,6 +99,9 @@
 #define ID_ANI_MARIO_SMALL_RUNNING_RIGHT 200
 #define ID_ANI_MARIO_SMALL_RUNNING_LEFT 210
 
+#define ID_ANI_MARIO_SMALL_RUNNING_FULL_RIGHT 300
+#define ID_ANI_MARIO_SMALL_RUNNING_FULL_LEFT 310
+
 #define ID_ANI_MARIO_SMALL_BRACE_RIGHT 800
 #define ID_ANI_MARIO_SMALL_BRACE_LEFT 810
 
@@ -138,6 +141,9 @@
 
 #define ID_ANI_MARIO_RACOON_SLOW_FALL_RIGHT 2940
 #define ID_ANI_MARIO_RACOON_SLOW_FALL_LEFT 2942
+
+#define ID_ANI_MARIO_RACOON_FLY_RIGHT 2950
+#define ID_ANI_MATIO_RACOON_FLY_LEFT 2952
 // TRANSFORM
 #define ID_ANI_MARIO_TRANSFORM_SMALL_TO_BIG_RIGHT 4000
 #define ID_ANI_MARIO_TRANSFORM_SMALL_TO_BIG_LEFT 4001
@@ -182,6 +188,9 @@
 #define MARIO_KICK_TIMEOUT 200
 #define MARIO_DIE_TIMEOUT 500
 #define MARIO_SLOW_FALL_TIMEOUT 200
+#define MARIO_CHARGE_POWER_UP_TIME 1800
+#define MARIO_DRAIN_POWER_UP_TIME 500
+#define MARIO_POWER_FULL_TIME 5000
 #define MARIO_FLICKER_TIMEOUT 20
 #define SMALL_OFFSET_X 10
 #define SMALL_OFFSET_Y -2
@@ -198,11 +207,17 @@ class CMario : public CGameObject
 	float ax;				// acceleration on x 
 	float ay;				// acceleration on y 
 	float slowFallTime;
+	float flyTime;
+	float drainTime;
+	float chargeTime;
+	float powerFullTime;
 	int level; 
 	int untouchable; 
+	int chargeAble;
 	bool isKicking;
 	bool isAttacking;
 	bool isRenderable;
+	bool isFlyable;
 	int idAniTransform;
 	CKoopa* koopa;
 	ULONGLONG untouchable_start;
@@ -219,6 +234,7 @@ class CMario : public CGameObject
 	void OnCollisionWithPiranha(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
 	void HandleTailAttack(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
+	void HandlePowerUp(DWORD dt);
 	void HandleKoopaHold();
 	int GetAniIdBig();
 	int GetAniIdSmall();
@@ -248,6 +264,12 @@ public:
 		isOnPlatform = false;
 		isRenderable = true;
 		slowFallTime = -1;
+		drainTime = 0;
+		chargeTime = 0;
+		powerFullTime = 0;
+		chargeAble = 0;
+		flyTime = 0;
+		isFlyable = true;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
@@ -285,6 +307,12 @@ public:
 		CAnimations::GetInstance()->Get(idAniTransform)->Render(x, y);
 	}
 	void SlowFall() {
+		if (powerFullTime > 0) {
+			state = MARIO_STATE_JUMP;
+			flyTime = MARIO_SLOW_FALL_TIMEOUT;
+			chargeAble = 0;
+			return;
+		}
 		if (level == MARIO_LEVEL_RACOON) {
 			if (isOnPlatform) SetState(MARIO_STATE_JUMP);
 			else slowFallTime = MARIO_SLOW_FALL_TIMEOUT;

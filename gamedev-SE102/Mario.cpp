@@ -63,7 +63,17 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 
 	HandleKoopaHold();
-	if (slowFallTime > 0) {
+	if (flyTime > 0) {
+		if  (level != MARIO_LEVEL_RACOON) flyTime = -1;
+		else {
+			flyTime -= dt;
+			vy = - MARIO_FALLING_SPEED * 3;
+			slowFallTime = 0;
+
+		}
+		
+	}
+	else if (slowFallTime > 0) {
 		if (isOnPlatform || level != MARIO_LEVEL_RACOON) slowFallTime = -1;
 		else if (vy >0) {
 			slowFallTime -= dt;
@@ -71,6 +81,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		}
 		
 	}
+	HandlePowerUp(dt);
 	if (x < 12) x = 12;
 	if (x > 2810) x = 2810;
 	
@@ -88,12 +99,15 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (e->ny != 0 && e->obj->IsBlocking())
 	{
 		vy = 0;
-		if (e->ny < 0) isOnPlatform = true;
+		if (e->ny < 0) {
+			isOnPlatform = true;
+		}
 	}
 	else 
 	if (e->nx != 0 && e->obj->IsBlocking())
 	{
 		vx = 0;
+		chargeAble = 0;
 	}
 
 	if (dynamic_cast<CGoomba*>(e->obj))
@@ -309,6 +323,30 @@ void CMario::HandleTailAttack(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	else if (tail) tail->SetPosition(x, y);
 }
 
+void CMario::HandlePowerUp(DWORD dt)
+{
+	DebugOut(L"power: %f\n", powerFullTime);
+	powerFullTime -= dt;
+	if (powerFullTime < 0) {
+		powerFullTime = 0;
+	}
+	if (drainTime > 0 || chargeAble == 0) {
+		chargeTime -= dt;
+		if (chargeTime < 0) {
+			chargeTime = drainTime = 0;
+		}
+		else if (drainTime > 0) drainTime -= dt;
+		return;
+	}
+	if (!isOnPlatform) return;
+	chargeTime += dt;
+	if (chargeTime >= MARIO_CHARGE_POWER_UP_TIME) {
+		chargeTime = MARIO_CHARGE_POWER_UP_TIME;
+		powerFullTime = MARIO_POWER_FULL_TIME;
+	}
+	
+}
+
 void CMario::HandleKoopaHold()
 {
 	if (koopa)
@@ -443,6 +481,25 @@ int CMario::GetAniIdSmall()
 	
 
 	if (aniId == -1) aniId = ID_ANI_MARIO_SMALL_IDLE_RIGHT;
+	if (chargeTime == MARIO_CHARGE_POWER_UP_TIME) {
+		switch (aniId)
+		{
+		case ID_ANI_MARIO_SMALL_RUNNING_RIGHT:
+			aniId = ID_ANI_MARIO_SMALL_RUNNING_FULL_RIGHT;
+			break;
+		case ID_ANI_MARIO_SMALL_RUNNING_LEFT:
+			aniId = ID_ANI_MARIO_SMALL_RUNNING_FULL_LEFT;
+			break;
+		case ID_ANI_MARIO_SMALL_JUMP_RIGHT:
+			aniId = ID_ANI_MARIO_SMALL_JUMP_FULL_RIGHT;
+			break;
+		case ID_ANI_MARIO_SMALL_JUMP_LEFT:
+			aniId = ID_ANI_MARIO_SMALL_JUMP_FULL_LEFT;
+			break;
+		default:
+			break;
+		}
+	}
 	return aniId;
 }
 
@@ -510,7 +567,8 @@ int CMario::GetAniIdRacoon()
 				if (koopa)
 				{
 					aniId = ID_ANI_MARIO_RACOON_RUNNING_HOLD_RIGHT;
-					if (ax < 0) aniId = ID_ANI_MARIO_RACOON_RUNNING_HOLD_LEFT;
+					if (ax < 0) 
+						aniId = ID_ANI_MARIO_RACOON_RUNNING_HOLD_LEFT;	
 				}
 				else
 				{
@@ -544,6 +602,29 @@ int CMario::GetAniIdRacoon()
 	if (slowFallTime > 0 && vy > 0) {
 		if (nx > 0) aniId = ID_ANI_MARIO_RACOON_SLOW_FALL_RIGHT;
 		else aniId = ID_ANI_MARIO_RACOON_SLOW_FALL_LEFT;
+	}
+	if (flyTime > 0) {
+		if (nx > 0) aniId = ID_ANI_MARIO_RACOON_FLY_RIGHT;
+		else aniId = ID_ANI_MATIO_RACOON_FLY_LEFT;
+	}
+	if (chargeTime == MARIO_CHARGE_POWER_UP_TIME) {
+		switch (aniId)
+		{
+		case ID_ANI_MARIO_RACOON_RUNNING_RIGHT:
+			aniId = ID_ANI_MARIO_RACOON_RUNNING_FULL_RIGHT;
+			break;
+		case ID_ANI_MARIO_RACOON_RUNNING_LEFT:
+			aniId = ID_ANI_MARIO_RACOON_RUNNING_FULL_LEFT;
+			break;
+		case ID_ANI_MARIO_RACOON_JUMP_RIGHT:
+			aniId = ID_ANI_MARIO_RACOON_JUMP_FULL_RIGHT;
+			break;
+		case ID_ANI_MARIO_RACOON_JUMP_LEFT:
+			aniId = ID_ANI_MARIO_RACOON_JUMP_FULL_LEFT;
+			break;
+		default:
+			break;
+		}
 	}
 	return aniId;
 }
@@ -646,7 +727,25 @@ int CMario::GetAniIdBig()
 			}
 
 	if (aniId == -1) aniId = ID_ANI_MARIO_IDLE_RIGHT;
-
+	if (chargeTime == MARIO_CHARGE_POWER_UP_TIME) {
+		switch (aniId)
+		{
+		case ID_ANI_MARIO_RUNNING_RIGHT:
+			aniId = ID_ANI_MARIO_RUNNING_FULL_RIGHT;
+			break;
+		case ID_ANI_MARIO_RUNNING_LEFT:
+			aniId = ID_ANI_MARIO_RUNNING_FULL_LEFT;
+			break;
+		case ID_ANI_MARIO_JUMP_RIGHT:
+			aniId = ID_ANI_MARIO_JUMP_FULL_RIGHT;
+			break;
+		case ID_ANI_MARIO_JUMP_LEFT:
+			aniId = ID_ANI_MARIO_JUMP_FULL_LEFT;
+			break;
+		default:
+			break;
+		}
+	}
 	return aniId;
 }
 
@@ -672,7 +771,7 @@ void CMario::SetState(int state)
 {
 	// DIE is the end state, cannot be changed! 
 	if (this->state == MARIO_STATE_DIE) return; 
-
+	int temp = 0;
 	switch (state)
 	{
 	case MARIO_STATE_RUNNING_RIGHT:
@@ -680,12 +779,22 @@ void CMario::SetState(int state)
 		maxVx = MARIO_RUNNING_SPEED;
 		ax = MARIO_ACCEL_RUN_X;
 		nx = 1;
+		if (chargeAble == -1 && isOnPlatform) {
+			drainTime = MARIO_DRAIN_POWER_UP_TIME;
+			//powerFullTime = 0;
+		}
+		temp = 1;
 		break;
 	case MARIO_STATE_RUNNING_LEFT:
 		if (isSitting) break;
 		maxVx = -MARIO_RUNNING_SPEED;
 		ax = -MARIO_ACCEL_RUN_X;
 		nx = -1;
+		if (chargeAble == 1 && isOnPlatform) {
+			drainTime = MARIO_DRAIN_POWER_UP_TIME;
+			//powerFullTime = 0;
+		}
+		temp = -1;
 		break;
 	case MARIO_STATE_WALKING_RIGHT:
 		if (isSitting) break;
@@ -700,7 +809,7 @@ void CMario::SetState(int state)
 		nx = -1;
 		break;
 	case MARIO_STATE_JUMP:
-		if (isSitting) break;
+	//	if (isSitting) break;
 		if (isOnPlatform)
 		{
 			if (abs(this->vx) == MARIO_RUNNING_SPEED)
@@ -745,6 +854,7 @@ void CMario::SetState(int state)
 		ax = 0;
 		break;
 	}
+	chargeAble = temp;
 
 	CGameObject::SetState(state);
 }
