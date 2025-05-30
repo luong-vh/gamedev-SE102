@@ -32,6 +32,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 {
 	player = NULL;
 	key_handler = new CSampleKeyHandler(this);
+	preY = -1;
 }
 
 
@@ -431,18 +432,35 @@ void CPlayScene::Update(DWORD dt)
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return; 
 
-	// Update camera to follow mario
-	float cx, cy;
-	player->GetPosition(cx, cy);
-
+	 //Update camera to follow mario
+	float my,cx, sx, sy;
+	player->GetPosition(cx, my);
+	player->GetSpeed(sx, sy);
 	CGame *game = CGame::GetInstance();
 	cx -= game->GetBackBufferWidth() / 2;
-	cy -= game->GetBackBufferHeight() / 2;
+	
 
 	if (cx < 0) cx = 0;
-	if (cx > 2567) cx = 2564;
-	if (cy > 100) cy = 236;
-	CGame::GetInstance()->SetCamPos(cx, cy);
+	if (cx > 2564) cx = 2564;
+	if (preY > 0) {
+		if (my - preY < 20) isFollowing = true;
+		if (isFollowing) {
+			if (my - preY < 80) preY -= 0.2f * dt ;
+			else isFollowing = false;
+		}
+		else if (my - preY > 100) preY += 0.2f * dt;
+	}
+	else {
+		preY = my - game->GetBackBufferHeight() / 2;
+	}
+	if (((CMario*)player)->flyTime >0 || my < 180) preY = my - game->GetBackBufferHeight() / 2;
+	if (preY > 236) {
+		preY = 236;
+	}
+
+	CGame::GetInstance()->SetCamPos(cx, preY);
+
+	
 	
 	PurgeDeletedObjects();
 }

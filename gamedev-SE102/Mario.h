@@ -187,9 +187,9 @@
 #define MARIO_UNTOUCHABLE_TIME 2500
 #define MARIO_KICK_TIMEOUT 200
 #define MARIO_DIE_TIMEOUT 500
-#define MARIO_SLOW_FALL_TIMEOUT 200
-#define MARIO_CHARGE_POWER_UP_TIME 1800
-#define MARIO_DRAIN_POWER_UP_TIME 500
+#define MARIO_SLOW_FALL_TIMEOUT 210
+#define MARIO_CHARGE_POWER_UP_TIME 1200
+#define MARIO_DRAIN_POWER_UP_TIME 300
 #define MARIO_POWER_FULL_TIME 5000
 #define MARIO_FLICKER_TIMEOUT 20
 #define SMALL_OFFSET_X 10
@@ -207,7 +207,7 @@ class CMario : public CGameObject
 	float ax;				// acceleration on x 
 	float ay;				// acceleration on y 
 	float slowFallTime;
-	float flyTime;
+
 	float drainTime;
 	float chargeTime;
 	float powerFullTime;
@@ -242,6 +242,7 @@ class CMario : public CGameObject
 	CTail* tail;
 
 public:
+	float flyTime;
 	bool ableToHold;
 	bool ableToAttack;
 	CMario(float x, float y) : CGameObject(x, y)
@@ -307,13 +308,14 @@ public:
 		CAnimations::GetInstance()->Get(idAniTransform)->Render(x, y);
 	}
 	void SlowFall() {
-		if (powerFullTime > 0) {
-			state = MARIO_STATE_JUMP;
-			flyTime = MARIO_SLOW_FALL_TIMEOUT;
-			chargeAble = 0;
-			return;
-		}
+		
 		if (level == MARIO_LEVEL_RACOON) {
+			if (powerFullTime > 0) {
+				state = MARIO_STATE_JUMP;
+				flyTime = MARIO_SLOW_FALL_TIMEOUT;
+				chargeAble = 0;
+				return;
+			}
 			if (isOnPlatform) SetState(MARIO_STATE_JUMP);
 			else slowFallTime = MARIO_SLOW_FALL_TIMEOUT;
 		}

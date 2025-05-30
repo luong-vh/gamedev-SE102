@@ -18,11 +18,13 @@ protected:
 	LPGAMEOBJECT player;	
 	ULONGLONG marioPause_start;
 	float marioPause_time;
+	float preY;
 	float gamePause_time;
 	float gameResume_time;
 	bool isMarioPaused = false;
 	bool isGamePaused = false;
 	bool isGameOver = false;
+	bool isFollowing = false;
 	vector<LPGAMEOBJECT> objects;
 	vector<CBackgroundTile*> tiles;
 	void _ParseSection_SPRITES(string line);

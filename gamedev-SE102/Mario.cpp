@@ -325,7 +325,6 @@ void CMario::HandleTailAttack(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CMario::HandlePowerUp(DWORD dt)
 {
-	DebugOut(L"power: %f\n", powerFullTime);
 	powerFullTime -= dt;
 	if (powerFullTime < 0) {
 		powerFullTime = 0;
