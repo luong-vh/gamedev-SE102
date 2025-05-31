@@ -25,6 +25,7 @@
 #include "KillZone.h"
 #include "ParaKoopa.h"
 #include "CGoalCard.h"
+#include "CWarpPipe.h"
 using namespace std;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath):
@@ -220,14 +221,23 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		if (tokens.size() < 4) return;
 		int height = atoi(tokens[3].c_str());
-		if (tokens.size() < 6) {
+		if (tokens.size() == 5) {
+			obj = new CWarpPipe(x, y, height, atoi(tokens[4].c_str()));
+		}
+		else if (tokens.size() == 4) {
 			obj = new CPipe(x, y, height);
+		}
+		else if (tokens.size() == 7) {
+			int headId = atoi(tokens[4].c_str());
+			int bodyId = atoi(tokens[5].c_str());
+			obj = new CWarpPipe(x, y, height, headId, bodyId, atoi(tokens[6].c_str()));
 		}
 		else {
 			int headId = atoi(tokens[4].c_str());
 			int bodyId = atoi(tokens[5].c_str());
 			obj = new CPipe(x, y, height, headId, bodyId);
 		}
+		pipes.push_back(obj);
 		break;
 	}
 	case OBJECT_TYPE_RED_VENUS:
@@ -507,6 +517,9 @@ void CPlayScene::Render()
 			objects[i]->Render();
 		objects[0]->Render();
 	}
+	for (int i = 0; i < pipes.size(); i++) {
+		pipes[i]->Render();
+	}
 	CPlayHUD::GetInstance()->Render();
 	CGameManager::GetInstance()->Render();
 }
@@ -534,7 +547,10 @@ void CPlayScene::Unload()
 {
 	for (int i = 1; i < objects.size(); i++)
 		delete objects[i];
-
+	for (int i = 0; i < tiles.size(); i++) delete tiles[i];
+	tiles.clear();
+	
+	pipes.clear();
 	objects.clear();
 	CGame::GetInstance()->SetPlayer(player);
 	player = NULL;

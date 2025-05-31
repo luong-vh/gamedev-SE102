@@ -37,6 +37,7 @@
 
 
 
+
 #pragma region ANIMATION_ID
 
 #define ID_ANI_MARIO_IDLE_RIGHT 1000
@@ -212,6 +213,7 @@ class CMario : public CGameObject
 	float drainTime;
 	float chargeTime;
 	float powerFullTime;
+	float warpTime;
 	int level; 
 	int untouchable; 
 	int chargeAble;
@@ -247,6 +249,8 @@ public:
 	bool ableToHold;
 	bool ableToAttack;
 	bool isAbleToRise;
+	bool isAbleToDive;
+	float vwarp;
 	CMario(float x, float y) : CGameObject(x, y)
 	{
 		isSitting = false;
@@ -274,6 +278,7 @@ public:
 		flyTime = 0;
 		isFlyable = true;
 		isAbleToRise = false;
+		isAbleToDive = false;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
@@ -323,5 +328,9 @@ public:
 			else slowFallTime = MARIO_SLOW_FALL_TIMEOUT;
 		}
 		else SetState(MARIO_STATE_JUMP);
+	}
+	void Warp(float v, int time) {
+		warpTime = time;
+		vwarp = v;
 	}
 };

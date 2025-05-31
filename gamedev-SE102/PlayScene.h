@@ -28,6 +28,7 @@ protected:
 	bool isFollowing = false;
 	vector<LPGAMEOBJECT> objects;
 	vector<CBackgroundTile*> tiles;
+	vector<LPGAMEOBJECT> pipes;
 	void _ParseSection_SPRITES(string line);
 	void _ParseSection_ANIMATIONS(string line);
 	void _ParseSection_TILES(string line);

@@ -22,8 +22,14 @@
 #include "OneUpMushroom.h"
 #include "KillZone.h"
 #include "ParaGoomba.h"
+#include "CWarpPipe.h"
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
+	if (warpTime > 0) {
+		y += vwarp * dt;
+		warpTime -= dt;
+		return;
+	}
 	if (untouchable == 1 && state != MARIO_STATE_DIE) {
 		ULONGLONG deltaTime = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetDeltaTime(flicker_start);
 		if (deltaTime > MARIO_FLICKER_TIMEOUT) {
@@ -99,9 +105,16 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (e->ny != 0 && e->obj->IsBlocking())
 	{
 		vy = 0;
+		
 		if (e->ny < 0) {
 			isOnPlatform = true;
+			
 		}
+		if (dynamic_cast<CWarpPipe*>(e->obj)) {
+			((CWarpPipe*)e->obj)->HandleWithMario(e, this);
+			return;
+		}
+		
 	}
 	else 
 	if (e->nx != 0 && e->obj->IsBlocking())
@@ -396,6 +409,7 @@ void CMario::OnGetDamage()
 //
 int CMario::GetAniIdSmall()
 {
+	if (warpTime > 0) return ID_ANI_MARIO_SMALL_WARPING;
 	if (isKicking) {
 		if (nx > 0) return ID_ANI_MARIO_SMALL_KICK_RIGHT;
 		else return ID_ANI_MARIO_SMALL_KICK_LEFT;
@@ -504,6 +518,7 @@ int CMario::GetAniIdSmall()
 
 int CMario::GetAniIdRacoon()
 {
+	if (warpTime > 0) return ID_ANI_MARIO_RACOON_WARPING;
 	if (isAttacking) {
 		if (nx > 0) return ID_ANI_MARIO_RACOON_TAIL_ATTACK_RIGHT;
 		else return ID_ANI_MARIO_RACOON_TAIL_ATTACK_LEFT;
@@ -634,6 +649,7 @@ int CMario::GetAniIdRacoon()
 //
 int CMario::GetAniIdBig()
 {
+	if (warpTime >0) return ID_ANI_MARIO_WARPING;
 	if (isKicking) {
 		if (nx > 0) return ID_ANI_MARIO_KICK_RIGHT;
 		else return ID_ANI_MARIO_KICK_LEFT;

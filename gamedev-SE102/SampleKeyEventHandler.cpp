@@ -41,6 +41,9 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_F2:
 		mario->SetPosition(2047, 350);
 		break;
+	case DIK_F3:
+		mario->SetPosition(2279, 80);
+		break;
 	case DIK_W:
 		if (playScene->IsPaused()) playScene->GameResume();
 		else playScene->GamePause();
@@ -78,6 +81,10 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 		mario->isAbleToRise = true;
 	}
 	else mario->isAbleToRise = false;
+	if (game->IsKeyDown(DIK_DOWN)) {
+		mario->isAbleToDive = true;
+	}
+	else mario->isAbleToDive = false;
 	if (game->IsKeyDown(DIK_RIGHT))
 	{
 		if (game->IsKeyDown(DIK_A))
