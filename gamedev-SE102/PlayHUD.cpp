@@ -19,9 +19,15 @@ CPlayHUD::CPlayHUD()
 	{
 		time.push_back(new CHUDTile(CSprites::GetInstance()->Get(ID_NUMBER_0), 138 + 8 * i, 11));
 	}
+	for (int i = 0; i < 6; i++) {
+		powers.push_back(new CHUDTile(CSprites::GetInstance()->Get(ID_HUD_POWERUP), 66 + 8 * i, 19));
+	}
+	powerFull = new CHUDTile(CSprites::GetInstance()->Get(ID_HUD_FULL_POWER), 120 , 19);
 	CGameData::LoadData();
 	SetCoin(CGameData::coin);
 	SetScore(CGameData::score);
+	card = NULL;
+	power = 0;
 }
 
 CPlayHUD* CPlayHUD::GetInstance()
@@ -45,6 +51,11 @@ void CPlayHUD::Render()
 	{
 		time[i]->Draw();
 	}
+	for (int i = 0; i < power; i++) {
+		powers[i]->Draw();
+	}
+	if (card && drawCardTime >0) card->Draw();
+	if (power  == 6 && drawPowerFullTime>0) powerFull->Draw();
 }
 
 void CPlayHUD::RenderWhilePaused()
@@ -103,4 +114,19 @@ void CPlayHUD::SetTime(int timeValue)
 		int spriteId = ID_NUMBER_0 + digit;
 		time[i]->SetSprite(CSprites::GetInstance()->Get(spriteId));
 	}
+}
+
+void CPlayHUD::AddCard(int id)
+{
+	card = new CHUDTile(CSprites::GetInstance()->Get(ID_CARD_HUD_1 + id), 182, 16);
+	this->drawCardTime = 500;
+
+}
+
+void CPlayHUD::Update(DWORD dt)
+{
+	drawCardTime -= dt;
+	if (drawCardTime < -500) drawCardTime = 500;
+	drawPowerFullTime -= dt;
+	if (drawPowerFullTime < -500) drawPowerFullTime = 500;
 }

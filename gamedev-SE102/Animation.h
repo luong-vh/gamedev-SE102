@@ -19,6 +19,7 @@ public:
 	void Add(int spriteId, DWORD time = 0);
 	void Render(float x, float y);
 	void RenderCurrentFrame(float x, float y);
+	int GetCurrentFrame() { return currentFrame; }
 };
 
 typedef CAnimation* LPANIMATION;

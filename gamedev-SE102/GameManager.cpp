@@ -4,6 +4,8 @@
 #include "GameData.h"
 #include "PlayHUD.h"
 #include "BrokenBrickEffect.h"
+#include "GoalCardEffect.h"
+#include "TextEffect.h"
 #define ID_ANI_SCORE_100 100000100
 #define ID_ANI_SCORE_200 100000200
 #define ID_ANI_SCORE_400 100000400
@@ -14,6 +16,12 @@
 #define ID_ANI_SCORE_8000 100008000
 #define ID_ANI_ONEUP_EFFECT 100010000
 
+#define ID_ANI_GOAL_CARD_MUSHROOM_EFFECT 130000000
+#define ID_ANI_GOAL_CARD_TREE_EFFECT 130000002
+#define ID_ANI_GOAL_CARD_STAR_EFFECT 130000004
+
+#define ID_ANI_TEXT_1 140000000
+#define ID_ANI_TEXT_2 140000001
 #define DOUBLE_SCORE_TIME_OUT 500
 CGameManager* CGameManager::instance = nullptr;
 CGameManager* CGameManager::GetInstance()
@@ -59,6 +67,15 @@ void CGameManager::AddBrokenEffect(float x, float y)
 	objects.push_back(new CBrokenBrickEffect(x, y));
 }
 
+void CGameManager::AddGoalCardEffect(float x, float y)
+{
+	idCard = CAnimations::GetInstance()->Get(15001)->GetCurrentFrame();
+	int ani = ID_ANI_GOAL_CARD_MUSHROOM_EFFECT;
+	ani += idCard * 2;
+	objects.push_back(new CGoalCardEffect(x, y, ani));
+	winTime = 2000;
+}
+
 void CGameManager::StomKoopa(float x, float y)
 {
 	ULONGLONG deltaTime = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetDeltaTime(lastTimeStomKoopa);
@@ -102,7 +119,23 @@ void CGameManager::Update(DWORD dt)
 	for (int i = 0; i < objects.size(); i++) {
 		objects[i]->Update(dt, NULL);
 	}
+	if (winTime >= 0) {
+		winTime -= dt;
+		if (winTime < 1000 && text1 == NULL) {
+			text1 = new CTextEffect(2710, 270, ID_ANI_TEXT_1);
+		}
+		if (winTime < 0 && text2 == NULL) {
+			text2 = new CTextEffect(2710, 300, ID_ANI_TEXT_2);
+		}
+		if (winTime < 0 && card == NULL) 
+		{
+			card = new CTextEffect(2773, 300, 140000002 + idCard);
+			CPlayHUD::GetInstance()->AddCard(idCard);
+		}
+
+	}
 	PurgeDeletedObjects();
+	
 }
 
 void CGameManager::Render()
@@ -110,6 +143,9 @@ void CGameManager::Render()
 	for (int i = 0; i < objects.size(); i++) {
 		objects[i]->Render();
 	}
+	if (text1) text1->Render();
+	if (text2) text2->Render();
+	if (card)card->Render();
 }
 
 int CGameManager::GetIdAniScore(int value)

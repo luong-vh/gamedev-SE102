@@ -221,6 +221,7 @@ class CMario : public CGameObject
 	bool isAttacking;
 	bool isRenderable;
 	bool isFlyable;
+	bool isGetCard;
 	int idAniTransform;
 	CKoopa* koopa;
 	ULONGLONG untouchable_start;
@@ -279,6 +280,7 @@ public:
 		isFlyable = true;
 		isAbleToRise = false;
 		isAbleToDive = false;
+		isGetCard = false;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
@@ -332,5 +334,8 @@ public:
 	void Warp(float v, int time) {
 		warpTime = time;
 		vwarp = v;
+	}
+	void GetCard() {
+		isGetCard = true;
 	}
 };

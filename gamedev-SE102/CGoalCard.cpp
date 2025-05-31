@@ -1,5 +1,5 @@
 #include "CGoalCard.h"
-
+#include "GameManager.h"
 void CGoalCard::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	l = x - GOAL_CARD_BBOX_WIDTH / 2;
@@ -17,8 +17,14 @@ void CGoalCard::Render()
 
 void CGoalCard::HitByMario()
 {
+	if (state != GOAL_CARD_HIT) {
+		state = GOAL_CARD_HIT;
+		CGameManager::GetInstance()->AddGoalCardEffect(x, y);
+	}
+	
 }
 
 void CGoalCard::HitByKoopa()
 {
+	HitByMario();
 }

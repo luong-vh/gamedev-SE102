@@ -23,8 +23,15 @@
 #include "KillZone.h"
 #include "ParaGoomba.h"
 #include "CWarpPipe.h"
+#include "CGoalCard.h"
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
+	if (isGetCard && isOnPlatform) {
+		x += MARIO_WALKING_SPEED * dt;
+		vy = 0;
+		return;
+
+	}
 	if (warpTime > 0) {
 		y += vwarp * dt;
 		warpTime -= dt;
@@ -67,7 +74,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	HandleTailAttack(dt,coObjects);
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
-
+	
 	HandleKoopaHold();
 	if (flyTime > 0) {
 		if  (level != MARIO_LEVEL_RACOON) flyTime = -1;
@@ -108,7 +115,6 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		
 		if (e->ny < 0) {
 			isOnPlatform = true;
-			
 		}
 		if (dynamic_cast<CWarpPipe*>(e->obj)) {
 			((CWarpPipe*)e->obj)->HandleWithMario(e, this);
@@ -139,6 +145,14 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		if (e->ny > 0)
 		{
 			questionBrick->OnMarioHit(e);
+		}
+	}
+	else if (dynamic_cast<CGoalCard*>(e->obj)) {
+		CGoalCard* gc = dynamic_cast<CGoalCard*>(e->obj);
+		if (e->ny > 0)
+		{
+			gc->HitByMario();
+			GetCard();
 		}
 	}
 	else if (dynamic_cast<CSuperMushroom*>(e->obj))
@@ -338,11 +352,17 @@ void CMario::HandleTailAttack(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CMario::HandlePowerUp(DWORD dt)
 {
+	CPlayHUD::GetInstance()->SetPower(static_cast<int>(std::floor(chargeTime / 200)));
 	powerFullTime -= dt;
 	if (powerFullTime < 0) {
 		powerFullTime = 0;
 	}
+	
 	if (drainTime > 0 || chargeAble == 0) {
+		if (flyTime > 0) {
+			chargeTime = MARIO_CHARGE_POWER_UP_TIME;
+			return;
+		}
 		chargeTime -= dt;
 		if (chargeTime < 0) {
 			chargeTime = drainTime = 0;
@@ -769,7 +789,16 @@ void CMario::Render()
 	if (!isRenderable) return;
 	CAnimations* animations = CAnimations::GetInstance();
 	int aniId = -1;
-
+	if (isGetCard && isOnPlatform) {
+		if (level == MARIO_LEVEL_BIG)
+			aniId = ID_ANI_MARIO_RUNNING_RIGHT;
+		else if (level == MARIO_LEVEL_SMALL)
+			aniId = ID_ANI_MARIO_SMALL_RUNNING_RIGHT;
+		else if (level == MARIO_LEVEL_RACOON)
+			aniId = ID_ANI_MARIO_RACOON_RUNNING_RIGHT;
+		animations->Get(aniId)->Render(x, y);
+		return;
+	}
 	if (state == MARIO_STATE_DIE)
 		aniId = ID_ANI_MARIO_DIE;
 	else if (level == MARIO_LEVEL_BIG)

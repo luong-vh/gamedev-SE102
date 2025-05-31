@@ -16,6 +16,13 @@
 #define ID_HUD_BACKGROUND	20000000
 #define ID_HUD_PAUSE_TEXT 	20000001
 #define ID_HUD_GAMEOVER_TEXT 20000002
+
+#define ID_CARD_HUD_1 140000002
+#define ID_CARD_HUD_2 140000003
+#define ID_CARD_HUD_3 140000004
+
+#define ID_HUD_POWERUP 20000003
+#define ID_HUD_FULL_POWER 20000004
 using namespace std;
 class CPlayHUD
 {
@@ -23,9 +30,16 @@ class CPlayHUD
 	vector<CHUDTile*> coin;
 	vector<CHUDTile*> score;
 	vector<CHUDTile*> time;
+	vector<CHUDTile*> powers;
+
 	CHUDTile* background;
 	CHUDTile* pauseText;
 	CHUDTile* gameOverText;
+	CHUDTile* card;
+	CHUDTile* powerFull;
+	float drawCardTime = 0;
+	float drawPowerFullTime = 0;
+	int power;
 public:
 	CPlayHUD();
 	static CPlayHUD* GetInstance();
@@ -35,9 +49,15 @@ public:
 	void SetCoin(int coin);
 	void SetScore(int score);
 	void SetTime(int time);
+	void AddCard(int id);
+	void Update(DWORD dt);
 	void Clear() {
 		delete __instance;
 		__instance = NULL;
+	}
+	void SetPower(int p) {
+		power = p;
+		if (p != 6) drawPowerFullTime = 500;
 	}
 };
 

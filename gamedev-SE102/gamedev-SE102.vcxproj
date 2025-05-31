@@ -151,6 +151,7 @@
     <ClCompile Include="GameData.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GoalCardEffect.cpp" />
     <ClCompile Include="GoldenBrick.cpp" />
     <ClCompile Include="Goomba.cpp" />
     <ClCompile Include="HUDTile.cpp" />
@@ -180,6 +181,7 @@
     <ClCompile Include="SuperLeaf.cpp" />
     <ClCompile Include="SuperMushroom.cpp" />
     <ClCompile Include="Tail.cpp" />
+    <ClCompile Include="TextEffect.cpp" />
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="VenusFireTrap.cpp" />
@@ -209,6 +211,7 @@
     <ClInclude Include="GameData.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GoalCardEffect.h" />
     <ClInclude Include="GoldenBrick.h" />
     <ClInclude Include="Goomba.h" />
     <ClInclude Include="HUDTile.h" />
@@ -239,6 +242,7 @@
     <ClInclude Include="SuperLeaf.h" />
     <ClInclude Include="SuperMushroom.h" />
     <ClInclude Include="Tail.h" />
+    <ClInclude Include="TextEffect.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Textures.h" />
     <ClInclude Include="Utils.h" />

@@ -1,0 +1,1 @@
+#include "GoalCardEffect.h"
